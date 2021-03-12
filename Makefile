@@ -9,6 +9,7 @@ DSRC	=	./src/
 
 SRC_FILES = 	main.cpp					\
 				exception/BaseException.cpp	\
+				lib/loader/DLLoader.cpp		\
 
 SRC	=	$(addprefix $(DSRC), $(SRC_FILES))
 
@@ -20,7 +21,7 @@ CXXFLAGS	+= -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
 
 DEBUG=-g
 
-INCLUDE = -I./includes -I./src -I./exception/includes
+INCLUDE = -I./includes -I./src -I./src/exception/includes
 
 all:  $(NAME)
 

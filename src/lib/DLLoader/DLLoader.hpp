@@ -13,24 +13,28 @@
 
 #include "LibLoadingException.hpp"
 
-
 namespace DL
 {
     template<typename T>
-    class Loader {
+    class DLLoader {
     public:
-        Loader(std::string const &filepath);
+        typedef T *(* entryPoint)(void);
 
-        virtual ~Loader(void);
+        DLLoader(std::string const &filepath);
 
-        T &getInstance(void);
+        virtual ~DLLoader(void);
+
+        T &getInstance(void) const;
+        std::string const& getName(void) const;
 
     private:
-        std::string getFilename(std::string const& filepath);
+        void setName(std::string const& filepath);
 
         void *_lib;
         T *_instance;
         std::string _filepath;
+        std::string _name;
+        const std::string _entryPointName;
     };
 }
 
