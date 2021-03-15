@@ -63,6 +63,8 @@ namespace arcade
 
         virtual ~IDisplayModule(){};
 
+        virtual void open();
+        virtual void close();
         virtual void putRect(Color color, Coord size, Coord pos) = 0;
         virtual void putCircle(Color color, Coord pos, size_t radius) = 0;
         virtual void putLine(Color color, Coord startPos, Coord endPos) = 0;
