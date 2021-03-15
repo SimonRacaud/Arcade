@@ -10,6 +10,7 @@
 
 #include <string>
 #include <dlfcn.h>
+#include <iostream>
 
 #include "LibLoadingException.hpp"
 #include "IDisplayModule.hpp"
@@ -26,11 +27,12 @@ namespace DL
 
         virtual ~DLLoader(void);
 
-        T &getInstance(void) const;
+        T &getInstance(void);
         std::string const& getName(void) const;
 
     private:
         void setName(std::string const& filepath);
+        void fetchInstance(void);
 
         void *_lib;
         T *_instance;

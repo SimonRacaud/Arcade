@@ -12,7 +12,7 @@ DL::DLLoader<T>::DLLoader(std::string const &filepath)
 : _lib(nullptr), _instance(nullptr), _filepath(filepath), _entryPointName("entryPoint")
 {
     this->_lib = dlopen(filepath.c_str(), RTLD_LAZY);
-    if (_lib == nullptr) {
+    if (this->_lib == nullptr) {
         throw LibLoadingException("Fail to load the lib: "+filepath);
     }
     this->setName(filepath);
@@ -21,8 +21,10 @@ DL::DLLoader<T>::DLLoader(std::string const &filepath)
 template <typename T>
 DL::DLLoader<T>::~DLLoader(void)
 {
+    if (_instance != nullptr)
+        delete _instance;
     if (this->_lib != nullptr) {
-        dlclose(_lib);
+        dlclose(this->_lib);
     }
 }
 
@@ -43,7 +45,16 @@ void DL::DLLoader<T>::setName(const std::string &filepath)
 }
 
 template <typename T>
-T &DL::DLLoader<T>::getInstance(void) const
+T &DL::DLLoader<T>::getInstance(void)
+{
+    if (_instance == nullptr) {
+        this->fetchInstance();
+    }
+    return *_instance;
+}
+
+template <typename T>
+void DL::DLLoader<T>::fetchInstance(void)
 {
     DLLoader::entryPoint func;
     T *res;
@@ -56,8 +67,9 @@ T &DL::DLLoader<T>::getInstance(void) const
     if (res == nullptr) {
         throw LibLoadingException("Fail to get lib module");
     }
-    return *res;
+    this->_instance = res;
 }
+
 
 template <typename T>
 std::string const &DL::DLLoader<T>::getName(void) const

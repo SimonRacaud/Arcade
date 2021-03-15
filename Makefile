@@ -8,6 +8,7 @@
 DSRC	=	./src/
 
 SRC_FILES = 	main.cpp						\
+				utility/trim.cpp				\
 				exception/BaseException.cpp		\
 				lib/DLLoader/DLLoader.cpp		\
 				lib/DLManager/DLManager.cpp		\

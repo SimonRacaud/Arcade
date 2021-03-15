@@ -35,7 +35,6 @@ std::unordered_map<std::string, T *> &DLManager<T>::getLibs(void) const
     auto result = new std::unordered_map<std::string, T *>;
 
     for (auto const loader : _libsLoader) {
-        std::cerr << "HELLO\n";
         (*result)[loader.first] = &loader.second->getInstance();
     }
     return *result;
@@ -52,7 +51,7 @@ void DLManager<T>::fetchLibFiles(void)
     if (dir == nullptr) {
         throw LibLoadingException("Fail to load lib directory");
     }
-    this->_libFileNames.clear();
+    this->_libFilePath.clear();
     while ((fileInfo = readdir(dir)) != nullptr) {
         if (fileInfo->d_type != DT_REG)
             continue;
@@ -60,7 +59,7 @@ void DLManager<T>::fetchLibFiles(void)
         pos = filename.find_last_of('.');
         if (pos == filename.size() || filename.compare(pos, _extension.size(), _extension))
             continue;
-        this->_libFileNames.push_back(filename);
+        this->_libFilePath.push_back(this->mergeFilePath(_libPath, filename));
     }
     closedir(dir);
 }
@@ -69,9 +68,11 @@ void DLManager<T>::fetchLibFiles(void)
 template <class T>
 void DLManager<T>::generateLoaders()
 {
+    std::string filepath;
+
     this->cleanLoaders();
-    for (std::string const& filename : _libFileNames) {
-        _libsLoader[filename] = new DLLoader<T>(_libPath + filename);
+    for (std::string const& filepath : _libFilePath) {
+        _libsLoader[filepath] = new DLLoader<T>(filepath);
     }
 }
 
@@ -82,6 +83,34 @@ void DLManager<T>::cleanLoaders()
         delete this->_libsLoader.begin()->second;
         this->_libsLoader.erase(_libsLoader.begin());
     }
+}
+
+template <class T>
+std::deque<std::string> const& DLManager<T>::getAvailableLibs() const
+{
+    return _libFilePath;
+}
+
+template <class T>
+T &DLManager<T>::getModule(std::string const& filepath)
+{
+    if (_libsLoader.find(filepath) == _libsLoader.end()) {
+        throw LibNotFoundException(filepath + " : library not found");
+    }
+    return _libsLoader[filepath]->getInstance();
+}
+
+template <class T>
+std::string DLManager<T>::mergeFilePath(std::string const& path, std::string const& file)
+{
+    std::string result = path;
+
+    trim(result);
+    if (result.size() > 0 && result.back() != '/') {
+        result += '/';
+    }
+    result += file;
+    return result;
 }
 
 template class DLManager<arcade::IDisplayModule>;

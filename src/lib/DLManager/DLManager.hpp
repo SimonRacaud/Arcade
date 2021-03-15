@@ -10,8 +10,10 @@
 
 #include "lib/DLLoader/DLLoader.hpp"
 #include "LibLoadingException.hpp"
+#include "LibNotFoundException.hpp"
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
+#include "utility.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -31,15 +33,21 @@ namespace DL {
         void loadLibs(void);
 
         std::unordered_map<std::string, T *> &getLibs(void) const;
+
+        std::deque<std::string> const& getAvailableLibs(void) const;
+        T &getModule(std::string const& filePath);
+
     private:
         void fetchLibFiles(void);
         void generateLoaders(void);
         void cleanLoaders(void);
 
+        std::string mergeFilePath(std::string const& path, std::string const& file);
+
         const std::string _libPath;
         const std::string _extension;
         std::unordered_map<std::string, DLLoader<T> *> _libsLoader;
-        std::deque<std::string> _libFileNames;
+        std::deque<std::string> _libFilePath;
     };
 }
 
