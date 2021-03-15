@@ -13,7 +13,6 @@ template <class T>
 DLManager<T>::DLManager(std::string const& libsPath, std::string const& extension)
     : _libPath(libsPath), _extension(extension)
 {
-    this->loadLibs();
 }
 
 template <class T>
@@ -23,10 +22,10 @@ DLManager<T>::~DLManager()
 }
 
 template <class T>
-void DLManager<T>::loadLibs()
+void DLManager<T>::loadLibs(std::deque<std::string> const& libNames)
 {
     this->fetchLibFiles();
-    this->generateLoaders();
+    this->generateLoaders(libNames);
 }
 
 template <class T>
@@ -66,12 +65,19 @@ void DLManager<T>::fetchLibFiles(void)
 
 // throw LibLoadException
 template <class T>
-void DLManager<T>::generateLoaders()
+void DLManager<T>::generateLoaders(std::deque<std::string> const& libNames)
 {
     std::string filepath;
 
     this->cleanLoaders();
     for (std::string const& filepath : _libFilePath) {
+        if (std::find_if(
+                libNames.begin(),
+                libNames.end(),
+                [filepath](std::string const& f) { return filepath.find(f) != filepath.size(); }
+                ) == libNames.end()) {
+            continue;
+        }
         _libsLoader[filepath] = new DLLoader<T>(filepath);
     }
 }

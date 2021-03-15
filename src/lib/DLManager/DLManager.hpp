@@ -22,6 +22,8 @@
 #include <dirent.h>
 #include <iostream>
 #include <memory>
+#include <regex>
+#include <algorithm>
 
 namespace DL {
     template <class T>
@@ -30,7 +32,7 @@ namespace DL {
         DLManager(std::string const& libsPath, std::string const &extension = ".so");
         virtual ~DLManager();
 
-        void loadLibs(void);
+        void loadLibs(std::deque<std::string> const& libNames);
 
         std::unordered_map<std::string, T *> &getLibs(void) const;
 
@@ -39,7 +41,7 @@ namespace DL {
 
     private:
         void fetchLibFiles(void);
-        void generateLoaders(void);
+        void generateLoaders(std::deque<std::string> const& libNames);
         void cleanLoaders(void);
 
         std::string mergeFilePath(std::string const& path, std::string const& file);
