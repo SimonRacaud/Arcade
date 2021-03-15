@@ -13,7 +13,7 @@ DL::DLLoader<T>::DLLoader(std::string const &filepath)
 {
     this->_lib = dlopen(filepath.c_str(), RTLD_LAZY);
     if (_lib == nullptr) {
-        throw LibLoadingException();
+        throw LibLoadingException("Fail to load the lib: "+filepath);
     }
     this->setName(filepath);
 }
@@ -48,7 +48,7 @@ T &DL::DLLoader<T>::getInstance(void) const
     DLLoader::entryPoint func;
     T *res;
 
-    func = dlsym(this->_lib, this->_entryPointName.c_str());
+    func = (DLLoader::entryPoint)dlsym(this->_lib, this->_entryPointName.c_str());
     if (func == nullptr) {
         throw LibLoadingException("Lib entry point not found");
     }
@@ -64,3 +64,6 @@ std::string const &DL::DLLoader<T>::getName(void) const
 {
     return this->_name;
 }
+
+template class DL::DLLoader<arcade::IDisplayModule>;
+template class DL::DLLoader<arcade::IGameModule>;

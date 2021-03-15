@@ -12,6 +12,8 @@
 #include <dlfcn.h>
 
 #include "LibLoadingException.hpp"
+#include "IDisplayModule.hpp"
+#include "IGameModule.hpp"
 
 namespace DL
 {

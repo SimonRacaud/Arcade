@@ -7,9 +7,10 @@
 
 DSRC	=	./src/
 
-SRC_FILES = 	main.cpp					\
-				exception/BaseException.cpp	\
-				lib/loader/DLLoader.cpp		\
+SRC_FILES = 	main.cpp						\
+				exception/BaseException.cpp		\
+				lib/DLLoader/DLLoader.cpp		\
+				lib/DLManager/DLManager.cpp		\
 
 SRC	=	$(addprefix $(DSRC), $(SRC_FILES))
 
@@ -17,7 +18,8 @@ OBJ	=	$(SRC:.cpp=.o)
 
 NAME	=	arcade
 
-CXXFLAGS	+= -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
+CXXFLAGS	+= -std=c++11 -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
+GPPFLAGS   	= -ldl
 
 DEBUG=-g
 
@@ -26,7 +28,7 @@ INCLUDE = -I./includes -I./src -I./src/exception/includes
 all:  $(NAME)
 
 $(NAME): $(OBJ)
-	@g++ -o $(NAME) $(OBJ) && \
+	@g++ -o $(NAME) $(OBJ) $(GPPFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)
 
