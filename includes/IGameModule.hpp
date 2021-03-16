@@ -24,11 +24,12 @@ namespace arcade
         virtual void reset() = 0;
 
         virtual size_t getScore() const = 0;
+        virtual size_t getScoreHigh() const = 0;
 
         virtual void setUsername(std::string const &username) = 0;
 
         virtual const IDisplayModule &getDisplayModule() const = 0;
-        virtual void setDisplayModule(const IDisplayModule &displayModule) = 0;
+        virtual void setDisplayModule(IDisplayModule &displayModule) = 0;
     };
 } // namespace arcade
 

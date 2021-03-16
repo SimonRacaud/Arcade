@@ -20,22 +20,17 @@ namespace arcade
 
     typedef std::pair<size_t, size_t> Coord;
 
-    typedef void (IGameModule::*key_evt)(int code);
-    typedef void (IGameModule::*mouse_evt)(Coord const &pos);
-
     class IDisplayModule {
       public:
         typedef enum class Color_s {
-            RED,
-            BLUE,
-            GREEN,
             BLACK,
+            RED,
+            GREEN,
             YELLOW,
-            BROWN,
-            GRAY,
-            WHITE,
-            ORANGE,
-            PURPLE
+            BLUE,
+            MAGENTA,
+            CYAN,
+            WHITE
         } Color;
 
         typedef enum class EKeyList {
@@ -57,31 +52,26 @@ namespace arcade
             ARROW_LEFT,
             ARROW_RIGHT,
             KEY_SPACE,
-            KEY_MOUSE_LEFT,
-            KEY_MOUSE_RIGHT
+            KEY_MOUSE_CLICK
         } KeyList;
 
-        virtual ~IDisplayModule(){};
+        virtual ~IDisplayModule() = default;
 
-        virtual void open();
-        virtual void close();
-        virtual void putRect(Color color, Coord size, Coord pos) = 0;
+        virtual void open() = 0;
+        virtual void close() = 0;
+
+        virtual void putRectFill(Color color, Coord size, Coord pos) = 0;
+        virtual void putRectOutline(Color color, Coord size, Coord pos) = 0;
         virtual void putCircle(Color color, Coord pos, size_t radius) = 0;
-        virtual void putLine(Color color, Coord startPos, Coord endPos) = 0;
         virtual void putText(Color color, Coord pos, std::string const &value) = 0;
-        virtual void putMatrix(Color color, std::string *mtx);
 
         virtual void displayScreen() = 0;
         virtual void refreshScreen() = 0;
         virtual void clearScreen() = 0;
 
         virtual bool isKeyPress(const KeyList key) const = 0;
-        virtual bool isKeyRelease(const KeyList key) const = 0;
+        virtual bool isMouseClicked() const = 0; // Any key of the mouse
         virtual Coord getMousePos() const = 0;
-
-        virtual void eventClicked(mouse_evt func) = 0;
-        virtual void eventKeyPressed(key_evt func) = 0;
-        virtual void eventKeyReleased(key_evt func) = 0;
     };
 } // namespace arcade
 
