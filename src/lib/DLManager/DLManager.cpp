@@ -21,6 +21,9 @@ DLManager<T>::~DLManager()
     this->cleanLoaders();
 }
 
+/*
+ * LibLoadingException
+ */
 template <class T>
 void DLManager<T>::loadLibs(std::deque<std::string> const& libNames)
 {
@@ -38,6 +41,27 @@ std::unordered_map<std::string, T *> &DLManager<T>::getLibs(void) const
     }
     return *result;
 }
+
+template <class T>
+std::deque<std::string> const& DLManager<T>::getAvailableLibs() const
+{
+    return _libFilePath;
+}
+
+/*
+ * LibNotFoundException
+ * LibLoadingException
+ */
+template <class T>
+T &DLManager<T>::getModule(std::string const& filepath)
+{
+    if (_libsLoader.find(filepath) == _libsLoader.end()) {
+        throw LibNotFoundException(filepath + " : library not found");
+    }
+    return _libsLoader[filepath]->getInstance();
+}
+
+/* --- Private --- */
 
 template <class T>
 void DLManager<T>::fetchLibFiles(void)
@@ -89,21 +113,6 @@ void DLManager<T>::cleanLoaders()
         delete this->_libsLoader.begin()->second;
         this->_libsLoader.erase(_libsLoader.begin());
     }
-}
-
-template <class T>
-std::deque<std::string> const& DLManager<T>::getAvailableLibs() const
-{
-    return _libFilePath;
-}
-
-template <class T>
-T &DLManager<T>::getModule(std::string const& filepath)
-{
-    if (_libsLoader.find(filepath) == _libsLoader.end()) {
-        throw LibNotFoundException(filepath + " : library not found");
-    }
-    return _libsLoader[filepath]->getInstance();
 }
 
 template <class T>

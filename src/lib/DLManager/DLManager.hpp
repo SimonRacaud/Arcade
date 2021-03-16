@@ -39,13 +39,14 @@ namespace DL {
         std::deque<std::string> const& getAvailableLibs(void) const;
         T &getModule(std::string const& filePath);
 
-    private:
+    protected:
         void fetchLibFiles(void);
         void generateLoaders(std::deque<std::string> const& libNames);
         void cleanLoaders(void);
 
         std::string mergeFilePath(std::string const& path, std::string const& file);
 
+    private:
         const std::string _libPath;
         const std::string _extension;
         std::unordered_map<std::string, DLLoader<T> *> _libsLoader;
