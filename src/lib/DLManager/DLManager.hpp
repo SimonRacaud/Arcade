@@ -32,16 +32,14 @@ namespace DL {
         DLManager(std::string const& libsPath, std::string const &extension = ".so");
         virtual ~DLManager();
 
-        void loadLibs(std::deque<std::string> const& libNames);
-
-        std::unordered_map<std::string, T *> &getLibs(void) const;
+        void fetchAvailableLibs(std::deque<std::string> const& libNames);
 
         std::deque<std::string> const& getAvailableLibs(void) const;
-        T &getModule(std::string const& filePath);
+        T &getModule(std::string const& fileName);
 
     protected:
-        void fetchLibFiles(void);
-        void generateLoaders(std::deque<std::string> const& libNames);
+        void fetchLibFiles(std::deque<std::string> const& libNames);
+        void generateLoader(std::string const& fileName);
         void cleanLoaders(void);
 
         std::string mergeFilePath(std::string const& path, std::string const& file);

@@ -20,7 +20,7 @@ OBJ	=	$(SRC:.cpp=.o)
 NAME	=	arcade
 
 CXXFLAGS	+= -std=c++11 -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
-GPPFLAGS   	= -ldl
+LDFLAGS   	= -ldl
 
 DEBUG=-g
 
@@ -29,7 +29,7 @@ INCLUDE = -I./includes -I./src -I./src/exception/includes
 all:  $(NAME)
 
 $(NAME): $(OBJ)
-	@g++ -o $(NAME) $(OBJ) $(GPPFLAGS) && \
+	@g++ -o $(NAME) $(OBJ) $(LDFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)
 
@@ -42,8 +42,6 @@ fclean:	clean
 	rm -f $(NAME)
 
 re:	fclean all
-
-reall:	fclean all
 
 #tests_run:
 	#@g++ -o $(NAME) $(SRC_UT) -I./ -lcriterion --coverage && ./$(NAME)

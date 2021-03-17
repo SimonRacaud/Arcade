@@ -25,21 +25,11 @@ DLManager<T>::~DLManager()
  * LibLoadingException
  */
 template <class T>
-void DLManager<T>::loadLibs(std::deque<std::string> const& libNames)
+void DLManager<T>::fetchAvailableLibs(std::deque<std::string> const& libNames)
 {
-    this->fetchLibFiles();
-    this->generateLoaders(libNames);
-}
-
-template <class T>
-std::unordered_map<std::string, T *> &DLManager<T>::getLibs(void) const
-{
-    auto result = new std::unordered_map<std::string, T *>;
-
-    for (auto const loader : _libsLoader) {
-        (*result)[loader.first] = &loader.second->getInstance();
-    }
-    return *result;
+    this->_libFilePath.clear();
+    this->cleanLoaders();
+    this->fetchLibFiles(libNames);
 }
 
 template <class T>
@@ -48,33 +38,33 @@ std::deque<std::string> const& DLManager<T>::getAvailableLibs() const
     return _libFilePath;
 }
 
-/*
+/**
  * LibNotFoundException
  * LibLoadingException
  */
 template <class T>
-T &DLManager<T>::getModule(std::string const& filepath)
+T &DLManager<T>::getModule(std::string const& fileName)
 {
-    if (_libsLoader.find(filepath) == _libsLoader.end()) {
-        throw LibNotFoundException(filepath + " : library not found");
+    if (_libsLoader.find(fileName) == _libsLoader.end()) {
+        this->generateLoader(fileName);
     }
-    return _libsLoader[filepath]->getInstance();
+    return _libsLoader[fileName]->getInstance();
 }
 
 /* --- Private --- */
 
 template <class T>
-void DLManager<T>::fetchLibFiles(void)
+void DLManager<T>::fetchLibFiles(std::deque<std::string> const& libNames)
 {
     DIR *dir = opendir(_libPath.c_str());
     struct dirent *fileInfo;
     std::string filename;
+    std::string filePath;
     size_t pos;
 
     if (dir == nullptr) {
         throw LibLoadingException("Fail to load lib directory");
     }
-    this->_libFilePath.clear();
     while ((fileInfo = readdir(dir)) != nullptr) {
         if (fileInfo->d_type != DT_REG)
             continue;
@@ -82,27 +72,33 @@ void DLManager<T>::fetchLibFiles(void)
         pos = filename.find_last_of('.');
         if (pos == filename.size() || filename.compare(pos, _extension.size(), _extension))
             continue;
-        this->_libFilePath.push_back(this->mergeFilePath(_libPath, filename));
+        filePath = this->mergeFilePath(_libPath, filename);
+        if (std::find(libNames.begin(), libNames.end(), filename) != libNames.end()) {
+            this->_libFilePath.push_back(filePath);
+        }
     }
     closedir(dir);
 }
 
-// throw LibLoadException
+/**
+ * LibNotFoundException
+ */
 template <class T>
-void DLManager<T>::generateLoaders(std::deque<std::string> const& libNames)
+void DLManager<T>::generateLoader(std::string const& fileName)
 {
-    std::string filepath;
+    auto it = std::find_if(
+        _libFilePath.begin(),
+        _libFilePath.end(),
+        [fileName](std::string const& path){ return path.find(fileName) != path.size(); }
+    );
 
-    this->cleanLoaders();
-    for (std::string const& filepath : _libFilePath) {
-        if (std::find_if(
-                libNames.begin(),
-                libNames.end(),
-                [filepath](std::string const& f) { return filepath.find(f) != filepath.size(); }
-                ) == libNames.end()) {
-            continue;
+    if (it != _libFilePath.end()) {
+        if (_libsLoader.find(fileName) != _libsLoader.end()) {
+            return;
         }
-        _libsLoader[filepath] = new DLLoader<T>(filepath);
+        _libsLoader[fileName] = new DLLoader<T>(*it);
+    } else {
+        throw LibNotFoundException(fileName + " not found");
     }
 }
 

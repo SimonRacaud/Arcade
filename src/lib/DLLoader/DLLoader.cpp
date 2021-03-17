@@ -13,6 +13,7 @@ DL::DLLoader<T>::DLLoader(std::string const &filepath)
 {
     this->_lib = dlopen(filepath.c_str(), RTLD_LAZY);
     if (this->_lib == nullptr) {
+        std::cerr << dlerror() << std::endl;
         throw LibLoadingException("Fail to load the lib: "+filepath);
     }
     this->setName(filepath);
