@@ -4,6 +4,7 @@
 arcade
 *.pdf
 .idea
+.clang-format
 ### C ###
 # Prerequisites
 *.d
