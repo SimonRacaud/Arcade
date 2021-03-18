@@ -55,8 +55,13 @@ void Arcade::loop()
             this->_selectedGame->refresh();
         }
         if (this->_selectedGraphic) {
-            this->_selectedGraphic->clearScreen();
-            this->_selectedGraphic->displayScreen();
+            if (this->_selectedGraphic->isOpen() == false) {
+                this->_status = ExitStatus::SUCCESS;
+            } else {
+                this->_selectedGraphic->clearScreen();
+                this->_selectedGraphic->refreshScreen();
+                this->_selectedGraphic->displayScreen();
+            }
         }
     }
 }
@@ -101,6 +106,7 @@ void Arcade::gotoMainMenu()
     if (this->_selectedGame == nullptr)
         return;
     this->_selectedGame = nullptr;
+    // TODO : open main menu
 }
 
 void Arcade::selectGraphic(std::string const& name)
