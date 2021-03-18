@@ -21,6 +21,7 @@ DEF_SRC	= 	$(DSRC)exception/BaseException.cpp		\
 CORE_SRC_FILES = 	main.cpp						\
 					lib/DLLoader/DLLoader.cpp		\
 					lib/DLManager/DLManager.cpp		\
+					Arcade/Arcade.cpp				\
 
 CORE_SRC			= $(DEF_SRC) $(addprefix $(DSRC), $(CORE_SRC_FILES))
 CORE_OBJ			= $(CORE_SRC:.cpp=.o)
