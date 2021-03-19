@@ -14,6 +14,7 @@
 #include "ObjectException.hpp"
 #include "OutOfBoundException.hpp"
 #include "Vector.hpp"
+#include <ctime>
 
 namespace Game
 {
@@ -32,15 +33,25 @@ namespace Game
         bool isCollideWith(GameObject const &obj) const;
         bool isCollideWith(GameMap const &map) const;
 
+        void setAnimation(Color secondary, size_t freq);
+
       protected:
         bool canMove(int offsetX, int offsetY) const;
 
         bool isCollideCoord(Vector const &pos) const;
 
+        bool _anim;
+
         Color _color;
         Vector _posMax;
         size_t _size;
         std::deque<Vector> _positions;
+
+        size_t _animFreq;
+        clock_t _time;
+        bool _colorState;
+        Color _animColor[2];
+
     };
 } // namespace Game
 

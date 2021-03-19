@@ -10,7 +10,8 @@
 using namespace Game;
 
 GameObject::GameObject(Color color, const Coord &mapSize)
-    : _color(color), _posMax({mapSize.first, mapSize.second}), _size(1)
+    : _anim(false), _color(color), _posMax({mapSize.first, mapSize.second}),
+      _size(1)
 {
     this->_positions.push_back(Vector(0, 0));
 }
@@ -21,9 +22,18 @@ GameObject::~GameObject()
 
 void GameObject::display(arcade::IDisplayModule &mod)
 {
+    Color c = _color;
+
+    if (_anim) {
+        if (_time - (size_t)clock() >= _animFreq) {
+            _time = clock();
+            _colorState = !_colorState;
+        }
+        c = _animColor[_colorState];
+    }
     for (size_t i = 0; i < _size; i++) {
         mod.putRectFill(
-            _color, Coord(1, 1), Coord(_positions[i].y, _positions[i].x));
+            c, Coord(1, 1), Coord(_positions[i].y, _positions[i].x));
     }
 }
 
@@ -50,7 +60,7 @@ void GameObject::move(int offsetX, int offsetY)
  * throw ObjectException
  * @param coord
  */
-void GameObject::setPosition(Vector const& coord)
+void GameObject::setPosition(Vector const &coord)
 {
     if (_size == 1) {
         this->_positions[0].x = coord.x;
@@ -77,7 +87,7 @@ bool GameObject::isCollideWith(const GameMap &map) const
             if (map.isCollideToCoord(_positions[i].x, _positions[i].y)) {
                 return true;
             }
-        } catch (OutOfBoundException const& e) {
+        } catch (OutOfBoundException const &e) {
             return true;
         }
     }
@@ -94,7 +104,7 @@ bool GameObject::canMove(int offsetX, int offsetY) const
         || offsetY + (int) _positions[0].y < 0) {
         return false;
     } else if (offsetY + (int) _positions[0].y >= (int) _posMax.y
-               || offsetX + (int) _positions[0].x >= (int) _posMax.x) {
+        || offsetX + (int) _positions[0].x >= (int) _posMax.x) {
         return false;
     }
     for (size_t i = 1; i < _size; i++) {
@@ -113,4 +123,14 @@ bool GameObject::isCollideCoord(const Vector &pos) const
         }
     }
     return false;
+}
+
+void GameObject::setAnimation(Color secondary, size_t freq)
+{
+    this->_anim = true;
+    this->_animFreq = freq;
+    this->_colorState = false;
+    this->_animColor[0] = _color;
+    this->_animColor[1] = secondary;
+    this->_time = 0;
 }
