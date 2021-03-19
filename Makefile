@@ -17,13 +17,19 @@ NAME		= arcade lib/arcade_nibbler.so lib/arcade_libsfml.so
 DEF_SRC	= 	$(DSRC)exception/BaseException.cpp		\
 			$(DSRC)utility/trim.cpp					\
 
+### DEFAUL_GAME_CLASSES
+GAME_DSRC = $(DSRC)Game
+DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
+					$(GAME_DSRC)/GameMap/GameMap.cpp						\
+					$(GAME_DSRC)/GameObject/GameObject.cpp					\
+
 ### CORE
 CORE_SRC_FILES = 	main.cpp						\
 					lib/DLLoader/DLLoader.cpp		\
 					lib/DLManager/DLManager.cpp		\
 					Arcade/Arcade.cpp				\
 
-CORE_SRC			= $(DEF_SRC) $(addprefix $(DSRC), $(CORE_SRC_FILES))
+CORE_SRC			= $(DEF_SRC) $(addprefix $(DSRC), $(CORE_SRC_FILES)) $(DEF_GAME_SRC)
 CORE_OBJ			= $(CORE_SRC:.cpp=.o)
 core: OBJ 			= $(CORE_OBJ)
 core: NAME		= arcade
