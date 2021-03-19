@@ -13,6 +13,7 @@
 #include "IDisplayModule.hpp"
 #include "OutOfBoundException.hpp"
 #include "Vector.hpp"
+#include "../../../../../../../../media/work/2_CURRENT/B-OOP-400-REN-4-1-arcade-aurelien.joncour/includes/Vector.hpp"
 
 namespace Game
 {
@@ -35,6 +36,7 @@ namespace Game
 
         const std::deque<Color> &getCollideColors() const;
         void setCollideColors(const std::deque<Color> &collideColors);
+        const Vector &getSize() const;
 
         bool isCollideToCoord(int x, int y) const;
     };

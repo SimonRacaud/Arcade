@@ -9,8 +9,8 @@
 
 using namespace Game;
 
-GameObject::GameObject(Color color, const Coord &mapSize)
-    : _anim(false), _color(color), _posMax({mapSize.first, mapSize.second}),
+GameObject::GameObject(Color color, const Vector &mapSize)
+    : _anim(false), _color(color), _posMax(mapSize),
       _size(1)
 {
     this->_positions.push_back(Vector(0, 0));
@@ -25,7 +25,7 @@ void GameObject::display(arcade::IDisplayModule &mod)
     Color c = _color;
 
     if (_anim) {
-        if (_time - (size_t)clock() >= _animFreq) {
+        if ((size_t)clock() - _time >= _animFreq) {
             _time = clock();
             _colorState = !_colorState;
         }

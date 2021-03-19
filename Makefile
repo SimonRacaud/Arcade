@@ -22,6 +22,7 @@ GAME_DSRC = $(DSRC)Game
 DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 					$(GAME_DSRC)/GameMap/GameMap.cpp						\
 					$(GAME_DSRC)/GameObject/GameObject.cpp					\
+					$(GAME_DSRC)/Projectile/Projectile.cpp					\
 
 ### CORE
 CORE_SRC_FILES = 	main.cpp						\
@@ -29,7 +30,7 @@ CORE_SRC_FILES = 	main.cpp						\
 					lib/DLManager/DLManager.cpp		\
 					Arcade/Arcade.cpp				\
 
-CORE_SRC			= $(DEF_SRC) $(addprefix $(DSRC), $(CORE_SRC_FILES)) $(DEF_GAME_SRC)
+CORE_SRC			= $(DEF_SRC) $(addprefix $(DSRC), $(CORE_SRC_FILES))
 CORE_OBJ			= $(CORE_SRC:.cpp=.o)
 core: OBJ 			= $(CORE_OBJ)
 core: NAME		= arcade

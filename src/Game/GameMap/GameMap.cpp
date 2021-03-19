@@ -84,3 +84,8 @@ bool GameMap::isCollideToCoord(int x, int y) const
     }
     return false;
 }
+
+const Vector &GameMap::getSize() const
+{
+    return _size;
+}

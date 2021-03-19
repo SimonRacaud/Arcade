@@ -22,12 +22,12 @@ namespace Game
 
     class GameObject {
       public:
-        GameObject(Color color, Coord const &mapSize);
+        GameObject(Color color, Vector const &mapSize);
         virtual ~GameObject();
 
         void display(arcade::IDisplayModule &mod);
 
-        void move(int offsetX, int offsetY);
+        virtual void move(int offsetX, int offsetY);
         void setPosition(Vector const &coord);
 
         bool isCollideWith(GameObject const &obj) const;
