@@ -9,7 +9,7 @@
 #define NCURSES_HPP_
 
 #include "../../../includes/IDisplayModule.hpp"
-#include "../exception/includes/DisplayModuleException.hpp"
+#include "../../exception/includes/DisplayModuleException.hpp"
 #include <curses.h>
 #include <map>
 #include <iostream>
