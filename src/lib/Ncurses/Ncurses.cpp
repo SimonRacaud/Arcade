@@ -66,6 +66,8 @@ void Ncurses::open()
     COLOR_YELLOW, COLOR_BLUE, COLOR_MAGENTA, COLOR_CYAN, COLOR_WHITE};
 
     _window = initscr();
+    if (_window == NULL)
+        throw DisplayModuleException("The initialization of the window failed !");
     timeout(1);
     _isOpen = true;
     keypad(_window, true);
@@ -81,7 +83,8 @@ void Ncurses::open()
 
 void Ncurses::close()
 {
-    endwin();
+    if (endwin() == ERR)
+        throw DisplayModuleException("The closing of the window failed !");
     _isOpen = false;
 }
 
@@ -176,14 +179,18 @@ void Ncurses::displayScreen() {}
 
 void Ncurses::refreshScreen()
 {
-    refresh();
+    if (refresh() == ERR)
+        throw DisplayModuleException("The refreshment of the window failed !");
     cbreak();
+    if (cbreak() == ERR)
+        throw DisplayModuleException("The unblocking of the getch failed !");
     _ch = wgetch(_window);
 }
 
 void Ncurses::clearScreen()
 {
-    clear();
+    if (clear() == ERR)
+        throw DisplayModuleException("The cleaning of the window failed !");
 }
 
 bool Ncurses::isKeyPress(const KeyList key) const
