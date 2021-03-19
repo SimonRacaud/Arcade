@@ -48,10 +48,18 @@ sfml: LDFLAGS 	+= -shared -lsfml-graphics -lsfml-window -lsfml-system
 sfml: CXXFLAGS 	+= -fPIC
 sfml: $(SFML_OBJ) build
 
+NCURSES_SRC 	= 	$(DSRC)lib/Ncurses/Ncurses.cpp $(DEF_SRC)
+NCURSES_OBJ	= 	$(NCURSES_SRC:.cpp=.o)
+ncurses: OBJ	=	$(NCURSES_OBJ)
+ncurses: NAME	=	lib/arcade_ncurses.so
+ncurses: LDFLAGS 	+= -shared -lncurses
+ncurses: CXXFLAGS 	+= -fPIC
+ncurses: $(NCURSES_OBJ) build
+
 all:  core games graphicals
 
 games: nibbler
-graphicals: sfml
+graphicals: sfml ncurses
 
 ### BUILD
 %.o: %.cpp
