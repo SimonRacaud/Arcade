@@ -26,7 +26,7 @@ namespace arcade
       public:
         virtual ~IGameModule(){};
 
-        virtual GameStatus getStatus() const;
+        virtual GameStatus getStatus() const = 0;
 
         virtual void refresh() = 0;
 
