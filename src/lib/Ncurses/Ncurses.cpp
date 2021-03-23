@@ -37,6 +37,7 @@ const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
     //{arcade::IDisplayModule::KeyList::RESTART_GAME, sf::Keyboard::Num0},
     //{arcade::IDisplayModule::KeyList::MENU, sf::Keyboard::Num0},
     //{arcade::IDisplayModule::KeyList::EXIT, sf::Keyboard::Num0},
+    //{arcade::IDisplayModule::KeyList::PREV_GAME, sf::Keyboard::Num0},
     {arcade::IDisplayModule::KeyList::KEY_Z, 'z'},
     {arcade::IDisplayModule::KeyList::KEY_Q, 'q'},
     {arcade::IDisplayModule::KeyList::KEY_S, 's'},

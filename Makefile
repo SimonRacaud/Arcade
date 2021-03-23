@@ -11,7 +11,7 @@ DSRC	=	./src/
 CXXFLAGS	+= -std=c++11 -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
 DEBUG		= -g
 INCLUDE 	= -I./includes -I./src -I./src/exception/includes
-NAME		= arcade lib/arcade_nibbler.so lib/arcade_libsfml.so
+NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so
 
 ### DEFAULT
 DEF_SRC	= 	$(DSRC)exception/BaseException.cpp		\
@@ -28,7 +28,7 @@ DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 all:  core games graphicals
 
 games: nibbler
-graphicals: sfml
+graphicals: sfml SDL2 ncurses
 
 ### CORE
 CORE_SRC_FILES = 	main.cpp						\
@@ -41,7 +41,7 @@ CORE_OBJ			= $(CORE_SRC:.cpp=.o)
 core: OBJ 			= $(CORE_OBJ)
 core: NAME		= arcade
 core: LDFLAGS   += -ldl
-core: $(CORE_OBJ) build
+core: $(CORE_OBJ)
 
 ### GAMES
 NIBBLER_SRC	=	$(DEF_SRC) $(DSRC)lib/game/nibbler.cpp
@@ -50,7 +50,7 @@ nibbler: OBJ = $(NIBBLER_OBJ)
 nibbler: NAME	=	lib/arcade_nibbler.so
 nibbler: LDFLAGS 	+= -fpic
 nibbler: CXXFLAGS 	+= -shared
-nibbler: $(NIBBLER_OBJ) build
+nibbler: $(NIBBLER_OBJ)
 
 ### GRAPHICALS
 SFML_SRC 	= 	$(DSRC)lib/SFML.cpp $(DEF_SRC)
@@ -59,7 +59,7 @@ sfml: OBJ	=	$(SFML_OBJ)
 sfml: NAME	=	lib/arcade_libsfml.so
 sfml: LDFLAGS 	+= -shared -lsfml-graphics -lsfml-window -lsfml-system
 sfml: CXXFLAGS 	+= -fPIC
-sfml: $(SFML_OBJ) build
+sfml: $(SFML_OBJ)
 
 NCURSES_SRC 	= 	$(DSRC)lib/Ncurses/Ncurses.cpp $(DEF_SRC)
 NCURSES_OBJ	= 	$(NCURSES_SRC:.cpp=.o)
@@ -67,7 +67,15 @@ ncurses: OBJ	=	$(NCURSES_OBJ)
 ncurses: NAME	=	lib/arcade_ncurses.so
 ncurses: LDFLAGS 	+= -shared -lncurses
 ncurses: CXXFLAGS 	+= -fPIC
-ncurses: $(NCURSES_OBJ) build
+ncurses: $(NCURSES_OBJ)
+
+SDL2_SRC	=	$(DSRC)lib/SDL2.cpp $(DEF_SRC)
+SDL2_OBJ	=	$(SDL2_SRC:.cpp=.o)
+SDL2: OBJ	=	$(SDL2_OBJ)
+SDL2: NAME	=	lib/arcade_sdl2.so
+SDL2: LDFLAGS	+= -shared -lSDL2 -lSDL2_ttf
+SDL2: CXXFLAGS	+=	-fPIC
+SDL2: $(SDL2_OBJ)
 
 all:  core games graphicals
 
@@ -78,7 +86,7 @@ graphicals: sfml ncurses
 %.o: %.cpp
 	@g++ -c $(CXXFLAGS) -o $@ $<
 
-build: $(OBJ)
+core nibbler sfml SDL2 ncurses: $(OBJ)
 	@g++ -o $(NAME) $(OBJ) $(LDFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)

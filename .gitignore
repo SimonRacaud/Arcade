@@ -114,6 +114,7 @@ NormEZ.rb
 #tests/
 *.gcda
 *.gcno
+vgcore.*
 
 .vscode
 .vscode/
