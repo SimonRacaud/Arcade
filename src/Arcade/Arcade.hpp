@@ -37,11 +37,11 @@ namespace arcade {
 
         std::string const &getUsername() const;
 
-    protected:
         void selectGame(std::string const& name);
-        void gotoMainMenu();
-
         void selectGraphic(std::string const& name);
+
+      protected:
+        void gotoMainMenu();
 
         static const std::deque<std::string> GAME_LIB_NAMES;
         static const std::deque<std::string> GRAPHIC_LIB_NAMES;

@@ -69,7 +69,7 @@ void DLManager<T>::fetchLibFiles(std::deque<std::string> const &libNames)
             continue;
         filename = fileInfo->d_name;
         pos = filename.find_last_of('.');
-        if (pos == filename.size()
+        if (pos == std::string::npos
             || filename.compare(pos, _extension.size(), _extension))
             continue;
         filePath = this->mergeFilePath(_libPath, filename);
@@ -89,7 +89,7 @@ void DLManager<T>::generateLoader(std::string const &fileName)
 {
     auto it = std::find_if(_libFilePath.begin(), _libFilePath.end(),
         [fileName](std::string const &path) {
-            return path.find(fileName) != path.size();
+            return path.find(fileName) != std::string::npos;
         });
 
     if (it != _libFilePath.end()) {

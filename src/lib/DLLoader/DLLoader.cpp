@@ -36,10 +36,10 @@ void DL::DLLoader<T>::setName(const std::string &filepath)
     const size_t posExt = filepath.find_last_of('.');
     std::string result = filepath;
 
-    if (posExt != filepath.size()) {
+    if (posExt != std::string::npos) {
         result = filepath.substr(0, posExt);
     }
-    if (posPath != filepath.size()) {
+    if (posPath != std::string::npos) {
         result = result.substr(posPath);
     }
     this->_name = result;
