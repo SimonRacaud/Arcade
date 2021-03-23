@@ -22,16 +22,7 @@ namespace arcade
 
     class IDisplayModule {
       public:
-        typedef enum class Color_s {
-            BLACK,
-            RED,
-            GREEN,
-            YELLOW,
-            BLUE,
-            MAGENTA,
-            CYAN,
-            WHITE
-        } Color;
+        typedef enum class Color_s { BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE } Color;
 
         typedef enum class EKeyList {
             // GUI
@@ -42,6 +33,7 @@ namespace arcade
             RESTART_GAME,
             MENU,
             EXIT,
+            PAUSE,
             // Keys
             KEY_Z,
             KEY_Q,
@@ -52,7 +44,7 @@ namespace arcade
             ARROW_LEFT,
             ARROW_RIGHT,
             KEY_SPACE,
-            KEY_MOUSE
+            KEY_MOUSE_CLICK
         } KeyList;
 
         virtual ~IDisplayModule() = default;
@@ -64,8 +56,7 @@ namespace arcade
         virtual void putRectFill(Color color, Coord size, Coord pos) = 0;
         virtual void putRectOutline(Color color, Coord size, Coord pos) = 0;
         virtual void putCircle(Color color, Coord pos, size_t radius) = 0;
-        virtual void putText(
-            Color color, Coord pos, std::string const &value) = 0;
+        virtual void putText(Color color, Coord pos, std::string const &value) = 0;
 
         virtual void displayScreen() = 0;
         virtual void refreshScreen() = 0;
