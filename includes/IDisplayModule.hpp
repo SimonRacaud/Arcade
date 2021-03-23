@@ -72,7 +72,7 @@ namespace arcade
         virtual void clearScreen() = 0;
 
         virtual bool isKeyPress(const KeyList key) const = 0;
-        virtual bool isMouseClicked() = 0; // Any key of the mouse
+        virtual bool isMouseClicked() const = 0; // Any key of the mouse
         virtual Coord getMousePos() const = 0;
     };
 } // namespace arcade
