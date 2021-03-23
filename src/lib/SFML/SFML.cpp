@@ -5,7 +5,7 @@
 ** SFML
 */
 
-#include "../../includes/lib/SFML.hpp"
+#include "../../../includes/lib/SFML.hpp"
 
 const std::map <arcade::IDisplayModule::Color, sf::Color> SFML::_color = {
     {arcade::IDisplayModule::Color::BLACK, sf::Color::Black},

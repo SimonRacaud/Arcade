@@ -53,10 +53,10 @@ nibbler: CXXFLAGS 	+= -shared
 nibbler: $(NIBBLER_OBJ)
 
 ### GRAPHICALS
-SFML_SRC 	= 	$(DSRC)lib/SFML.cpp $(DEF_SRC)
+SFML_SRC 	= 	$(DSRC)lib/SFML/SFML.cpp $(DEF_SRC)
 SFML_OBJ	= 	$(SFML_SRC:.cpp=.o)
 sfml: OBJ	=	$(SFML_OBJ)
-sfml: NAME	=	lib/arcade_libsfml.so
+sfml: NAME	=	lib/arcade_sfml.so
 sfml: LDFLAGS 	+= -shared -lsfml-graphics -lsfml-window -lsfml-system
 sfml: CXXFLAGS 	+= -fPIC
 sfml: $(SFML_OBJ)
@@ -69,7 +69,7 @@ ncurses: LDFLAGS 	+= -shared -lncurses
 ncurses: CXXFLAGS 	+= -fPIC
 ncurses: $(NCURSES_OBJ)
 
-SDL2_SRC	=	$(DSRC)lib/SDL2.cpp $(DEF_SRC)
+SDL2_SRC	=	$(DSRC)lib/SDL2/SDL2.cpp $(DEF_SRC)
 SDL2_OBJ	=	$(SDL2_SRC:.cpp=.o)
 SDL2: OBJ	=	$(SDL2_OBJ)
 SDL2: NAME	=	lib/arcade_sdl2.so

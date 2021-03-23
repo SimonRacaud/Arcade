@@ -5,8 +5,8 @@
 ** SDL2
 */
 
-#include "../../includes/lib/SDL2.hpp"
-#include "../../includes/config.h"
+#include "../../../includes/lib/SDL2.hpp"
+#include "../../../includes/config.h"
 
 const std::map<arcade::IDisplayModule::Color, SDL_Color> SDL2::_color = {
     {arcade::IDisplayModule::Color::BLACK, {0, 0, 0, 255}},
