@@ -30,6 +30,7 @@ _graphLibManager("./lib"), _gameLibManager("./lib")
         try {
             IDisplayModule &displayMod = this->_graphLibManager.getModule(defGraphicFile);
             this->_selectedGraphic = &displayMod;
+            this->_selectedGraphic->open();
         }  catch (LibNotFoundException const& e) {
             std::cerr << "Error: " << e.what() << std::endl;
             this->_status = ExitStatus::ERROR;
@@ -43,7 +44,7 @@ _graphLibManager("./lib"), _gameLibManager("./lib")
 
 Arcade::~Arcade()
 {
-
+    this->_selectedGraphic->close();
 }
 
 void Arcade::loop()

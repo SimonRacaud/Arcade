@@ -19,9 +19,9 @@ GameMap::GameMap(const Vector &size, std::deque<Color> const &fill)
     size_t idx = 0;
 
     this->_mtx = new Color *[size.y];
-    for (size_t y = 0; y < size.y; y++) {
+    for (size_t y = 0; y < (size_t)size.y; y++) {
         this->_mtx[y] = new Color[size.x];
-        for (size_t x = 0; x < size.x; x++) {
+        for (size_t x = 0; x < (size_t)size.x; x++) {
             if (fill.size() > idx) {
                 this->_mtx[y][x] = fill[idx++];
             } else {
@@ -39,8 +39,8 @@ GameMap::~GameMap()
 void GameMap::display(arcade::IDisplayModule &mod)
 {
     if (this->_mtx != nullptr) {
-        for (size_t y = 0; y < _size.y; y++) {
-            for (size_t x = 0; x < _size.x; x++) {
+        for (size_t y = 0; y < (size_t)_size.y; y++) {
+            for (size_t x = 0; x < (size_t)_size.x; x++) {
                 mod.putRectFill(
                     this->_mtx[y][x], arcade::Coord(1, 1), arcade::Coord(y, x));
             }

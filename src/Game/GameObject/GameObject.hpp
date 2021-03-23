@@ -25,6 +25,8 @@ namespace Game
         GameObject(Color color, Vector const &mapSize);
         virtual ~GameObject();
 
+        GameObject &operator=(GameObject const& obj);
+
         void display(arcade::IDisplayModule &mod);
 
         virtual void move(int offsetX, int offsetY);
@@ -35,10 +37,9 @@ namespace Game
 
         void setAnimation(Color secondary, size_t freq);
 
+        bool isCollideCoord(Vector const &pos) const;
       protected:
         bool canMove(int offsetX, int offsetY) const;
-
-        bool isCollideCoord(Vector const &pos) const;
 
         bool _anim;
 
@@ -51,7 +52,6 @@ namespace Game
         clock_t _time;
         bool _colorState;
         Color _animColor[2];
-
     };
 } // namespace Game
 
