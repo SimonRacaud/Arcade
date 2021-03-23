@@ -38,7 +38,7 @@ void GameObject::display(arcade::IDisplayModule &mod)
 }
 
 /**
- * throw ObjectException
+ * throw OutOfBoundException
  * @param offsetX
  * @param offsetY
  */
@@ -52,7 +52,7 @@ void GameObject::move(int offsetX, int offsetY)
         this->_positions[0].y += offsetY;
         this->_positions[0].x += offsetX;
     } else {
-        throw ObjectException("GameObject::move");
+        throw OutOfBoundException("GameObject::move");
     }
 }
 
@@ -107,12 +107,6 @@ bool GameObject::canMove(int offsetX, int offsetY) const
         || offsetX + (int) _positions[0].x >= (int) _posMax.x) {
         return false;
     }
-    for (size_t i = 1; i < _size; i++) {
-        if (_positions[i].x == (offsetX + _positions[0].x)
-            || _positions[i].y == (offsetY + _positions[0].y)) {
-            return false;
-        }
-    }
     return true;
 }
 bool GameObject::isCollideCoord(const Vector &pos) const
@@ -133,4 +127,20 @@ void GameObject::setAnimation(Color secondary, size_t freq)
     this->_animColor[0] = _color;
     this->_animColor[1] = secondary;
     this->_time = 0;
+}
+
+GameObject &GameObject::operator=(const GameObject &obj)
+{
+    _anim = obj._anim;
+    _color = obj._color;
+    _posMax.x = obj._posMax.x;
+    _posMax.y = obj._posMax.y;
+    _size = obj._size;
+    _positions = obj._positions;
+    _animFreq = obj._animFreq;
+    _time = obj._time;
+    _colorState = obj._colorState;
+    _animColor[0] = obj._animColor[0];
+    _animColor[1] = obj._animColor[1];
+    return *this;
 }

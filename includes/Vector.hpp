@@ -8,14 +8,20 @@
 #ifndef VECTOR_HPP_
 #define VECTOR_HPP_
 
+#include <cstddef>
+#include <sys/types.h>
+
 class Vector {
   public:
-    Vector(size_t ix, size_t iy) : x(ix), y(iy) {}
-    Vector(Vector const& v) : x(v.x), y(v.y) {}
+    Vector(ssize_t ix, ssize_t iy);
+    Vector(Vector const &v);
     ~Vector() = default;
 
-    size_t x;
-    size_t y;
+    Vector operator+(Vector const &v);
+    Vector operator-(Vector const &v);
+
+    ssize_t x;
+    ssize_t y;
 };
 
 #endif // VECTOR_HPP_

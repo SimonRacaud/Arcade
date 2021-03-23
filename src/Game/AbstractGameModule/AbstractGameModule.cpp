@@ -9,9 +9,17 @@
 
 using namespace Game;
 
-AbstractGameModule::AbstractGameModule(std::string &username)
-    : _score(0), _highScore(0), _username(username), _graphModule(nullptr),
-      _map(nullptr)
+AbstractGameModule::AbstractGameModule(
+    std::string const& username, Vector const &mapSize)
+    : _status(GameStatus::SUCCESS), _score(0), _highScore(0), _username(username),
+      _graphModule(nullptr), _map(mapSize)
+{
+}
+
+AbstractGameModule::AbstractGameModule(
+    std::string const& username, Vector const &mapSize, std::deque<Color> const &map)
+    : _status(GameStatus::SUCCESS), _score(0), _highScore(0), _username(username),
+      _graphModule(nullptr), _map(mapSize, map)
 {
 }
 
@@ -36,13 +44,72 @@ void AbstractGameModule::setUsername(std::string const &username)
  */
 const arcade::IDisplayModule &AbstractGameModule::getDisplayModule() const
 {
-    if (this->_graphModule != nullptr)
-        return *_graphModule;
-    throw ModuleException();
+    return *_graphModule;
 }
 
 void AbstractGameModule::setDisplayModule(
     arcade::IDisplayModule &displayModule)
 {
     this->_graphModule = &displayModule;
+}
+
+GameStatus AbstractGameModule::getStatus() const
+{
+    return _status;
+}
+
+void AbstractGameModule::setStatus(GameStatus status)
+{
+    this->_status = status;
+}
+
+void AbstractGameModule::refreshEndMenu()
+{
+    if (_graphModule != nullptr) {
+        Vector const &mapSize = _map.getSize();
+        Coord posTitle(mapSize.y / 2, mapSize.x / 2 - 5);
+        Coord posMsg(mapSize.y / 2 + 2, mapSize.x / 2 - 11);
+
+        this->_graphModule->putText(Color::RED, posTitle, "GAME OVER");
+        this->_graphModule->putText(
+            Color::RED, posMsg, "press space to restart");
+    }
+}
+
+void AbstractGameModule::refreshPauseMenu()
+{
+    if (_graphModule != nullptr) {
+        Vector const &mapSize = _map.getSize();
+        Coord posTitle(mapSize.y / 2, mapSize.x / 2 - 2);
+        Coord posMsg(mapSize.y / 2 + 2, mapSize.x / 2 - 11);
+
+        this->_graphModule->putText(Color::RED, posTitle, "PAUSE");
+        this->_graphModule->putText(
+            Color::RED, posMsg, "press space to continue");
+    }
+}
+
+void AbstractGameModule::refresh()
+{
+    if (_graphModule == nullptr)
+        return;
+    if (_status == GameStatus::SUCCESS) {
+        this->refreshGame();
+    } else if (_status == GameStatus::GAMEOVER) {
+        this->refreshEndMenu();
+    } else if (_status == GameStatus::PAUSE) {
+        this->refreshPauseMenu();
+    }
+}
+
+void AbstractGameModule::increaseScore(size_t val)
+{
+    this->_score += val;
+}
+
+void AbstractGameModule::evalHighScore()
+{
+    if (_score > _highScore) {
+        _highScore = _score;
+    }
 }

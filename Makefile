@@ -16,6 +16,7 @@ NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so li
 ### DEFAULT
 DEF_SRC	= 	$(DSRC)exception/BaseException.cpp		\
 			$(DSRC)utility/trim.cpp					\
+			$(DSRC)utility/Vector.cpp				\
 
 ### DEFAUL_GAME_CLASSES
 GAME_DSRC = $(DSRC)Game
@@ -44,12 +45,15 @@ core: LDFLAGS   += -ldl
 core: $(CORE_OBJ)
 
 ### GAMES
-NIBBLER_SRC	=	$(DEF_SRC) $(DSRC)lib/game/nibbler.cpp
+NIBBLER_SRC	=	$(DEF_SRC) $(DEF_GAME_SRC) 						\
+				$(DSRC)Game/Nibbler/NibblerGameModule.cpp		\
+				$(DSRC)Game/Nibbler/Player/NibblerPlayer.cpp	\
+
 NIBBLER_OBJ	=	$(NIBBLER_SRC:.cpp=.o)
 nibbler: OBJ = $(NIBBLER_OBJ)
 nibbler: NAME	=	lib/arcade_nibbler.so
-nibbler: LDFLAGS 	+= -fpic
-nibbler: CXXFLAGS 	+= -shared
+nibbler: LDFLAGS 	+= -shared
+nibbler: CXXFLAGS 	+= -fPIC
 nibbler: $(NIBBLER_OBJ)
 
 ### GRAPHICALS
@@ -84,7 +88,7 @@ graphicals: sfml ncurses
 
 ### BUILD
 %.o: %.cpp
-	@g++ -c $(CXXFLAGS) -o $@ $<
+	g++ -c $(CXXFLAGS) -o $@ $<
 
 core nibbler sfml SDL2 ncurses: $(OBJ)
 	@g++ -o $(NAME) $(OBJ) $(LDFLAGS) && \
