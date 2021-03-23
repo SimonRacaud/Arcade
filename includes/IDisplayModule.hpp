@@ -59,6 +59,7 @@ namespace arcade
 
         virtual void open() = 0;
         virtual void close() = 0;
+        virtual bool isOpen() const = 0;
 
         virtual void putRectFill(Color color, Coord size, Coord pos) = 0;
         virtual void putRectOutline(Color color, Coord size, Coord pos) = 0;
