@@ -15,9 +15,18 @@ namespace arcade
 {
     class IDisplayModule;
 
+    enum class GameStatus {
+        ERROR,
+        GAMEOVER,
+        PAUSE,
+        SUCCESS
+    };
+
     class IGameModule {
       public:
         virtual ~IGameModule(){};
+
+        virtual GameStatus getStatus() const;
 
         virtual void refresh() = 0;
 
