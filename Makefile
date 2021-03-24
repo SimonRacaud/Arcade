@@ -18,6 +18,7 @@ LDFLAGS 	= $(INCLUDE) $(DEBUG)
 DEF_SRC	= 	$(DSRC)exception/BaseException.cpp		\
 			$(DSRC)utility/trim.cpp					\
 			$(DSRC)utility/Vector.cpp				\
+			$(DSRC)Timer/Timer.cpp					\
 
 ### DEFAUL_GAME_CLASSES
 GAME_DSRC = $(DSRC)Game

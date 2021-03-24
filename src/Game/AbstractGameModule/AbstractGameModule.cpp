@@ -102,11 +102,11 @@ void AbstractGameModule::refresh()
             this->refreshPauseMenu();
         }
     } catch (BaseException const& e) {
-        this->_status = ERROR;
+        this->_status = GameStatus::ERROR;
         std::cerr << e.what() << std::endl;
     } catch (...) {
         std::cerr << "An exception occured\n";
-        this->_status = ERROR;
+        this->_status = GameStatus::ERROR;
     }
 }
 
