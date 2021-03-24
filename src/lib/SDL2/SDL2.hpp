@@ -8,7 +8,7 @@
 #ifndef SDL2_HPP_
 #define SDL2_HPP_
 
-#include "../IDisplayModule.hpp"
+#include "../../../includes/IDisplayModule.hpp"
 #include <stdlib.h>
 #include <map>
 #include "SDL2/SDL.h"

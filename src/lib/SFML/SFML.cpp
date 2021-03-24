@@ -5,7 +5,8 @@
 ** SFML
 */
 
-#include "../../../includes/lib/SFML.hpp"
+#include "./SFML.hpp"
+#include "../../../includes/config.h"
 
 const std::map <arcade::IDisplayModule::Color, sf::Color> SFML::_color = {
     {arcade::IDisplayModule::Color::BLACK, sf::Color::Black},
@@ -52,7 +53,7 @@ SFML::~SFML() {}
 
 void SFML::open()
 {
-    _window = new sf::RenderWindow(sf::VideoMode(800, 600), "My window");
+    _window = new sf::RenderWindow(sf::VideoMode(W_WIDTH, W_HEIGH), WINDOW_NAME);
 }
 
 void SFML::close()

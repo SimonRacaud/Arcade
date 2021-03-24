@@ -8,7 +8,7 @@
 #ifndef SFML_HPP_
 #define SFML_HPP_
 
-#include "../IDisplayModule.hpp"
+#include "../../../includes/IDisplayModule.hpp"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
