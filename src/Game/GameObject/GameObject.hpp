@@ -15,6 +15,7 @@
 #include "OutOfBoundException.hpp"
 #include "Vector.hpp"
 #include <ctime>
+#include <iostream>
 
 namespace Game
 {
@@ -45,7 +46,6 @@ namespace Game
 
         Color _color;
         Vector _posMax;
-        size_t _size;
         std::deque<Vector> _positions;
 
         size_t _animFreq;
