@@ -67,8 +67,8 @@ void AbstractGameModule::refreshEndMenu()
 {
     if (_graphModule != nullptr) {
         Vector const &mapSize = _map.getSize();
-        Coord posTitle(mapSize.y / 2, mapSize.x / 2 - 5);
-        Coord posMsg(mapSize.y / 2 + 2, mapSize.x / 2 - 11);
+        Coord posTitle(mapSize.x / 2 - 2, mapSize.y / 2);
+        Coord posMsg(mapSize.x / 2 - 4, mapSize.y / 2 + 3);
 
         this->_graphModule->putText(Color::RED, posTitle, "GAME OVER");
         this->_graphModule->putText(
@@ -80,8 +80,8 @@ void AbstractGameModule::refreshPauseMenu()
 {
     if (_graphModule != nullptr) {
         Vector const &mapSize = _map.getSize();
-        Coord posTitle(mapSize.y / 2, mapSize.x / 2 - 2);
-        Coord posMsg(mapSize.y / 2 + 2, mapSize.x / 2 - 11);
+        Coord posTitle(mapSize.x / 2 - 1, mapSize.y / 2);
+        Coord posMsg(mapSize.x / 2 - 4, mapSize.y / 2 + 3);
 
         this->_graphModule->putText(Color::RED, posTitle, "PAUSE");
         this->_graphModule->putText(
@@ -93,12 +93,20 @@ void AbstractGameModule::refresh()
 {
     if (_graphModule == nullptr)
         return;
-    if (_status == GameStatus::SUCCESS) {
-        this->refreshGame();
-    } else if (_status == GameStatus::GAMEOVER) {
-        this->refreshEndMenu();
-    } else if (_status == GameStatus::PAUSE) {
-        this->refreshPauseMenu();
+    try {
+        if (_status == GameStatus::SUCCESS) {
+            this->refreshGame();
+        } else if (_status == GameStatus::GAMEOVER) {
+            this->refreshEndMenu();
+        } else if (_status == GameStatus::PAUSE) {
+            this->refreshPauseMenu();
+        }
+    } catch (BaseException const& e) {
+        this->_status = ERROR;
+        std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An exception occured\n";
+        this->_status = ERROR;
     }
 }
 

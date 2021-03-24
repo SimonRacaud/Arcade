@@ -9,6 +9,7 @@
 #define ABSTRACTGAMEMODULE_HPP_
 
 #include <deque>
+#include <iostream>
 #include "Game/GameMap/GameMap.hpp"
 #include "Game/GameObject/GameObject.hpp"
 #include "IDisplayModule.hpp"
