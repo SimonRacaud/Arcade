@@ -5,6 +5,7 @@
 ** SDL2
 */
 
+#include <iostream>
 #include <vector>
 #include "./SDL2.hpp"
 #include "../../../includes/config.h"
@@ -41,8 +42,6 @@ const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
     {arcade::IDisplayModule::KeyList::KEY_SPACE, SDLK_SPACE},
     {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, SDLK_UNKNOWN},
 };
-
-#include <iostream>
 
 SDL2::SDL2() :
     _scaleX(SCALE_X), _scaleY(SCALE_Y),
@@ -133,10 +132,10 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
     SDL_Color sdl_color = _color.at(color);
-    Vector center( pos.first + radius, pos.second + radius);
+    float position_x = pos.first * SCALE_X;
+    float position_y = pos.second * SCALE_Y;
+    Vector center( position_x + radius, position_y + radius);
     std::vector<float> v = {0, 0};
-    float position_x = pos.first;
-    float position_y = pos.second;
 
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     for (size_t x = 0; x < radius * 2; x++) {
@@ -158,8 +157,8 @@ void SDL2::putText(Color color, Coord pos, std::string const &value)
 
     rect.w = surface->w;
     rect.h = surface->h;
-    rect.x = pos.first;
-    rect.y = pos.second;
+    rect.x = pos.first * SCALE_X;
+    rect.y = pos.second * SCALE_Y;
     SDL_FreeSurface(surface);
     SDL_RenderCopy(_renderer, message, NULL, &rect);
 }
