@@ -44,6 +44,7 @@ const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
 };
 
 SDL2::SDL2() :
+    _isMouseClicked(false), _isOpen(false),
     _scaleX(SCALE_X), _scaleY(SCALE_Y),
     _textSize(TEXT_SIZE),
     _window(NULL), _renderer(NULL)
@@ -80,24 +81,19 @@ void SDL2::open()
         fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
         //THROW ERROR
     }
+    _isOpen = true;
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 }
 
 void SDL2::close()
 {
+    _isOpen = false;
     SDL_DestroyWindow(_window);
 }
 
 bool SDL2::isOpen() const
 {
-    SDL_Event e;
-
-    if (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
-            return false;
-        }
-    }
-    return true;
+    return _isOpen;
 }
 
 void SDL2::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
@@ -170,6 +166,9 @@ void SDL2::displayScreen()
 
 void SDL2::refreshScreen()
 {
+    this->_isMouseClicked = false;
+    this->_keyStack.clear();
+    this->refreshEvent();
 }
 
 void SDL2::clearScreen()
@@ -178,19 +177,31 @@ void SDL2::clearScreen()
     SDL_RenderClear(_renderer);
 }
 
-bool SDL2::isKeyPress(const KeyList key) const
+void SDL2::refreshEvent()
 {
     SDL_Event event = {0};
-    SDL_Keycode askedKey = _key.at(key);
 
-    if (key == KeyList::KEY_MOUSE_CLICK) {
-        return false;
-    }
     if (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            _isOpen = false;
+        }
+        if (event.type == SDL_MOUSEBUTTONUP) {
+            _isMouseClicked = true;
+        }
         if (event.type == SDL_KEYDOWN) {
-            if (event.key.keysym.sym == askedKey) {
-                return true;
-            }
+            _keyStack.push_back(event.key.keysym.sym);
+        }
+    }
+}
+
+bool SDL2::isKeyPress(const KeyList key) const
+{
+    if (key == KeyList::KEY_MOUSE_CLICK) {
+        return _isMouseClicked;
+    }
+    for (SDL_Keycode n : _keyStack) {
+        if (_key.at(key) == n) {
+            return true;
         }
     }
     return false;
@@ -198,12 +209,16 @@ bool SDL2::isKeyPress(const KeyList key) const
 
 bool SDL2::isMouseClicked() const // Any key of the mouse
 {
-    return false;
+    return _isMouseClicked;
 }
 
 Coord SDL2::getMousePos() const
 {
-    return Coord(0, 0);
+    int x = 0;
+    int y = 0;
+
+    SDL_GetMouseState(&x, &y);
+    return Coord(x, y);
 }
 
 extern "C" arcade::IDisplayModule *entryPoint()

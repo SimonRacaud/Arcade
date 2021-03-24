@@ -41,10 +41,11 @@ const std::map <arcade::IDisplayModule::KeyList, sf::Keyboard::Key> SFML::_key =
 };
 
 SFML::SFML() :
+ _isMouseClicked(false), _isOpen(false),
  _scaleX(SCALE_X), _scaleY(SCALE_Y),
  _textSize(TEXT_SIZE)
 {
-    if (!_font.loadFromFile("assets/arial.ttf")) {
+    if (!_font.loadFromFile(FONT_PATH)) {
         //throw error ?
     }
 }
@@ -53,24 +54,21 @@ SFML::~SFML() {}
 
 void SFML::open()
 {
+    _isOpen = true;
     _window = new sf::RenderWindow(sf::VideoMode(W_WIDTH, W_HEIGH), WINDOW_NAME);
 }
 
 void SFML::close()
 {
+    _isOpen = false;
     _window->close();
 }
 
 
 bool SFML::isOpen() const
 {
-    sf::Event event;
-
-    while (_window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            return false;
-        }
-    }
+    if (!_isOpen)
+        return false;
     return _window->isOpen();
 }
 
@@ -125,6 +123,9 @@ void SFML::displayScreen()
 
 void SFML::refreshScreen()
 {
+    this->_isMouseClicked = false;
+    this->_keyStack.clear();
+    this->refreshEvent();
 }
 
 void SFML::clearScreen()
@@ -132,22 +133,39 @@ void SFML::clearScreen()
     _window->clear(sf::Color::Black);
 }
 
+void SFML::refreshEvent()
+{
+    sf::Event event;
+
+    while (_window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            _isOpen = false;
+        }
+        if (event.type == sf::Event::MouseButtonPressed) {
+            _isMouseClicked = true;
+        }
+        if (event.type == sf::Event::KeyPressed) {
+            _keyStack.push_back(event.key.code);
+        }
+    }
+}
+
 bool SFML::isKeyPress(const KeyList key) const
 {
     if (key == KeyList::KEY_MOUSE_CLICK) {
-        return false;
+        return _isMouseClicked;
     }
-    return sf::Keyboard::isKeyPressed(_key.at(key));
+    for (sf::Keyboard::Key n : _keyStack) {
+        if (_key.at(key) == n) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool SFML::isMouseClicked() const // Any key of the mouse
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) ||
-        sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-    } {
-        return true;
-    }
-    return false;
+    return _isMouseClicked;
 }
 
 Coord SFML::getMousePos() const
