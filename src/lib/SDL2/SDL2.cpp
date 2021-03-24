@@ -5,8 +5,10 @@
 ** SDL2
 */
 
+#include <vector>
 #include "./SDL2.hpp"
 #include "../../../includes/config.h"
+#include "../../../includes/Vector.hpp"
 
 const std::map<arcade::IDisplayModule::Color, SDL_Color> SDL2::_color = {
     {arcade::IDisplayModule::Color::BLACK, {0, 0, 0, 255}},
@@ -20,24 +22,24 @@ const std::map<arcade::IDisplayModule::Color, SDL_Color> SDL2::_color = {
 };
 
 const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
-    //{arcade::IDisplayModule::KeyList::NEXT_GAME, },
-    //{arcade::IDisplayModule::KeyList::PREV_GAME, },
-    //{arcade::IDisplayModule::KeyList::NEXT_LIB, },
-    //{arcade::IDisplayModule::KeyList::PREV_LIB, },
-    //{arcade::IDisplayModule::KeyList::RESTART_GAME, },
-    //{arcade::IDisplayModule::KeyList::MENU, },
-    //{arcade::IDisplayModule::KeyList::EXIT, },
-    //{arcade::IDisplayModule::KeyList::PAUSE, },
-    {arcade::IDisplayModule::KeyList::KEY_Z, SDL_SCANCODE_Z},
-    {arcade::IDisplayModule::KeyList::KEY_Q, SDL_SCANCODE_Q},
-    {arcade::IDisplayModule::KeyList::KEY_S, SDL_SCANCODE_S},
-    {arcade::IDisplayModule::KeyList::KEY_D, SDL_SCANCODE_D},
-    {arcade::IDisplayModule::KeyList::ARROW_UP, SDL_SCANCODE_UP},
-    {arcade::IDisplayModule::KeyList::ARROW_DOWN, SDL_SCANCODE_DOWN},
-    {arcade::IDisplayModule::KeyList::ARROW_LEFT, SDL_SCANCODE_LEFT},
-    {arcade::IDisplayModule::KeyList::ARROW_RIGHT, SDL_SCANCODE_RIGHT},
-    {arcade::IDisplayModule::KeyList::KEY_SPACE, SDL_SCANCODE_SPACE},
-    {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, SDL_SCANCODE_0},
+    {arcade::IDisplayModule::KeyList::NEXT_GAME, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::PREV_GAME, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::NEXT_LIB, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::PREV_LIB, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::MENU, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::EXIT, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::PAUSE, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::KEY_Z, SDLK_z},
+    {arcade::IDisplayModule::KeyList::KEY_Q, SDLK_q},
+    {arcade::IDisplayModule::KeyList::KEY_S, SDLK_s},
+    {arcade::IDisplayModule::KeyList::KEY_D, SDLK_d},
+    {arcade::IDisplayModule::KeyList::ARROW_UP, SDLK_UP},
+    {arcade::IDisplayModule::KeyList::ARROW_DOWN, SDLK_DOWN},
+    {arcade::IDisplayModule::KeyList::ARROW_LEFT, SDLK_LEFT},
+    {arcade::IDisplayModule::KeyList::ARROW_RIGHT, SDLK_RIGHT},
+    {arcade::IDisplayModule::KeyList::KEY_SPACE, SDLK_SPACE},
+    {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, SDLK_UNKNOWN},
 };
 
 #include <iostream>
@@ -49,7 +51,7 @@ SDL2::SDL2() :
 {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
-    _font = TTF_OpenFont(FONT_PATH, 60);
+    _font = TTF_OpenFont(FONT_PATH, _textSize);
     if (_font == NULL) {
         std::cout << "font is null" << std::endl;
         //throw error
@@ -130,9 +132,22 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
-    (void)color;
-    (void)pos;
-    (void)radius;
+    SDL_Color sdl_color = _color.at(color);
+    Vector center( pos.first + radius, pos.second + radius);
+    std::vector<float> v = {0, 0};
+    float position_x = pos.first;
+    float position_y = pos.second;
+
+    SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
+    for (size_t x = 0; x < radius * 2; x++) {
+        for (size_t y = 0; y < radius * 2; y++) {
+            v[0] = position_x + x - center.x;
+            v[1] = position_y + y - center.y;
+            if ((pow(v[0], 2) + pow(v[1], 2)) <= pow(radius, 2)) {
+                SDL_RenderDrawPoint(_renderer, position_x + x, position_y + y);
+            }
+        }
+    }
 }
 
 void SDL2::putText(Color color, Coord pos, std::string const &value)
@@ -166,7 +181,19 @@ void SDL2::clearScreen()
 
 bool SDL2::isKeyPress(const KeyList key) const
 {
-    (void)key;
+    SDL_Event event = {0};
+    SDL_Keycode askedKey = _key.at(key);
+
+    if (key == KeyList::KEY_MOUSE_CLICK) {
+        return false;
+    }
+    if (SDL_PollEvent(&event)) {
+        if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == askedKey) {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
