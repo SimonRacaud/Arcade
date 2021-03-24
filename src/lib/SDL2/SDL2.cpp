@@ -132,10 +132,10 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
     SDL_Color sdl_color = _color.at(color);
-    Vector center( pos.first + radius, pos.second + radius);
-    std::vector<float> v = {0, 0};
     float position_x = pos.first * SCALE_X;
     float position_y = pos.second * SCALE_Y;
+    Vector center( position_x + radius, position_y + radius);
+    std::vector<float> v = {0, 0};
 
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     for (size_t x = 0; x < radius * 2; x++) {
