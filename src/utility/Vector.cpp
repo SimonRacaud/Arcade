@@ -17,10 +17,10 @@ Vector::Vector(Vector const &v) : x(v.x), y(v.y)
 
 Vector Vector::operator+(Vector const &v)
 {
-    return Vector (this->y + v.y, this->x + v.x);
+    return Vector (this->x + v.x, this->y + v.y);
 }
 
 Vector Vector::operator-(Vector const &v)
 {
-    return Vector (this->y - v.y, this->x - v.x);
+    return Vector (this->x - v.x, this->y - v.y);
 }
