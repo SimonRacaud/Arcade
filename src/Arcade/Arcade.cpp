@@ -15,7 +15,7 @@ const std::deque<std::string> Arcade::GAME_LIB_NAMES = {
 };
 
 const std::deque<std::string> Arcade::GRAPHIC_LIB_NAMES = {
-    "arcade_libsfml.so",
+    "arcade_sfml.so",
     "arcade_ncurses.so",
     "arcade_sdl2.so"
 };
@@ -44,7 +44,9 @@ _graphLibManager("./lib"), _gameLibManager("./lib")
 
 Arcade::~Arcade()
 {
-    this->_selectedGraphic->close();
+    if (this->_selectedGraphic) {
+        this->_selectedGraphic->close();
+    }
 }
 
 void Arcade::loop()
