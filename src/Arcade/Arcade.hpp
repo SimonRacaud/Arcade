@@ -13,6 +13,7 @@
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
 #include "lib/DLManager/DLManager.hpp"
+#include "../Timer/Timer.hpp"
 
 #include <string>
 #include <deque>
@@ -20,6 +21,8 @@
 #ifndef EXIT_ERROR
 #define EXIT_ERROR 84
 #endif
+
+#define CORE_TIMER 200
 
 namespace arcade {
 
@@ -59,6 +62,8 @@ namespace arcade {
         IDisplayModule *_selectedGraphic;
         DL::DLManager<IDisplayModule> _graphLibManager;
         DL::DLManager<IGameModule> _gameLibManager;
+        Timer _timer;
+
         // MainMenu _mainMenu;
     };
 }
