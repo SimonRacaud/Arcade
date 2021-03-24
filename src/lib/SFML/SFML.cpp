@@ -41,8 +41,8 @@ const std::map <arcade::IDisplayModule::KeyList, sf::Keyboard::Key> SFML::_key =
 };
 
 SFML::SFML() :
- _scaleX(40), _scaleY(40),
- _textSize(40)
+ _scaleX(SCALE_X), _scaleY(SCALE_Y),
+ _textSize(TEXT_SIZE)
 {
     if (!_font.loadFromFile("assets/arial.ttf")) {
         //throw error ?
@@ -101,7 +101,7 @@ void SFML::putCircle(Color color, Coord pos, size_t radius)
     sf::CircleShape circle;
 
     circle.setRadius((float)radius);
-    circle.setPosition(sf::Vector2f((float)pos.first, (float)pos.second));
+    circle.setPosition(sf::Vector2f((float)pos.first * _scaleX, (float)pos.second * _scaleX));
     circle.setFillColor(_color.at(color));
     _window->draw(circle);
 }
@@ -114,7 +114,7 @@ void SFML::putText(Color color, Coord pos, std::string const &value)
     text.setString(value.c_str());
     text.setCharacterSize(_textSize);
     text.setFillColor(_color.at(color));
-    text.setPosition(sf::Vector2f((float)pos.first, (float)pos.second));
+    text.setPosition(sf::Vector2f((float)pos.first * _scaleX, (float)pos.second * _scaleY));
     _window->draw(text);
 }
 
