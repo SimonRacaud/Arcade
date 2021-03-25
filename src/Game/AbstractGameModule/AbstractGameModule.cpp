@@ -6,6 +6,7 @@
 */
 
 #include "AbstractGameModule.hpp"
+#include "../../../includes/IDisplayModule.hpp"
 
 using namespace Game;
 
@@ -63,6 +64,30 @@ void AbstractGameModule::setStatus(GameStatus status)
     this->_status = status;
 }
 
+void AbstractGameModule::refresh()
+{
+    if (_graphModule == nullptr)
+        return;
+    try {
+        if (_status == GameStatus::SUCCESS) {
+            this->refreshGame();
+        } else if (_status == GameStatus::GAMEOVER) {
+            this->refreshEndMenu();
+        } else if (_status == GameStatus::PAUSE) {
+            this->refreshPauseMenu();
+        }
+        this->eventManager(*this->_graphModule);
+    } catch (BaseException const& e) {
+        this->_status = GameStatus::ERROR;
+        std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "An exception occured\n";
+        this->_status = GameStatus::ERROR;
+    }
+}
+
+/** Private/Protected **/
+
 void AbstractGameModule::refreshEndMenu()
 {
     if (_graphModule != nullptr) {
@@ -89,27 +114,6 @@ void AbstractGameModule::refreshPauseMenu()
     }
 }
 
-void AbstractGameModule::refresh()
-{
-    if (_graphModule == nullptr)
-        return;
-    try {
-        if (_status == GameStatus::SUCCESS) {
-            this->refreshGame();
-        } else if (_status == GameStatus::GAMEOVER) {
-            this->refreshEndMenu();
-        } else if (_status == GameStatus::PAUSE) {
-            this->refreshPauseMenu();
-        }
-    } catch (BaseException const& e) {
-        this->_status = GameStatus::ERROR;
-        std::cerr << e.what() << std::endl;
-    } catch (...) {
-        std::cerr << "An exception occured\n";
-        this->_status = GameStatus::ERROR;
-    }
-}
-
 void AbstractGameModule::increaseScore(size_t val)
 {
     this->_score += val;
@@ -119,5 +123,22 @@ void AbstractGameModule::evalHighScore()
 {
     if (_score > _highScore) {
         _highScore = _score;
+    }
+}
+
+void AbstractGameModule::eventManager(arcade::IDisplayModule &displayModule)
+{
+    if (displayModule.isKeyPress(KeyList::PAUSE)) {
+        if (this->_status == GameStatus::PAUSE) {
+            this->_status = GameStatus::SUCCESS;
+        } else {
+            this->_status = GameStatus::PAUSE;
+        }
+    }
+    if (_status == GameStatus::PAUSE || _status == GameStatus::GAMEOVER) {
+        if (displayModule.isKeyPress(KeyList::KEY_SPACE)) {
+            this->reset();
+            this->_status = GameStatus::SUCCESS;
+        }
     }
 }

@@ -41,7 +41,7 @@ void GameObject::display(arcade::IDisplayModule &mod)
  * @param offsetX
  * @param offsetY
  */
-void GameObject::move(int offsetX, int offsetY)
+void GameObject::move(double offsetX, double offsetY)
 {
     if (this->canMove(offsetX, offsetY)) {
         for (size_t i = _positions.size() - 1; i > 0; i--) {
@@ -95,15 +95,15 @@ bool GameObject::isCollideWith(const GameMap &map) const
 
 /** Private **/
 
-bool GameObject::canMove(int offsetX, int offsetY) const
+bool GameObject::canMove(double offsetX, double offsetY) const
 {
     if (_positions.empty())
         return false;
-    if (offsetX + (int) _positions[0].x < 0
-        || offsetY + (int) _positions[0].y < 0) {
+    if (offsetX + _positions[0].x < 0
+        || offsetY + _positions[0].y < 0) {
         return false;
-    } else if (offsetY + (int) _positions[0].y >= (int) _posMax.y
-        || offsetX + (int) _positions[0].x >= (int) _posMax.x) {
+    } else if (offsetY + _positions[0].y >= _posMax.y
+        || offsetX + _positions[0].x >= _posMax.x) {
         return false;
     }
     return true;

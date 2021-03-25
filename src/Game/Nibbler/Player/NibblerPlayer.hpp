@@ -9,14 +9,28 @@
 #define NIBBLERPLAYER_HPP_
 
 #include <deque>
+#include <unordered_map>
+#include <iostream>
 #include "../../GameObject/GameObject.hpp"
 #include "Vector.hpp"
-#include <iostream>
 
 namespace Game
 {
     class NibblerPlayer : public GameObject {
       public:
+        enum class Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 };
+
+      private:
+        Direction _movment;
+        double _speed;
+
+      public:
+        void setMovment(const Direction &movment);
+        void rotate(const Direction &dir);
+
+      protected:
+      public:
+
         NibblerPlayer(Vector const &mapSize);
         virtual ~NibblerPlayer();
 

@@ -6,11 +6,15 @@
 */
 
 #include "NibblerPlayer.hpp"
+#include "../../../../../../../../home/simon/work/2_CURRENT/B-OOP-400-REN-4-1-arcade-aurelien.joncour/src/Game/Nibbler/Player/NibblerPlayer.hpp"
 
 using namespace Game;
 
+static const double DEF_SPEED = 1;
+
 NibblerPlayer::NibblerPlayer(const Vector &mapSize)
-    : GameObject(Color::RED, mapSize)
+    : GameObject(Color::RED, mapSize), _movment(Direction::UP),
+      _speed(DEF_SPEED)
 {
     Vector initPos1(mapSize.x / 2, mapSize.y / 2);
     Vector initPos2(mapSize.x / 2, mapSize.y / 2 + 1);
@@ -33,12 +37,14 @@ NibblerPlayer::~NibblerPlayer()
 
 void NibblerPlayer::move()
 {
-    if (_positions.size() >= 2) {
-        Vector offset(this->_positions[0] - this->_positions[1]);
-        GameObject::move(offset.x, offset.y);
-    } else {
-        std::cerr << "Warning: invalid snake size in "
-                     "NibblerPlayer::move()\n";
+    if (_movment == Direction::UP) {
+        GameObject::move(0, -_speed);
+    } else if (_movment == Direction::DOWN) {
+        GameObject::move(0, _speed);
+    } else if (_movment == Direction::LEFT) {
+        GameObject::move(-_speed, 0);
+    } else if (_movment == Direction::RIGHT) {
+        GameObject::move(_speed, 0);
     }
 }
 
@@ -75,4 +81,44 @@ ssize_t NibblerPlayer::isCollideWith(const std::deque<GameObject> &coins) const
         }
     }
     return -1;
+}
+
+/** Private **/
+
+void NibblerPlayer::setMovment(const NibblerPlayer::Direction &movment)
+{
+    if (_positions.size() >= 2) {
+        Vector offset(this->_positions[0] - this->_positions[1]);
+
+        if (movment == Direction::UP && offset.y < 0) {
+            return;
+        } else if (movment == Direction::DOWN && offset.y > 0) {
+            return;
+        } else if (movment == Direction::LEFT && offset.x < 0) {
+            return;
+        } else if (movment == Direction::RIGHT && offset.x > 0) {
+            return;
+        }
+    }
+    _movment = movment;
+}
+
+void NibblerPlayer::rotate(const NibblerPlayer::Direction &dir)
+{
+    Direction update = _movment;
+
+    if (dir == Direction::LEFT) {
+        if (_movment == Direction::UP) {
+            update = Direction::LEFT;
+        } else {
+            update = (Direction)((int)update - 1);
+        }
+    } else if (dir == Direction::RIGHT) {
+        if (_movment == Direction::LEFT) {
+            update = Direction::UP;
+        } else {
+            update = (Direction)((int)update + 1);
+        }
+    }
+    this->setMovment(update);
 }

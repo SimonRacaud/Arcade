@@ -20,6 +20,7 @@
 namespace Game
 {
     typedef arcade::Coord Coord;
+    typedef arcade::Vector Vector;
 
     class GameObject {
       public:
@@ -30,7 +31,7 @@ namespace Game
 
         void display(arcade::IDisplayModule &mod);
 
-        virtual void move(int offsetX, int offsetY);
+        virtual void move(double offsetX, double offsetY);
         void setPosition(Vector const &coord);
 
         bool isCollideWith(GameObject const &obj) const;
@@ -40,7 +41,7 @@ namespace Game
 
         bool isCollideCoord(Vector const &pos) const;
       protected:
-        bool canMove(int offsetX, int offsetY) const;
+        bool canMove(double offsetX, double offsetY) const;
 
         bool _anim;
 

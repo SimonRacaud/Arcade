@@ -28,15 +28,16 @@ namespace Game
         NibblerPlayer _player;
         std::deque<GameObject> _coins;
 
+
       public:
         NibblerGameModule();
         ~NibblerGameModule() override = default;
-
         void reset();
 
       protected:
         void refreshGame();
         void generateCoin();
+        void eventManager(arcade::IDisplayModule &displayModule);
 
     };
 }

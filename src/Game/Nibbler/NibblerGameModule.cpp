@@ -6,6 +6,8 @@
 */
 
 #include "NibblerGameModule.hpp"
+#include "../../../includes/IDisplayModule.hpp"
+#include "../../../../../../../home/simon/work/2_CURRENT/B-OOP-400-REN-4-1-arcade-aurelien.joncour/src/Game/Nibbler/NibblerGameModule.hpp"
 
 using namespace Game;
 
@@ -106,8 +108,10 @@ void NibblerGameModule::refreshGame()
     coinIdx = this->_player.isCollideWith(_coins);
     if (coinIdx != -1) {
         _coins.erase(_coins.begin() + coinIdx);
+        // TODO : increate score
+        // TODO : increate snake size
         if (_coins.empty()) {
-            std::cout << "aa \n";
+            this->generateCoin();
         }
     }
     this->_map.display(*this->_graphModule);
@@ -135,8 +139,8 @@ void NibblerGameModule::generateCoin()
     Vector position(0, 0);
 
     for (size_t i = 0; i < 20; i++) {
-        position.x = (rand() % mapSize.x);
-        position.y = (rand() % mapSize.y);
+        position.x = (rand() % (size_t)mapSize.x);
+        position.y = (rand() % (size_t)mapSize.y);
         if (_player.isCollideCoord(position)) {
             continue;
         }
@@ -147,8 +151,26 @@ void NibblerGameModule::generateCoin()
         }
         this->_coins.push_back(GameObject(Color::YELLOW, _map.getSize()));
         this->_coins.back().setPosition(position);
+        this->_coins.back().setAnimation(Color::BLUE, 4);
         return;
     }
     std::cerr << "Warning: NibblerGameModule::generateCoin() fail"
               << std::endl;
+}
+
+void NibblerGameModule::eventManager(arcade::IDisplayModule &displayModule)
+{
+    AbstractGameModule::eventManager(displayModule);
+    if (displayModule.isKeyPress(KeyList::ARROW_LEFT)) {
+        this->_player.setMovment(NibblerPlayer::Direction::LEFT);
+    }
+    if (displayModule.isKeyPress(KeyList::ARROW_RIGHT)) {
+        this->_player.setMovment(NibblerPlayer::Direction::RIGHT);
+    }
+    if (displayModule.isKeyPress(KeyList::ARROW_UP)) {
+        this->_player.setMovment(NibblerPlayer::Direction::UP);
+    }
+    if (displayModule.isKeyPress(KeyList::ARROW_DOWN)) {
+        this->_player.setMovment(NibblerPlayer::Direction::DOWN);
+    }
 }
