@@ -43,6 +43,7 @@ namespace arcade
             KEY_E,
             KEY_F,
             KEY_G,
+
             KEY_H,
             KEY_I,
             KEY_J,

@@ -16,14 +16,13 @@ class Timer {
     clock_t _period;
 
   public:
-    clock_t getPeriod() const;
-    void setPeriod(clock_t period);
-
-  public:
     Timer(clock_t period);
     virtual ~Timer() = default;
 
     bool shouldRefresh();
+
+    clock_t getPeriod() const;
+    void setPeriod(clock_t period);
 };
 
 #endif // TIMER_HPP_

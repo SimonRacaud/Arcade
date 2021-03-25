@@ -8,26 +8,26 @@
 #ifndef ARCADE_HPP_
 #define ARCADE_HPP_
 
-#include "LibLoadingException.hpp"
-#include "LibNotFoundException.hpp"
+#include "../Timer/Timer.hpp"
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
+#include "LibLoadingException.hpp"
+#include "LibNotFoundException.hpp"
 #include "lib/DLManager/DLManager.hpp"
-#include "../Timer/Timer.hpp"
 
-#include <string>
 #include <deque>
+#include <string>
 
 #ifndef EXIT_ERROR
-#define EXIT_ERROR 84
+    #define EXIT_ERROR 84
 #endif
 
 #define CORE_TIMER 200
 
-namespace arcade {
-
+namespace arcade
+{
     class Arcade {
-    public:
+      public:
         enum class ExitStatus {
             SUCCESS = EXIT_SUCCESS,
             ERROR = EXIT_ERROR,
@@ -46,8 +46,9 @@ namespace arcade {
 
         std::string const &getUsername() const;
 
-        void selectGame(std::string const& name);
-        void selectGraphic(std::string const& name);
+        void selectGame(std::string const &name);
+        void selectGraphic(std::string const &name);
+        ExitStatus getStatus() const;
 
       protected:
         void gotoMainMenu();
@@ -55,14 +56,9 @@ namespace arcade {
         static const std::deque<std::string> GAME_LIB_NAMES;
         static const std::deque<std::string> GRAPHIC_LIB_NAMES;
 
-    private:
+      private:
         std::string _username;
         ExitStatus _status;
-
-      public:
-        ExitStatus getStatus() const;
-
-      private:
         IGameModule *_selectedGame;
         IDisplayModule *_selectedGraphic;
         DL::DLManager<IDisplayModule> _graphLibManager;
@@ -71,6 +67,6 @@ namespace arcade {
 
         // MainMenu _mainMenu;
     };
-}
+} // namespace arcade
 
-#endif //ARCADE_HPP_
+#endif // ARCADE_HPP_
