@@ -7,7 +7,6 @@
 
 #include "NibblerGameModule.hpp"
 #include "../../../includes/IDisplayModule.hpp"
-#include "../../../../../../../home/simon/work/2_CURRENT/B-OOP-400-REN-4-1-arcade-aurelien.joncour/src/Game/Nibbler/NibblerGameModule.hpp"
 
 using namespace Game;
 
