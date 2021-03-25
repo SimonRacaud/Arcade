@@ -81,7 +81,7 @@ void AbstractGameModule::refresh()
         this->_status = GameStatus::ERROR;
         std::cerr << e.what() << std::endl;
     } catch (...) {
-        std::cerr << "An exception occured\n";
+        std::cerr << "AbstractGameModule::refresh() An exception occured\n";
         this->_status = GameStatus::ERROR;
     }
 }
