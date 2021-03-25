@@ -110,8 +110,6 @@ void SFML::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
 {
     sf::RectangleShape rectangle;
 
-    std::cout << size.x << std::endl;
-    std::cout << size.y << std::endl;
     rectangle.setSize(sf::Vector2f((float)size.x * _scaleX, (float)size.y * _scaleY));
     rectangle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
     rectangle.setFillColor(_color.at(color));
