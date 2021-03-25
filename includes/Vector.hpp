@@ -8,20 +8,24 @@
 #ifndef VECTOR_HPP_
 #define VECTOR_HPP_
 
-#include <cstddef>
-#include <sys/types.h>
+namespace arcade
+{
+    class Vector {
+      public:
+        Vector(double ix, double iy);
+        Vector(Vector const &v);
+        ~Vector() = default;
 
-class Vector {
-  public:
-    Vector(ssize_t ix, ssize_t iy);
-    Vector(Vector const &v);
-    ~Vector() = default;
+        bool operator==(Vector const &v) const;
+        bool operator!=(Vector const &v) const;
 
-    Vector operator+(Vector const &v);
-    Vector operator-(Vector const &v);
+        Vector &operator=(Vector const &v);
+        Vector operator+(Vector const &v);
+        Vector operator-(Vector const &v);
 
-    ssize_t x;
-    ssize_t y;
-};
+        double x;
+        double y;
+    };
+} // namespace arcade
 
 #endif // VECTOR_HPP_
