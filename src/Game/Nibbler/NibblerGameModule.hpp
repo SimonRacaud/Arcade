@@ -17,6 +17,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include "../../Timer/Timer.hpp"
 
 namespace Game
 {
@@ -26,8 +27,8 @@ namespace Game
     class NibblerGameModule : public AbstractGameModule {
       private:
         NibblerPlayer _player;
+        Timer _coinGenTimer;
         std::deque<GameObject> _coins;
-
 
       public:
         NibblerGameModule();

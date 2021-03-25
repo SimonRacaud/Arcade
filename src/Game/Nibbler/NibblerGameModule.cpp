@@ -78,12 +78,14 @@ static const std::deque<Color> MAP = {c, c, c, c, c, c, c, c, c, c, c, c, c, c,
     c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c,
     c, c, c, c, c, c, c, c, c, c, c};
 
+static const clock_t COIN_GEN_PERIOD = 5000;
+
 NibblerGameModule::NibblerGameModule()
-try : AbstractGameModule("Unknown", MAP_SIZE, MAP), _player(MAP_SIZE)
-{
+try : AbstractGameModule("Unknown", MAP_SIZE, MAP), _player(MAP_SIZE),
+    _coinGenTimer(COIN_GEN_PERIOD) {
     srand((unsigned) time(nullptr));
     this->generateCoin();
-} catch (BaseException const& e) {
+} catch (BaseException const &e) {
     std::cerr << "Error: " << e.what() << std::endl;
 }
 
@@ -107,8 +109,8 @@ void NibblerGameModule::refreshGame()
     coinIdx = this->_player.isCollideWith(_coins);
     if (coinIdx != -1) {
         _coins.erase(_coins.begin() + coinIdx);
-        // TODO : increate score
-        // TODO : increate snake size
+        this->increaseScore(10);
+        this->_player.increaseLength();
         if (_coins.empty()) {
             this->generateCoin();
         }
@@ -118,6 +120,9 @@ void NibblerGameModule::refreshGame()
     for (size_t i = 0; i < _coins.size(); i++) {
         this->_coins[i].display(*this->_graphModule);
     }
+    if (this->_coinGenTimer.shouldRefresh()) {
+        this->generateCoin();
+    }
 }
 
 void NibblerGameModule::reset()
@@ -125,7 +130,7 @@ void NibblerGameModule::reset()
     try {
         _coins.clear();
         this->generateCoin();
-        // TODO: reset player
+        this->_player.reset();
     } catch (BaseException const &e) {
         std::cerr << "Error: NibblerGameModule::reset() " << e.what()
                   << std::endl;
@@ -138,8 +143,8 @@ void NibblerGameModule::generateCoin()
     Vector position(0, 0);
 
     for (size_t i = 0; i < 20; i++) {
-        position.x = (rand() % (size_t)mapSize.x);
-        position.y = (rand() % (size_t)mapSize.y);
+        position.x = (rand() % (size_t) mapSize.x);
+        position.y = (rand() % (size_t) mapSize.y);
         if (_player.isCollideCoord(position)) {
             continue;
         }
