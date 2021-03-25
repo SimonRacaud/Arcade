@@ -30,14 +30,14 @@ const std::map <arcade::IDisplayModule::Color, short> Ncurses::_textColor = {
 };
 
 const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
-    {arcade::IDisplayModule::KeyList::NEXT_GAME, '0'},
-    {arcade::IDisplayModule::KeyList::PREV_GAME, '0'},
-    {arcade::IDisplayModule::KeyList::NEXT_LIB, '0'},
-    {arcade::IDisplayModule::KeyList::PREV_LIB, '0'},
-    {arcade::IDisplayModule::KeyList::RESTART_GAME, '0'},
-    {arcade::IDisplayModule::KeyList::MENU, '0'},
-    {arcade::IDisplayModule::KeyList::EXIT, '0'},
-    {arcade::IDisplayModule::KeyList::PAUSE, '0'},
+    {arcade::IDisplayModule::KeyList::NEXT_GAME, 'z'},
+    {arcade::IDisplayModule::KeyList::PREV_GAME, 'a'},
+    {arcade::IDisplayModule::KeyList::NEXT_LIB, 'x'},
+    {arcade::IDisplayModule::KeyList::PREV_LIB, 'w'},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, 'r'},
+    {arcade::IDisplayModule::KeyList::MENU, 'q'},
+    {arcade::IDisplayModule::KeyList::EXIT, 27},
+    {arcade::IDisplayModule::KeyList::PAUSE, 'p'},
     {arcade::IDisplayModule::KeyList::KEY_A, 'A'},
     {arcade::IDisplayModule::KeyList::KEY_B, 'B'},
     {arcade::IDisplayModule::KeyList::KEY_C, 'C'},

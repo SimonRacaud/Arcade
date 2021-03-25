@@ -79,6 +79,7 @@ static const std::deque<Color> MAP = {c, c, c, c, c, c, c, c, c, c, c, c, c, c,
     c, c, c, c, c, c, c, c, c, c, c};
 
 static const clock_t COIN_GEN_PERIOD = 5000;
+static const size_t COIN_LIMIT = 10;
 
 NibblerGameModule::NibblerGameModule()
 try : AbstractGameModule("Unknown", MAP_SIZE, MAP), _player(MAP_SIZE),
@@ -129,7 +130,7 @@ void NibblerGameModule::refreshGame()
     for (size_t i = 0; i < _coins.size(); i++) {
         this->_coins[i]->display(*this->_graphModule);
     }
-    if (this->_coinGenTimer.shouldRefresh()) {
+    if (_coins.size() < COIN_LIMIT && this->_coinGenTimer.shouldRefresh()) {
         this->generateCoin();
     }
 }

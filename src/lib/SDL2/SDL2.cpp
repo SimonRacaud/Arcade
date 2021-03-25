@@ -23,14 +23,14 @@ const std::map<arcade::IDisplayModule::Color, SDL_Color> SDL2::_color = {
 };
 
 const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
-    {arcade::IDisplayModule::KeyList::NEXT_GAME, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::PREV_GAME, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::NEXT_LIB, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::PREV_LIB, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::RESTART_GAME, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::MENU, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::EXIT, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::PAUSE, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::NEXT_GAME, SDLK_z},
+    {arcade::IDisplayModule::KeyList::PREV_GAME, SDLK_a},
+    {arcade::IDisplayModule::KeyList::NEXT_LIB, SDLK_x},
+    {arcade::IDisplayModule::KeyList::PREV_LIB, SDLK_w},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, SDLK_r},
+    {arcade::IDisplayModule::KeyList::MENU, SDLK_q},
+    {arcade::IDisplayModule::KeyList::EXIT, SDLK_ESCAPE},
+    {arcade::IDisplayModule::KeyList::PAUSE, SDLK_p},
     {arcade::IDisplayModule::KeyList::KEY_A, SDLK_a},
     {arcade::IDisplayModule::KeyList::KEY_B, SDLK_b},
     {arcade::IDisplayModule::KeyList::KEY_C, SDLK_c},

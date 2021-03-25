@@ -14,7 +14,6 @@ int main(int argc, char **argv)
     arcade::Arcade core(argv[1]);
 
     if (argc == 2) {
-        arcade::Arcade core(argv[1]);
         try {
             core.selectGame("./lib/arcade_nibbler.so"); // DEBUG TODO
             core.loop();

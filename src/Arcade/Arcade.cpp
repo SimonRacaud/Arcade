@@ -28,6 +28,7 @@ Arcade::Arcade(const std::string &defGraphicFile)
                 this->_graphLibManager.getModule(defGraphicFile);
             this->_selectedGraphic = &displayMod;
             this->_selectedGraphic->open();
+            this->_selectedGraphicName = defGraphicFile;
         } catch (LibNotFoundException const &e) {
             std::cerr << "Error: " << e.what() << std::endl;
             this->_status = ExitStatus::ERROR;
@@ -65,6 +66,7 @@ void Arcade::loop()
                 } else {
                     this->_selectedGraphic->displayScreen();
                 }
+                this->eventManager();
             }
         }
     }
@@ -73,7 +75,7 @@ void Arcade::loop()
 void Arcade::resetGame()
 {
     if (this->_selectedGame != nullptr) {
-       this->_selectedGame->reset();
+        this->_selectedGame->reset();
     }
 }
 
@@ -100,6 +102,7 @@ void Arcade::selectGame(std::string const &name)
             this->_selectedGame->reset();
         this->_selectedGame = &gameMod;
         this->_selectedGame->setUsername(this->getUsername());
+        this->_selectedGameName = name;
         if (this->_selectedGraphic)
             this->_selectedGame->setDisplayModule(*this->_selectedGraphic);
         else
@@ -111,14 +114,6 @@ void Arcade::selectGame(std::string const &name)
     }
 }
 
-void Arcade::gotoMainMenu()
-{
-    if (this->_selectedGame == nullptr)
-        return;
-    this->_selectedGame = nullptr;
-    // TODO : open main menu
-}
-
 void Arcade::selectGraphic(std::string const &name)
 {
     try {
@@ -127,6 +122,10 @@ void Arcade::selectGraphic(std::string const &name)
             this->_selectedGraphic->close();
         this->_selectedGraphic = &displayMod;
         this->_selectedGraphic->open();
+        this->_selectedGraphicName = name;
+        if (this->_selectedGame) {
+            this->_selectedGame->setDisplayModule(displayMod);
+        }
     } catch (LibNotFoundException const &e) {
         std::cerr << "Arcade::selectGraphic : " << e.what() << std::endl;
     }
@@ -135,4 +134,116 @@ void Arcade::selectGraphic(std::string const &name)
 Arcade::ExitStatus Arcade::getStatus() const
 {
     return _status;
+}
+
+void Arcade::eventManager()
+{
+    if (this->_selectedGraphic == nullptr)
+        return;
+    if (_selectedGraphic->isKeyPress(Key::NEXT_GAME)) {
+        this->rotateGameLib(false);
+    }
+    if (_selectedGraphic->isKeyPress(Key::PREV_GAME)) {
+        this->rotateGameLib(true);
+    }
+    if (_selectedGraphic->isKeyPress(Key::NEXT_LIB)) {
+        this->rotateGraphLib(false);
+    }
+    if (_selectedGraphic->isKeyPress(Key::PREV_LIB)) {
+        this->rotateGraphLib(true);
+    }
+    if (_selectedGraphic->isKeyPress(Key::RESTART_GAME)) {
+        this->resetGame();
+    }
+    if (_selectedGraphic->isKeyPress(Key::EXIT)) {
+        this->_status = ExitStatus::SUCCESS;
+    }
+    if (_selectedGame && _selectedGraphic->isKeyPress(Key::MENU)) {
+        this->gotoMainMenu();
+    }
+}
+
+/** Private **/
+
+void Arcade::gotoMainMenu()
+{
+    if (this->_selectedGame == nullptr)
+        return;
+    this->_selectedGame = nullptr;
+    // TODO : open main menu
+}
+
+void Arcade::rotateGraphLib(bool rev)
+{
+    const std::deque<std::string> &libNames =
+        this->_graphLibManager.getAvailableLibs();
+
+    if (libNames.empty())
+        return;
+    if (_selectedGraphic == nullptr && !libNames.empty()) {
+        this->selectGraphic(libNames.front());
+    } else if (libNames.size() > 1) {
+        std::string selectedName = this->_selectedGraphicName;
+        auto it = std::find_if(libNames.begin(), libNames.end(),
+            [selectedName](std::string const &name) {
+                return name.find(selectedName) != std::string::npos;
+            });
+        if (it == libNames.end()) {
+            std::cerr << "Warning: Arcade::rotateGraphLib() "
+                      << _selectedGraphicName << " Lib not found\n";
+            return;
+        } else {
+            if (rev) {
+                if (it == libNames.end() - 1) {
+                    this->selectGraphic(libNames.front());
+                } else {
+                    this->selectGraphic(*(it + 1));
+                }
+            } else {
+                if (it == libNames.begin()) {
+                    this->selectGraphic(libNames.back());
+                } else {
+                    this->selectGraphic(*(it - 1));
+                }
+            }
+        }
+    }
+}
+
+void Arcade::rotateGameLib(bool rev)
+{
+    const std::deque<std::string> &libNames =
+        this->_gameLibManager.getAvailableLibs();
+
+    if (libNames.empty())
+        return;
+
+    if (_selectedGame == nullptr && !libNames.empty()) {
+        this->selectGame(libNames.front());
+    } else if (libNames.size() > 1) {
+        std::string selectedName = this->_selectedGameName;
+        auto it = std::find_if(libNames.begin(), libNames.end(),
+            [selectedName](std::string const &name) {
+                return name.find(selectedName) != std::string::npos;
+            });
+        if (it == libNames.end()) {
+            std::cerr << "Warning: Arcade::rotateGameLib() "
+                      << _selectedGameName << " Lib not found\n";
+            return;
+        } else {
+            if (rev) {
+                if (it == libNames.end() - 1) {
+                    this->selectGame(libNames.front());
+                } else {
+                    this->selectGame(*(it + 1));
+                }
+            } else {
+                if (it == libNames.begin()) {
+                    this->selectGame(libNames.back());
+                } else {
+                    this->selectGame(*(it - 1));
+                }
+            }
+        }
+    }
 }
