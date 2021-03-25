@@ -76,7 +76,8 @@ const std::map <arcade::IDisplayModule::KeyList, sf::Keyboard::Key> SFML::_key =
 
 SFML::SFML() :
  _isMouseClicked(false), _isOpen(false),
- _scaleX(SCALE_X), _scaleY(SCALE_Y),
+ _scale(SCALE_X, SCALE_Y),
+ _origin(ORIGIN_X * SCALE_X, ORIGIN_Y * SCALE_Y),
  _textSize(TEXT_SIZE)
 {
     if (!_font.loadFromFile(FONT_PATH)) {
@@ -111,8 +112,8 @@ void SFML::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
 {
     sf::RectangleShape rectangle;
 
-    rectangle.setSize(sf::Vector2f((float)size.x * _scaleX, (float)size.y * _scaleY));
-    rectangle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
+    rectangle.setSize(sf::Vector2f(size.x * _scale.x, size.y * _scale.y));
+    rectangle.setPosition(sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
     rectangle.setFillColor(_color.at(color));
     _window->draw(rectangle);
 }
@@ -121,10 +122,10 @@ void SFML::putRectOutline(Color color, Coord size, Coord pos)
 {
     sf::RectangleShape rectangle;
 
-    rectangle.setSize(sf::Vector2f((float)size.x * _scaleX, (float)size.y * _scaleY));
-    rectangle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
+    rectangle.setSize(sf::Vector2f(size.x * _scale.x, size.y * _scale.y));
+    rectangle.setPosition(sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
     rectangle.setOutlineColor(_color.at(color));
-    rectangle.setOutlineThickness(_scaleX);
+    rectangle.setOutlineThickness(_scale.x);
     rectangle.setFillColor(sf::Color(0, 0, 0, 0));
     _window->draw(rectangle);
 }
@@ -134,7 +135,7 @@ void SFML::putCircle(Color color, Coord pos, size_t radius)
     sf::CircleShape circle;
 
     circle.setRadius((float)radius);
-    circle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleX));
+    circle.setPosition(sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
     circle.setFillColor(_color.at(color));
     _window->draw(circle);
 }
@@ -147,7 +148,7 @@ void SFML::putText(Color color, Coord pos, std::string const &value)
     text.setString(value.c_str());
     text.setCharacterSize(_textSize);
     text.setFillColor(_color.at(color));
-    text.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
+    text.setPosition(sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
     _window->draw(text);
 }
 

@@ -41,15 +41,15 @@ class Ncurses : public IDisplayModule {
 
     protected:
     private:
-        float _scaleX;
-        float _scaleY;
-        size_t _textSize;
         bool _isOpen;
+        WINDOW *_window;
+        int _ch;
+        Vector _scale;
+        Vector _origin;
+        size_t _textSize;
         static const std::map<Color, short> _caseColor;
         static const std::map<Color, short> _textColor;
         static const std::map<KeyList, int> _key;
-        WINDOW *_window;
-        int _ch;
 };
 
 #endif /* !NCURSES_HPP_ */

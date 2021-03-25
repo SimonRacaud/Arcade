@@ -8,6 +8,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#define ORIGIN_X 4
+#define ORIGIN_Y 4
 #define SCALE_X 20
 #define SCALE_Y 20
 #define TEXT_SIZE 20

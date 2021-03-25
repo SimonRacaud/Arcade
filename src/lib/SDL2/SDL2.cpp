@@ -78,7 +78,8 @@ const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
 
 SDL2::SDL2() :
     _isMouseClicked(false), _isOpen(false),
-    _scaleX(SCALE_X), _scaleY(SCALE_Y),
+    _scale(SCALE_X, SCALE_Y),
+    _origin(ORIGIN_X * SCALE_X, ORIGIN_Y * SCALE_Y),
     _textSize(TEXT_SIZE),
     _window(NULL), _renderer(NULL)
 {
@@ -134,10 +135,10 @@ void SDL2::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
     SDL_Color sdl_color = _color.at(color);
     SDL_Rect r;
 
-    r.x = pos.x * _scaleX;
-    r.y = pos.y * _scaleY;
-    r.w = size.x * _scaleX;
-    r.h = size.y * _scaleY;
+    r.x = _origin.x + pos.x * _scale.x;
+    r.y = _origin.y + pos.y * _scale.y;
+    r.w = size.x * _scale.x;
+    r.h = size.y * _scale.y;
 
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     SDL_RenderFillRect(_renderer, &r);
@@ -149,10 +150,10 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
     SDL_Color sdl_color = _color.at(color);
     SDL_Rect r;
 
-    r.x = pos.x * _scaleX;
-    r.y = pos.y * _scaleY;
-    r.w = size.x * _scaleX;
-    r.h = size.y * _scaleY;
+    r.x = _origin.x + pos.x * _scale.x;
+    r.y = _origin.y + pos.y * _scale.y;
+    r.w = size.x * _scale.x;
+    r.h = size.y * _scale.y;
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     SDL_RenderDrawRect(_renderer, &r);
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
@@ -161,8 +162,8 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
     SDL_Color sdl_color = _color.at(color);
-    float position_x = pos.x * SCALE_X;
-    float position_y = pos.y * SCALE_Y;
+    float position_x = _origin.x + pos.x * _scale.x;
+    float position_y = _origin.y + pos.y * _scale.y;
     Vector center( position_x + radius, position_y + radius);
     std::vector<float> v = {0, 0};
 
@@ -186,8 +187,8 @@ void SDL2::putText(Color color, Coord pos, std::string const &value)
 
     rect.w = surface->w;
     rect.h = surface->h;
-    rect.x = pos.x * SCALE_X;
-    rect.y = pos.y * SCALE_Y;
+    rect.x = _origin.x + pos.x * _scale.x;
+    rect.y = _origin.y + pos.y * _scale.y;
     SDL_FreeSurface(surface);
     SDL_RenderCopy(_renderer, message, NULL, &rect);
 }

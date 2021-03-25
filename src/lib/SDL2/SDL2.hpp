@@ -44,8 +44,8 @@ class SDL2 : public IDisplayModule {
         std::vector<SDL_Keycode> _keyStack;
         bool _isMouseClicked;
         bool _isOpen;
-        float _scaleX;
-        float _scaleY;
+        Vector _scale;
+        Vector _origin;
         size_t _textSize;
         TTF_Font *_font;
         static const std::map<Color, SDL_Color> _color;

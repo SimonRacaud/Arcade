@@ -42,8 +42,8 @@ class SFML : public IDisplayModule {
         std::vector<sf::Keyboard::Key> _keyStack;
         bool _isMouseClicked;
         bool _isOpen;
-        float _scaleX;
-        float _scaleY;
+        Vector _scale;
+        Vector _origin;
         size_t _textSize;
         sf::Font _font;
         static const std::map<Color, sf::Color> _color;

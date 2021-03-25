@@ -8,14 +8,14 @@
 #include "Ncurses.hpp"
 
 const std::map <arcade::IDisplayModule::Color, short> Ncurses::_caseColor = {
-    {arcade::IDisplayModule::Color::BLACK, 0},
-    {arcade::IDisplayModule::Color::RED, 1},
-    {arcade::IDisplayModule::Color::GREEN, 2},
-    {arcade::IDisplayModule::Color::YELLOW, 3},
-    {arcade::IDisplayModule::Color::BLUE, 4},
-    {arcade::IDisplayModule::Color::MAGENTA, 5},
-    {arcade::IDisplayModule::Color::CYAN, 6},
-    {arcade::IDisplayModule::Color::WHITE, 7},
+    {arcade::IDisplayModule::Color::BLACK, COLOR_BLACK},
+    {arcade::IDisplayModule::Color::RED, COLOR_RED},
+    {arcade::IDisplayModule::Color::GREEN, COLOR_GREEN},
+    {arcade::IDisplayModule::Color::YELLOW, COLOR_YELLOW},
+    {arcade::IDisplayModule::Color::BLUE, COLOR_BLUE},
+    {arcade::IDisplayModule::Color::MAGENTA, COLOR_MAGENTA},
+    {arcade::IDisplayModule::Color::CYAN, COLOR_CYAN},
+    {arcade::IDisplayModule::Color::WHITE, COLOR_WHITE},
 };
 
 const std::map <arcade::IDisplayModule::Color, short> Ncurses::_textColor = {
@@ -84,12 +84,11 @@ const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
 };
 
 Ncurses::Ncurses() :
- _scaleX(1), _scaleY(1),
+ _isOpen(false), _window(nullptr),
+ _ch(-1),
+ _scale(1, 1), _origin(4, 4),
  _textSize(1)
 {
-    _isOpen = false;
-    _window = nullptr;
-    _ch = -1;
 }
 
 Ncurses::~Ncurses() {}
@@ -137,10 +136,10 @@ void Ncurses::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
     attron(COLOR_PAIR(_caseColor.at(color)));
     for (size_t i = 0; i < size.x; i++)
         line += "  ";
-    if (pos.x + size.x * 2 >= windowX)
-        line = line.substr(0, windowX - pos.x);
+    if (_origin.x + pos.x + size.x * 2 >= windowX)
+        line = line.substr(0, windowX - (_origin.x + pos.x));
     for (size_t i = 0; i < size.y; i++)
-        mvprintw(pos.y + i, pos.x, line.data());
+        mvprintw(_origin.y + pos.y + i, _origin.x + pos.x, line.data());
     attroff(COLOR_PAIR(_caseColor.at(color)));
 }
 
@@ -154,16 +153,16 @@ void Ncurses::putRectOutline(Color color, Coord size, Coord pos)
     attron(COLOR_PAIR(_caseColor.at(color)));
     for (size_t i = 0; i < size.x; i++)
         line += "  ";
-    if (pos.x + size.x * 2 >= windowX)
-        line = line.substr(0, windowX - pos.x);
-    mvprintw(pos.y, pos.x, line.data());
+    if (_origin.x + pos.x + size.x * 2 >= windowX)
+        line = line.substr(0, windowX - (_origin.x + pos.x));
+    mvprintw(_origin.y + pos.y, _origin.x + pos.x, line.data());
     for (size_t i = 0; i < size.y; i++) {
-        mvprintw(pos.y + i, pos.x, line.substr(0, 2).data());
+        mvprintw(_origin.y + pos.y + i, _origin.x + pos.x, line.substr(0, 2).data());
         if (line.size() > size.x * 2 - 2)
-            mvprintw(pos.y + i, pos.x + size.x * 2 - 2,
+            mvprintw(_origin.y + pos.y + i, _origin.x + pos.x + size.x * 2 - 2,
             line.substr(size.x * 2 - 2, 2).data());
     }
-    mvprintw(pos.y + size.y - 1, pos.x, line.data());
+    mvprintw(_origin.y + pos.y + size.y - 1, _origin.x + pos.x, line.data());
     attroff(COLOR_PAIR(_caseColor.at(color)));
 }
 
@@ -176,19 +175,19 @@ void Ncurses::putCircle(Color color, Coord pos, size_t radius)
 
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_caseColor.at(color)));
-    for (size_t y = pos.y; y < pos.y + 2 * radius; y++) {
-        for (size_t x = pos.x; x < pos.x + 2 * radius; x++) {
-            difx = x - pos.x - radius;
-            dify = y - pos.y - radius;
+    for (size_t y = _origin.y + pos.y; y < _origin.y + pos.y + 2 * radius; y++) {
+        for (size_t x = _origin.x + pos.x; x < _origin.x + pos.x + 2 * radius; x++) {
+            difx = x - (_origin.x + pos.x) - radius;
+            dify = y - (_origin.y + pos.y) - radius;
             if (sqrt((difx) * (difx) + (dify) * (dify)) > radius
             || sqrt((difx + 1) * (difx + 1) + (dify + 1) * (dify + 1)) > radius
             || sqrt((difx + 1) * (difx + 1) + (dify) * (dify)) > radius
             || sqrt((difx) * (difx) + (dify + 1) * (dify + 1)) > radius)
                 continue;
-            if (x + x - pos.x < windowX - 1)
-                mvprintw(y, x + x - pos.x, "  ");
-            else if (x + x - pos.x < windowX)
-                mvprintw(y, x + x - pos.x, " ");
+            if (x + x - (_origin.x + pos.x) < windowX - 1)
+                mvprintw(y, x + x - (_origin.x + pos.x), "  ");
+            else if (x + x - (_origin.x + pos.x) < windowX)
+                mvprintw(y, x + x - (_origin.x + pos.x), " ");
         }
     }
     attroff(COLOR_PAIR(_caseColor.at(color)));
@@ -202,10 +201,10 @@ void Ncurses::putText(Color color, Coord pos, std::string const &value)
 
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_textColor.at(color)));
-    if (pos.x + value.size() >= windowX)
-        mvprintw(pos.y, pos.x, value.substr(0, windowX - pos.x).data());
+    if (_origin.x + pos.x + value.size() >= windowX)
+        mvprintw(_origin.y + pos.y, _origin.x + pos.x, value.substr(0, windowX - (_origin.x + pos.x)).data());
     else
-        mvprintw(pos.y, pos.x, value.data());
+        mvprintw(_origin.y + pos.y, _origin.x + pos.x, value.data());
     attroff(COLOR_PAIR(_textColor.at(color)));
 }
 
