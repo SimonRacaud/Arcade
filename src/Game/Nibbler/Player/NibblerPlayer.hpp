@@ -24,17 +24,16 @@ namespace Game
         Direction _movment;
         double _speed;
 
+        void resetPosition();
       public:
-        void setMovment(const Direction &movment);
-        void rotate(const Direction &dir);
-
-      protected:
-      public:
-
         NibblerPlayer(Vector const &mapSize);
         virtual ~NibblerPlayer();
 
         void move();
+        void reset();
+
+        void setMovment(const Direction &movment);
+        void rotate(const Direction &dir);
 
         void increaseLength();
 

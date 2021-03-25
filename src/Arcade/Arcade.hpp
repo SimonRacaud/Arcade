@@ -28,6 +28,12 @@ namespace arcade {
 
     class Arcade {
     public:
+        enum class ExitStatus {
+            SUCCESS = EXIT_SUCCESS,
+            ERROR = EXIT_ERROR,
+            LOOP = 8
+        };
+
         Arcade(std::string const &defGraphicFile);
 
         virtual ~Arcade();
@@ -50,14 +56,13 @@ namespace arcade {
         static const std::deque<std::string> GRAPHIC_LIB_NAMES;
 
     private:
-        enum class ExitStatus {
-            SUCCESS = EXIT_SUCCESS,
-            ERROR = EXIT_ERROR,
-            LOOP = 8
-        };
-
         std::string _username;
         ExitStatus _status;
+
+      public:
+        ExitStatus getStatus() const;
+
+      private:
         IGameModule *_selectedGame;
         IDisplayModule *_selectedGraphic;
         DL::DLManager<IDisplayModule> _graphLibManager;

@@ -18,7 +18,10 @@ int main(int argc, char **argv)
             core.loop();
         } catch (BaseException const& e) {
             std::cerr << e.what() << std::endl;
-            return 84;
+            return EXIT_ERROR;
+        }
+        if (core.getStatus() == Arcade::ExitStatus::ERROR) {
+            return EXIT_ERROR;
         }
     } else {
         std::cout << "USAGE: " << argv[0] << " {{Graphical/library/path}}"

@@ -131,3 +131,8 @@ void Arcade::selectGraphic(std::string const &name)
         std::cerr << "Arcade::selectGraphic : " << e.what() << std::endl;
     }
 }
+
+Arcade::ExitStatus Arcade::getStatus() const
+{
+    return _status;
+}

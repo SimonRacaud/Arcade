@@ -6,7 +6,6 @@
 */
 
 #include "NibblerPlayer.hpp"
-#include "../../../../../../../../home/simon/work/2_CURRENT/B-OOP-400-REN-4-1-arcade-aurelien.joncour/src/Game/Nibbler/Player/NibblerPlayer.hpp"
 
 using namespace Game;
 
@@ -16,19 +15,7 @@ NibblerPlayer::NibblerPlayer(const Vector &mapSize)
     : GameObject(Color::RED, mapSize), _movment(Direction::UP),
       _speed(DEF_SPEED)
 {
-    Vector initPos1(mapSize.x / 2, mapSize.y / 2);
-    Vector initPos2(mapSize.x / 2, mapSize.y / 2 + 1);
-
-    try {
-        this->_positions.clear();
-        this->_positions.push_back(initPos1);
-        this->_positions.push_back(initPos2);
-        for (size_t p = 0; p < 2; p++) {
-            this->increaseLength();
-        }
-    } catch (BaseException const &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-    }
+    this->resetPosition();
 }
 
 NibblerPlayer::~NibblerPlayer()
@@ -83,20 +70,43 @@ ssize_t NibblerPlayer::isCollideWith(const std::deque<GameObject> &coins) const
     return -1;
 }
 
+void NibblerPlayer::reset()
+{
+    this->_speed = DEF_SPEED;
+    this->resetPosition();
+}
+
 /** Private **/
+
+void NibblerPlayer::resetPosition()
+{
+    Vector initPos1(_posMax.x / 2, _posMax.y / 2);
+    Vector initPos2(_posMax.x / 2, _posMax.y / 2 + 1);
+
+    try {
+        this->_positions.clear();
+        this->_positions.push_back(initPos1);
+        this->_positions.push_back(initPos2);
+        for (size_t p = 0; p < 2; p++) {
+            this->increaseLength();
+        }
+    } catch (BaseException const &e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+}
 
 void NibblerPlayer::setMovment(const NibblerPlayer::Direction &movment)
 {
     if (_positions.size() >= 2) {
         Vector offset(this->_positions[0] - this->_positions[1]);
 
-        if (movment == Direction::UP && offset.y < 0) {
+        if (movment == Direction::UP && offset.y > 0) {
             return;
-        } else if (movment == Direction::DOWN && offset.y > 0) {
+        } else if (movment == Direction::DOWN && offset.y < 0) {
             return;
-        } else if (movment == Direction::LEFT && offset.x < 0) {
+        } else if (movment == Direction::LEFT && offset.x > 0) {
             return;
-        } else if (movment == Direction::RIGHT && offset.x > 0) {
+        } else if (movment == Direction::RIGHT && offset.x < 0) {
             return;
         }
     }

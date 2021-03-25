@@ -135,9 +135,11 @@ void AbstractGameModule::eventManager(arcade::IDisplayModule &displayModule)
             this->_status = GameStatus::PAUSE;
         }
     }
-    if (_status == GameStatus::PAUSE || _status == GameStatus::GAMEOVER) {
+    if (_status == GameStatus::GAMEOVER || _status == GameStatus::PAUSE) {
         if (displayModule.isKeyPress(KeyList::KEY_SPACE)) {
-            this->reset();
+            if (_status == GameStatus::GAMEOVER) {
+                this->reset();
+            }
             this->_status = GameStatus::SUCCESS;
         }
     }
