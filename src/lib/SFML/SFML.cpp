@@ -25,7 +25,7 @@ const std::map <arcade::IDisplayModule::KeyList, sf::Keyboard::Key> SFML::_key =
     {arcade::IDisplayModule::KeyList::PREV_GAME, sf::Keyboard::Unknown},
     {arcade::IDisplayModule::KeyList::NEXT_LIB, sf::Keyboard::Unknown},
     {arcade::IDisplayModule::KeyList::PREV_LIB, sf::Keyboard::Unknown},
-    {arcade::IDisplayModule::KeyList::RESTART_GAME, sf::Keyboard::Unknown},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, sf::Keyboard::R},
     {arcade::IDisplayModule::KeyList::MENU, sf::Keyboard::Q},
     {arcade::IDisplayModule::KeyList::EXIT, sf::Keyboard::Escape},
     {arcade::IDisplayModule::KeyList::PAUSE, sf::Keyboard::P},
