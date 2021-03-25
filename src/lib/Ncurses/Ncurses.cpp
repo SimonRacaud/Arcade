@@ -79,7 +79,7 @@ const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
     {arcade::IDisplayModule::KeyList::ARROW_LEFT, KEY_LEFT},
     {arcade::IDisplayModule::KeyList::ARROW_RIGHT, KEY_RIGHT},
     {arcade::IDisplayModule::KeyList::KEY_SPACE, ' '},
-    {arcade::IDisplayModule::KeyList::BACK_SPACE, KEY_BACKSPACE}
+    {arcade::IDisplayModule::KeyList::BACK_SPACE, KEY_BACKSPACE},
     {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, KEY_MOUSE},
 };
 
