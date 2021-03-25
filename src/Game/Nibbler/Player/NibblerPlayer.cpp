@@ -60,10 +60,10 @@ bool NibblerPlayer::isCollideWithSelf() const
     return false;
 }
 
-ssize_t NibblerPlayer::isCollideWith(const std::deque<GameObject> &coins) const
+ssize_t NibblerPlayer::isCollideWith(const std::deque<GameObject *> &coins) const
 {
     for (size_t i = 0; i < coins.size(); i++) {
-        if (coins[i].isCollideWith(*this)) {
+        if (coins[i]->isCollideWith(*this)) {
             return (ssize_t) i;
         }
     }

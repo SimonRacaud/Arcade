@@ -28,11 +28,11 @@ namespace Game
       private:
         NibblerPlayer _player;
         Timer _coinGenTimer;
-        std::deque<GameObject> _coins;
+        std::deque<GameObject *> _coins;
 
       public:
         NibblerGameModule();
-        ~NibblerGameModule() override = default;
+        ~NibblerGameModule() override;
         void reset();
 
       protected:

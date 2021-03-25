@@ -89,6 +89,14 @@ try : AbstractGameModule("Unknown", MAP_SIZE, MAP), _player(MAP_SIZE),
     std::cerr << "Error: " << e.what() << std::endl;
 }
 
+NibblerGameModule::~NibblerGameModule()
+{
+    while (!_coins.empty()) {
+        delete _coins.back();
+        _coins.pop_back();
+    }
+}
+
 void NibblerGameModule::refreshGame()
 {
     ssize_t coinIdx;
@@ -108,6 +116,7 @@ void NibblerGameModule::refreshGame()
     // check collision coins
     coinIdx = this->_player.isCollideWith(_coins);
     if (coinIdx != -1) {
+        delete *(_coins.begin() + coinIdx);
         _coins.erase(_coins.begin() + coinIdx);
         this->increaseScore(10);
         this->_player.increaseLength();
@@ -118,7 +127,7 @@ void NibblerGameModule::refreshGame()
     this->_map.display(*this->_graphModule);
     this->_player.display(*this->_graphModule);
     for (size_t i = 0; i < _coins.size(); i++) {
-        this->_coins[i].display(*this->_graphModule);
+        this->_coins[i]->display(*this->_graphModule);
     }
     if (this->_coinGenTimer.shouldRefresh()) {
         this->generateCoin();
@@ -131,6 +140,7 @@ void NibblerGameModule::reset()
         _coins.clear();
         this->generateCoin();
         this->_player.reset();
+        this->_status = GameStatus::SUCCESS;
     } catch (BaseException const &e) {
         std::cerr << "Error: NibblerGameModule::reset() " << e.what()
                   << std::endl;
@@ -148,14 +158,14 @@ void NibblerGameModule::generateCoin()
         if (_player.isCollideCoord(position)) {
             continue;
         }
-        for (GameObject const &coin : _coins) {
-            if (coin.isCollideCoord(position) == true) {
+        for (GameObject const *coin : _coins) {
+            if (coin->isCollideCoord(position) == true) {
                 continue;
             }
         }
-        this->_coins.push_back(GameObject(Color::YELLOW, _map.getSize()));
-        this->_coins.back().setPosition(position);
-        this->_coins.back().setAnimation(Color::BLUE, 4);
+        this->_coins.push_back(new GameObject(Color::YELLOW, _map.getSize()));
+        this->_coins.back()->setPosition(position);
+        this->_coins.back()->setAnimation(Color::BLUE, 4);
         return;
     }
     std::cerr << "Warning: NibblerGameModule::generateCoin() fail"
@@ -178,3 +188,4 @@ void NibblerGameModule::eventManager(arcade::IDisplayModule &displayModule)
         this->_player.setMovment(NibblerPlayer::Direction::DOWN);
     }
 }
+

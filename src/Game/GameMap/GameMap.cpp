@@ -18,10 +18,10 @@ GameMap::GameMap(const Vector &size, std::deque<Color> const &fill)
 {
     size_t idx = 0;
 
-    this->_mtx = new Color *[(size_t)size.y];
-    for (size_t y = 0; y < (size_t)size.y; y++) {
-        this->_mtx[y] = new Color[(size_t)size.x];
-        for (size_t x = 0; x < (size_t)size.x; x++) {
+    this->_mtx = new Color *[(size_t) size.y];
+    for (size_t y = 0; y < (size_t) size.y; y++) {
+        this->_mtx[y] = new Color[(size_t) size.x];
+        for (size_t x = 0; x < (size_t) size.x; x++) {
             if (fill.size() > idx) {
                 this->_mtx[y][x] = fill[idx++];
             } else {
@@ -33,16 +33,19 @@ GameMap::GameMap(const Vector &size, std::deque<Color> const &fill)
 
 GameMap::~GameMap()
 {
+    for (size_t y = 0; y < (size_t) _size.y; y++) {
+        delete[] this->_mtx[y];
+    }
     delete[] this->_mtx;
 }
 
 void GameMap::display(arcade::IDisplayModule &mod)
 {
     if (this->_mtx != nullptr) {
-        for (size_t y = 0; y < (size_t)_size.y; y++) {
-            for (size_t x = 0; x < (size_t)_size.x; x++) {
-                mod.putRectFill(
-                    this->_mtx[y][x], arcade::Coord(1, 1), arcade::Coord(y, x));
+        for (size_t y = 0; y < (size_t) _size.y; y++) {
+            for (size_t x = 0; x < (size_t) _size.x; x++) {
+                mod.putRectFill(this->_mtx[y][x], arcade::Coord(1, 1),
+                    arcade::Coord(y, x));
             }
         }
     }
@@ -72,7 +75,7 @@ void GameMap::setCollideColors(const std::deque<Color> &collideColors)
  */
 bool GameMap::isCollideToCoord(int x, int y) const
 {
-    if (x >= (int)_size.x || y >= (int)_size.y || x < 0 || y < 0) {
+    if (x >= (int) _size.x || y >= (int) _size.y || x < 0 || y < 0) {
         throw OutOfBoundException();
     }
     if (_mtx == nullptr) {

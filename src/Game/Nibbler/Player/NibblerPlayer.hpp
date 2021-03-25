@@ -38,7 +38,7 @@ namespace Game
         void increaseLength();
 
         bool isCollideWithSelf() const;
-        ssize_t isCollideWith(std::deque<GameObject> const &coins) const;
+        ssize_t isCollideWith(std::deque<GameObject *> const &coins) const;
     };
 } // namespace Game
 
