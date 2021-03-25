@@ -26,6 +26,8 @@
 
 namespace arcade
 {
+    typedef IDisplayModule::KeyList Key;
+
     class Arcade {
       public:
         enum class ExitStatus {
@@ -50,8 +52,12 @@ namespace arcade
         void selectGraphic(std::string const &name);
         ExitStatus getStatus() const;
 
+        void eventManager();
+
       protected:
         void gotoMainMenu();
+        void rotateGraphLib(bool rev);
+        void rotateGameLib(bool rev);
 
         static const std::deque<std::string> GAME_LIB_NAMES;
         static const std::deque<std::string> GRAPHIC_LIB_NAMES;
@@ -61,6 +67,8 @@ namespace arcade
         ExitStatus _status;
         IGameModule *_selectedGame;
         IDisplayModule *_selectedGraphic;
+        std::string _selectedGameName;
+        std::string _selectedGraphicName;
         DL::DLManager<IDisplayModule> _graphLibManager;
         DL::DLManager<IGameModule> _gameLibManager;
         Timer _timer;
