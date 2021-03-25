@@ -10,8 +10,7 @@
 using namespace Game;
 
 GameObject::GameObject(Color color, const Vector &mapSize)
-    : _anim(false), _color(color), _posMax(mapSize),
-      _size(1)
+    : _anim(false), _color(color), _posMax(mapSize)
 {
     this->_positions.push_back(Vector(0, 0));
 }
@@ -31,9 +30,9 @@ void GameObject::display(arcade::IDisplayModule &mod)
         }
         c = _animColor[_colorState];
     }
-    for (size_t i = 0; i < _size; i++) {
+    for (size_t i = 0; i < _positions.size(); i++) {
         mod.putRectFill(
-            c, Coord(1, 1), Coord(_positions[i].y, _positions[i].x));
+            c, Coord(1, 1), Coord(_positions[i].x, _positions[i].y));
     }
 }
 
@@ -42,10 +41,10 @@ void GameObject::display(arcade::IDisplayModule &mod)
  * @param offsetX
  * @param offsetY
  */
-void GameObject::move(int offsetX, int offsetY)
+void GameObject::move(double offsetX, double offsetY)
 {
     if (this->canMove(offsetX, offsetY)) {
-        for (ssize_t i = _size - 1; i >= 0; i--) {
+        for (size_t i = _positions.size() - 1; i > 0; i--) {
             this->_positions[i].y = this->_positions[i - 1].y;
             this->_positions[i].x = this->_positions[i - 1].x;
         }
@@ -62,7 +61,7 @@ void GameObject::move(int offsetX, int offsetY)
  */
 void GameObject::setPosition(Vector const &coord)
 {
-    if (_size == 1) {
+    if (_positions.size() == 1) {
         this->_positions[0].x = coord.x;
         this->_positions[0].y = coord.y;
     } else {
@@ -72,7 +71,7 @@ void GameObject::setPosition(Vector const &coord)
 
 bool GameObject::isCollideWith(const GameObject &obj) const
 {
-    for (size_t i = 0; i < _size; i++) {
+    for (size_t i = 0; i < _positions.size(); i++) {
         if (obj.isCollideCoord(_positions[i])) {
             return true;
         }
@@ -82,7 +81,7 @@ bool GameObject::isCollideWith(const GameObject &obj) const
 
 bool GameObject::isCollideWith(const GameMap &map) const
 {
-    for (size_t i = 0; i < _size; i++) {
+    for (size_t i = 0; i < _positions.size(); i++) {
         try {
             if (map.isCollideToCoord(_positions[i].x, _positions[i].y)) {
                 return true;
@@ -96,22 +95,22 @@ bool GameObject::isCollideWith(const GameMap &map) const
 
 /** Private **/
 
-bool GameObject::canMove(int offsetX, int offsetY) const
+bool GameObject::canMove(double offsetX, double offsetY) const
 {
     if (_positions.empty())
         return false;
-    if (offsetX + (int) _positions[0].x < 0
-        || offsetY + (int) _positions[0].y < 0) {
+    if (offsetX + _positions[0].x < 0
+        || offsetY + _positions[0].y < 0) {
         return false;
-    } else if (offsetY + (int) _positions[0].y >= (int) _posMax.y
-        || offsetX + (int) _positions[0].x >= (int) _posMax.x) {
+    } else if (offsetY + _positions[0].y >= _posMax.y
+        || offsetX + _positions[0].x >= _posMax.x) {
         return false;
     }
     return true;
 }
 bool GameObject::isCollideCoord(const Vector &pos) const
 {
-    for (size_t i = 0; i < _size; i++) {
+    for (size_t i = 0; i < _positions.size(); i++) {
         if (_positions[i].x == pos.x && _positions[i].y == pos.y) {
             return true;
         }
@@ -135,7 +134,6 @@ GameObject &GameObject::operator=(const GameObject &obj)
     _color = obj._color;
     _posMax.x = obj._posMax.x;
     _posMax.y = obj._posMax.y;
-    _size = obj._size;
     _positions = obj._positions;
     _animFreq = obj._animFreq;
     _time = obj._time;

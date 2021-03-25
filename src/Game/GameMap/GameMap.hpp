@@ -9,6 +9,7 @@
 #define GAMEMAP_HPP_
 
 #include <algorithm>
+#include <cmath>
 #include <deque>
 #include "IDisplayModule.hpp"
 #include "OutOfBoundException.hpp"
@@ -17,6 +18,7 @@
 namespace Game
 {
     typedef arcade::IDisplayModule::Color Color;
+    typedef arcade::Vector Vector;
 
     class GameMap {
       protected:

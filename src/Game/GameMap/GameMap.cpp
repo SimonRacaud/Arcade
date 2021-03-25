@@ -18,9 +18,9 @@ GameMap::GameMap(const Vector &size, std::deque<Color> const &fill)
 {
     size_t idx = 0;
 
-    this->_mtx = new Color *[size.y];
+    this->_mtx = new Color *[(size_t)size.y];
     for (size_t y = 0; y < (size_t)size.y; y++) {
-        this->_mtx[y] = new Color[size.x];
+        this->_mtx[y] = new Color[(size_t)size.x];
         for (size_t x = 0; x < (size_t)size.x; x++) {
             if (fill.size() > idx) {
                 this->_mtx[y][x] = fill[idx++];

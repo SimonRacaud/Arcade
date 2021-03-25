@@ -5,8 +5,11 @@
 ** SDL2
 */
 
+#include <iostream>
+#include <vector>
 #include "./SDL2.hpp"
 #include "../../../includes/config.h"
+#include "../../../includes/Vector.hpp"
 
 const std::map<arcade::IDisplayModule::Color, SDL_Color> SDL2::_color = {
     {arcade::IDisplayModule::Color::BLACK, {0, 0, 0, 255}},
@@ -20,36 +23,68 @@ const std::map<arcade::IDisplayModule::Color, SDL_Color> SDL2::_color = {
 };
 
 const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
-    //{arcade::IDisplayModule::KeyList::NEXT_GAME, },
-    //{arcade::IDisplayModule::KeyList::PREV_GAME, },
-    //{arcade::IDisplayModule::KeyList::NEXT_LIB, },
-    //{arcade::IDisplayModule::KeyList::PREV_LIB, },
-    //{arcade::IDisplayModule::KeyList::RESTART_GAME, },
-    //{arcade::IDisplayModule::KeyList::MENU, },
-    //{arcade::IDisplayModule::KeyList::EXIT, },
-    //{arcade::IDisplayModule::KeyList::PAUSE, },
-    {arcade::IDisplayModule::KeyList::KEY_Z, SDL_SCANCODE_Z},
-    {arcade::IDisplayModule::KeyList::KEY_Q, SDL_SCANCODE_Q},
-    {arcade::IDisplayModule::KeyList::KEY_S, SDL_SCANCODE_S},
-    {arcade::IDisplayModule::KeyList::KEY_D, SDL_SCANCODE_D},
-    {arcade::IDisplayModule::KeyList::ARROW_UP, SDL_SCANCODE_UP},
-    {arcade::IDisplayModule::KeyList::ARROW_DOWN, SDL_SCANCODE_DOWN},
-    {arcade::IDisplayModule::KeyList::ARROW_LEFT, SDL_SCANCODE_LEFT},
-    {arcade::IDisplayModule::KeyList::ARROW_RIGHT, SDL_SCANCODE_RIGHT},
-    {arcade::IDisplayModule::KeyList::KEY_SPACE, SDL_SCANCODE_SPACE},
-    {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, SDL_SCANCODE_0},
+    {arcade::IDisplayModule::KeyList::NEXT_GAME, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::PREV_GAME, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::NEXT_LIB, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::PREV_LIB, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::MENU, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::EXIT, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::PAUSE, SDLK_UNKNOWN},
+    {arcade::IDisplayModule::KeyList::KEY_A, SDLK_a},
+    {arcade::IDisplayModule::KeyList::KEY_B, SDLK_b},
+    {arcade::IDisplayModule::KeyList::KEY_C, SDLK_c},
+    {arcade::IDisplayModule::KeyList::KEY_D, SDLK_d},
+    {arcade::IDisplayModule::KeyList::KEY_E, SDLK_e},
+    {arcade::IDisplayModule::KeyList::KEY_F, SDLK_f},
+    {arcade::IDisplayModule::KeyList::KEY_G, SDLK_g},
+    {arcade::IDisplayModule::KeyList::KEY_H, SDLK_h},
+    {arcade::IDisplayModule::KeyList::KEY_I, SDLK_i},
+    {arcade::IDisplayModule::KeyList::KEY_J, SDLK_j},
+    {arcade::IDisplayModule::KeyList::KEY_K, SDLK_k},
+    {arcade::IDisplayModule::KeyList::KEY_L, SDLK_l},
+    {arcade::IDisplayModule::KeyList::KEY_M, SDLK_m},
+    {arcade::IDisplayModule::KeyList::KEY_N, SDLK_n},
+    {arcade::IDisplayModule::KeyList::KEY_O, SDLK_o},
+    {arcade::IDisplayModule::KeyList::KEY_P, SDLK_p},
+    {arcade::IDisplayModule::KeyList::KEY_Q, SDLK_q},
+    {arcade::IDisplayModule::KeyList::KEY_R, SDLK_r},
+    {arcade::IDisplayModule::KeyList::KEY_S, SDLK_s},
+    {arcade::IDisplayModule::KeyList::KEY_T, SDLK_t},
+    {arcade::IDisplayModule::KeyList::KEY_U, SDLK_u},
+    {arcade::IDisplayModule::KeyList::KEY_V, SDLK_v},
+    {arcade::IDisplayModule::KeyList::KEY_W, SDLK_w},
+    {arcade::IDisplayModule::KeyList::KEY_X, SDLK_x},
+    {arcade::IDisplayModule::KeyList::KEY_Y, SDLK_y},
+    {arcade::IDisplayModule::KeyList::KEY_Z, SDLK_z},
+    {arcade::IDisplayModule::KeyList::KEY_1, SDLK_1},
+    {arcade::IDisplayModule::KeyList::KEY_2, SDLK_2},
+    {arcade::IDisplayModule::KeyList::KEY_3, SDLK_3},
+    {arcade::IDisplayModule::KeyList::KEY_4, SDLK_4},
+    {arcade::IDisplayModule::KeyList::KEY_5, SDLK_5},
+    {arcade::IDisplayModule::KeyList::KEY_6, SDLK_6},
+    {arcade::IDisplayModule::KeyList::KEY_7, SDLK_7},
+    {arcade::IDisplayModule::KeyList::KEY_8, SDLK_8},
+    {arcade::IDisplayModule::KeyList::KEY_9, SDLK_9},
+    {arcade::IDisplayModule::KeyList::KEY_0, SDLK_0},
+    {arcade::IDisplayModule::KeyList::ARROW_UP, SDLK_UP},
+    {arcade::IDisplayModule::KeyList::ARROW_DOWN, SDLK_DOWN},
+    {arcade::IDisplayModule::KeyList::ARROW_LEFT, SDLK_LEFT},
+    {arcade::IDisplayModule::KeyList::ARROW_RIGHT, SDLK_RIGHT},
+    {arcade::IDisplayModule::KeyList::BACK_SPACE, SDLK_BACKSPACE},
+    {arcade::IDisplayModule::KeyList::KEY_SPACE, SDLK_SPACE},
+    {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, SDLK_UNKNOWN},
 };
 
-#include <iostream>
-
 SDL2::SDL2() :
+    _isMouseClicked(false), _isOpen(false),
     _scaleX(SCALE_X), _scaleY(SCALE_Y),
     _textSize(TEXT_SIZE),
     _window(NULL), _renderer(NULL)
 {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
-    _font = TTF_OpenFont(FONT_PATH, 60);
+    _font = TTF_OpenFont(FONT_PATH, _textSize);
     if (_font == NULL) {
         std::cout << "font is null" << std::endl;
         //throw error
@@ -79,24 +114,19 @@ void SDL2::open()
         fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
         //THROW ERROR
     }
+    _isOpen = true;
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 }
 
 void SDL2::close()
 {
+    _isOpen = false;
     SDL_DestroyWindow(_window);
 }
 
 bool SDL2::isOpen() const
 {
-    SDL_Event e;
-
-    if (SDL_PollEvent(&e)) {
-        if (e.type == SDL_QUIT) {
-            return false;
-        }
-    }
-    return true;
+    return _isOpen;
 }
 
 void SDL2::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
@@ -104,10 +134,10 @@ void SDL2::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
     SDL_Color sdl_color = _color.at(color);
     SDL_Rect r;
 
-    r.x = pos.first * _scaleX;
-    r.y = pos.second * _scaleY;
-    r.w = size.first * _scaleX;
-    r.h = size.second * _scaleY;
+    r.x = pos.x * _scaleX;
+    r.y = pos.y * _scaleY;
+    r.w = size.x * _scaleX;
+    r.h = size.y * _scaleY;
 
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     SDL_RenderFillRect(_renderer, &r);
@@ -119,10 +149,10 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
     SDL_Color sdl_color = _color.at(color);
     SDL_Rect r;
 
-    r.x = pos.first * _scaleX;
-    r.y = pos.second * _scaleY;
-    r.w = size.first * _scaleX;
-    r.h = size.second * _scaleY;
+    r.x = pos.x * _scaleX;
+    r.y = pos.y * _scaleY;
+    r.w = size.x * _scaleX;
+    r.h = size.y * _scaleY;
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     SDL_RenderDrawRect(_renderer, &r);
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
@@ -130,9 +160,22 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
-    (void)color;
-    (void)pos;
-    (void)radius;
+    SDL_Color sdl_color = _color.at(color);
+    float position_x = pos.x * SCALE_X;
+    float position_y = pos.y * SCALE_Y;
+    Vector center( position_x + radius, position_y + radius);
+    std::vector<float> v = {0, 0};
+
+    SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
+    for (size_t x = 0; x < radius * 2; x++) {
+        for (size_t y = 0; y < radius * 2; y++) {
+            v[0] = position_x + x - center.x;
+            v[1] = position_y + y - center.y;
+            if ((pow(v[0], 2) + pow(v[1], 2)) <= pow(radius, 2)) {
+                SDL_RenderDrawPoint(_renderer, position_x + x, position_y + y);
+            }
+        }
+    }
 }
 
 void SDL2::putText(Color color, Coord pos, std::string const &value)
@@ -143,8 +186,8 @@ void SDL2::putText(Color color, Coord pos, std::string const &value)
 
     rect.w = surface->w;
     rect.h = surface->h;
-    rect.x = pos.first;
-    rect.y = pos.second;
+    rect.x = pos.x * SCALE_X;
+    rect.y = pos.y * SCALE_Y;
     SDL_FreeSurface(surface);
     SDL_RenderCopy(_renderer, message, NULL, &rect);
 }
@@ -156,6 +199,9 @@ void SDL2::displayScreen()
 
 void SDL2::refreshScreen()
 {
+    this->_isMouseClicked = false;
+    this->_keyStack.clear();
+    this->refreshEvent();
 }
 
 void SDL2::clearScreen()
@@ -164,20 +210,48 @@ void SDL2::clearScreen()
     SDL_RenderClear(_renderer);
 }
 
+void SDL2::refreshEvent()
+{
+    SDL_Event event = {0};
+
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            _isOpen = false;
+        }
+        if (event.type == SDL_MOUSEBUTTONUP) {
+            _isMouseClicked = true;
+        }
+        if (event.type == SDL_KEYDOWN) {
+            _keyStack.push_back(event.key.keysym.sym);
+        }
+    }
+}
+
 bool SDL2::isKeyPress(const KeyList key) const
 {
-    (void)key;
+    if (key == KeyList::KEY_MOUSE_CLICK) {
+        return _isMouseClicked;
+    }
+    for (SDL_Keycode n : _keyStack) {
+        if (_key.at(key) == n) {
+            return true;
+        }
+    }
     return false;
 }
 
 bool SDL2::isMouseClicked() const // Any key of the mouse
 {
-    return false;
+    return _isMouseClicked;
 }
 
 Coord SDL2::getMousePos() const
 {
-    return Coord(0, 0);
+    int x = 0;
+    int y = 0;
+
+    SDL_GetMouseState(&x, &y);
+    return Coord(x, y);
 }
 
 extern "C" arcade::IDisplayModule *entryPoint()

@@ -9,6 +9,7 @@
 #define ABSTRACTGAMEMODULE_HPP_
 
 #include <deque>
+#include <iostream>
 #include "Game/GameMap/GameMap.hpp"
 #include "Game/GameObject/GameObject.hpp"
 #include "IDisplayModule.hpp"
@@ -20,11 +21,13 @@ namespace Game
     typedef arcade::IDisplayModule::Color Color;
     typedef arcade::Coord Coord;
     typedef arcade::GameStatus GameStatus;
+    typedef arcade::IDisplayModule::KeyList KeyList;
+    typedef arcade::Vector Vector;
 
     class AbstractGameModule : public arcade::IGameModule {
       public:
-        AbstractGameModule(std::string const& username, Vector const &mapSize);
-        AbstractGameModule(std::string const& username, Vector const &mapSize,
+        AbstractGameModule(std::string const &username, Vector const &mapSize);
+        AbstractGameModule(std::string const &username, Vector const &mapSize,
             std::deque<Color> const &map);
         virtual ~AbstractGameModule() = default;
 
@@ -45,6 +48,8 @@ namespace Game
       protected:
         void refreshEndMenu();
         void refreshPauseMenu();
+
+        virtual void eventManager(arcade::IDisplayModule &displayModule);
 
         virtual void refreshGame() = 0;
 

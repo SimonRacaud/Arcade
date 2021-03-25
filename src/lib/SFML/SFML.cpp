@@ -21,30 +21,65 @@ const std::map <arcade::IDisplayModule::Color, sf::Color> SFML::_color = {
 };
 
 const std::map <arcade::IDisplayModule::KeyList, sf::Keyboard::Key> SFML::_key = {
-    //{arcade::IDisplayModule::KeyList::NEXT_GAME, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::PREV_GAME, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::NEXT_LIB, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::PREV_LIB, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::RESTART_GAME, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::MENU, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::EXIT, sf::Keyboard::Num0},
-    {arcade::IDisplayModule::KeyList::KEY_Z, sf::Keyboard::Z},
-    {arcade::IDisplayModule::KeyList::KEY_Q, sf::Keyboard::Q},
-    {arcade::IDisplayModule::KeyList::KEY_S, sf::Keyboard::S},
+    {arcade::IDisplayModule::KeyList::NEXT_GAME, sf::Keyboard::Unknown},
+    {arcade::IDisplayModule::KeyList::PREV_GAME, sf::Keyboard::Unknown},
+    {arcade::IDisplayModule::KeyList::NEXT_LIB, sf::Keyboard::Unknown},
+    {arcade::IDisplayModule::KeyList::PREV_LIB, sf::Keyboard::Unknown},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, sf::Keyboard::R},
+    {arcade::IDisplayModule::KeyList::MENU, sf::Keyboard::Q},
+    {arcade::IDisplayModule::KeyList::EXIT, sf::Keyboard::Escape},
+    {arcade::IDisplayModule::KeyList::PAUSE, sf::Keyboard::P},
+    {arcade::IDisplayModule::KeyList::KEY_A, sf::Keyboard::A},
+    {arcade::IDisplayModule::KeyList::KEY_B, sf::Keyboard::B},
+    {arcade::IDisplayModule::KeyList::KEY_C, sf::Keyboard::C},
     {arcade::IDisplayModule::KeyList::KEY_D, sf::Keyboard::D},
+    {arcade::IDisplayModule::KeyList::KEY_E, sf::Keyboard::E},
+    {arcade::IDisplayModule::KeyList::KEY_F, sf::Keyboard::F},
+    {arcade::IDisplayModule::KeyList::KEY_G, sf::Keyboard::G},
+    {arcade::IDisplayModule::KeyList::KEY_H, sf::Keyboard::H},
+    {arcade::IDisplayModule::KeyList::KEY_I, sf::Keyboard::I},
+    {arcade::IDisplayModule::KeyList::KEY_J, sf::Keyboard::J},
+    {arcade::IDisplayModule::KeyList::KEY_K, sf::Keyboard::K},
+    {arcade::IDisplayModule::KeyList::KEY_L, sf::Keyboard::L},
+    {arcade::IDisplayModule::KeyList::KEY_M, sf::Keyboard::M},
+    {arcade::IDisplayModule::KeyList::KEY_N, sf::Keyboard::N},
+    {arcade::IDisplayModule::KeyList::KEY_O, sf::Keyboard::O},
+    {arcade::IDisplayModule::KeyList::KEY_P, sf::Keyboard::P},
+    {arcade::IDisplayModule::KeyList::KEY_Q, sf::Keyboard::Q},
+    {arcade::IDisplayModule::KeyList::KEY_R, sf::Keyboard::R},
+    {arcade::IDisplayModule::KeyList::KEY_S, sf::Keyboard::S},
+    {arcade::IDisplayModule::KeyList::KEY_T, sf::Keyboard::T},
+    {arcade::IDisplayModule::KeyList::KEY_U, sf::Keyboard::U},
+    {arcade::IDisplayModule::KeyList::KEY_V, sf::Keyboard::V},
+    {arcade::IDisplayModule::KeyList::KEY_W, sf::Keyboard::W},
+    {arcade::IDisplayModule::KeyList::KEY_X, sf::Keyboard::X},
+    {arcade::IDisplayModule::KeyList::KEY_Y, sf::Keyboard::Y},
+    {arcade::IDisplayModule::KeyList::KEY_Z, sf::Keyboard::Z},
+    {arcade::IDisplayModule::KeyList::KEY_1, sf::Keyboard::Num1},
+    {arcade::IDisplayModule::KeyList::KEY_2, sf::Keyboard::Num2},
+    {arcade::IDisplayModule::KeyList::KEY_3, sf::Keyboard::Num3},
+    {arcade::IDisplayModule::KeyList::KEY_4, sf::Keyboard::Num4},
+    {arcade::IDisplayModule::KeyList::KEY_5, sf::Keyboard::Num5},
+    {arcade::IDisplayModule::KeyList::KEY_6, sf::Keyboard::Num6},
+    {arcade::IDisplayModule::KeyList::KEY_7, sf::Keyboard::Num7},
+    {arcade::IDisplayModule::KeyList::KEY_8, sf::Keyboard::Num8},
+    {arcade::IDisplayModule::KeyList::KEY_9, sf::Keyboard::Num9},
+    {arcade::IDisplayModule::KeyList::KEY_0, sf::Keyboard::Num0},
     {arcade::IDisplayModule::KeyList::ARROW_UP, sf::Keyboard::Up},
     {arcade::IDisplayModule::KeyList::ARROW_DOWN, sf::Keyboard::Down},
     {arcade::IDisplayModule::KeyList::ARROW_LEFT, sf::Keyboard::Left},
     {arcade::IDisplayModule::KeyList::ARROW_RIGHT, sf::Keyboard::Right},
     {arcade::IDisplayModule::KeyList::KEY_SPACE, sf::Keyboard::Space},
+    {arcade::IDisplayModule::KeyList::BACK_SPACE, sf::Keyboard::BackSpace},
     {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, sf::Keyboard::Num0},
 };
 
 SFML::SFML() :
- _scaleX(40), _scaleY(40),
- _textSize(40)
+ _isMouseClicked(false), _isOpen(false),
+ _scaleX(SCALE_X), _scaleY(SCALE_Y),
+ _textSize(TEXT_SIZE)
 {
-    if (!_font.loadFromFile("assets/arial.ttf")) {
+    if (!_font.loadFromFile(FONT_PATH)) {
         //throw error ?
     }
 }
@@ -53,24 +88,21 @@ SFML::~SFML() {}
 
 void SFML::open()
 {
+    _isOpen = true;
     _window = new sf::RenderWindow(sf::VideoMode(W_WIDTH, W_HEIGH), WINDOW_NAME);
 }
 
 void SFML::close()
 {
+    _isOpen = false;
     _window->close();
 }
 
 
 bool SFML::isOpen() const
 {
-    sf::Event event;
-
-    while (_window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            return false;
-        }
-    }
+    if (!_isOpen)
+        return false;
     return _window->isOpen();
 }
 
@@ -78,8 +110,8 @@ void SFML::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
 {
     sf::RectangleShape rectangle;
 
-    rectangle.setSize(sf::Vector2f((float)size.first * _scaleX, (float)size.second * _scaleY));
-    rectangle.setPosition(sf::Vector2f((float)pos.first * _scaleX, (float)pos.second * _scaleY));
+    rectangle.setSize(sf::Vector2f((float)size.x * _scaleX, (float)size.y * _scaleY));
+    rectangle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
     rectangle.setFillColor(_color.at(color));
     _window->draw(rectangle);
 }
@@ -88,8 +120,8 @@ void SFML::putRectOutline(Color color, Coord size, Coord pos)
 {
     sf::RectangleShape rectangle;
 
-    rectangle.setSize(sf::Vector2f((float)size.first * _scaleX, (float)size.second * _scaleY));
-    rectangle.setPosition(sf::Vector2f((float)pos.first * _scaleX, (float)pos.second * _scaleY));
+    rectangle.setSize(sf::Vector2f((float)size.x * _scaleX, (float)size.y * _scaleY));
+    rectangle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
     rectangle.setOutlineColor(_color.at(color));
     rectangle.setOutlineThickness(_scaleX);
     rectangle.setFillColor(sf::Color(0, 0, 0, 0));
@@ -101,7 +133,7 @@ void SFML::putCircle(Color color, Coord pos, size_t radius)
     sf::CircleShape circle;
 
     circle.setRadius((float)radius);
-    circle.setPosition(sf::Vector2f((float)pos.first, (float)pos.second));
+    circle.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleX));
     circle.setFillColor(_color.at(color));
     _window->draw(circle);
 }
@@ -114,7 +146,7 @@ void SFML::putText(Color color, Coord pos, std::string const &value)
     text.setString(value.c_str());
     text.setCharacterSize(_textSize);
     text.setFillColor(_color.at(color));
-    text.setPosition(sf::Vector2f((float)pos.first, (float)pos.second));
+    text.setPosition(sf::Vector2f((float)pos.x * _scaleX, (float)pos.y * _scaleY));
     _window->draw(text);
 }
 
@@ -125,6 +157,9 @@ void SFML::displayScreen()
 
 void SFML::refreshScreen()
 {
+    this->_isMouseClicked = false;
+    this->_keyStack.clear();
+    this->refreshEvent();
 }
 
 void SFML::clearScreen()
@@ -132,22 +167,39 @@ void SFML::clearScreen()
     _window->clear(sf::Color::Black);
 }
 
+void SFML::refreshEvent()
+{
+    sf::Event event;
+
+    while (_window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            _isOpen = false;
+        }
+        if (event.type == sf::Event::MouseButtonPressed) {
+            _isMouseClicked = true;
+        }
+        if (event.type == sf::Event::KeyPressed) {
+            _keyStack.push_back(event.key.code);
+        }
+    }
+}
+
 bool SFML::isKeyPress(const KeyList key) const
 {
     if (key == KeyList::KEY_MOUSE_CLICK) {
-        return false;
+        return _isMouseClicked;
     }
-    return sf::Keyboard::isKeyPressed(_key.at(key));
+    for (sf::Keyboard::Key n : _keyStack) {
+        if (_key.at(key) == n) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool SFML::isMouseClicked() const // Any key of the mouse
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) ||
-        sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-    } {
-        return true;
-    }
-    return false;
+    return _isMouseClicked;
 }
 
 Coord SFML::getMousePos() const

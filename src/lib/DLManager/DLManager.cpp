@@ -47,7 +47,11 @@ template <class T> T &DLManager<T>::getModule(std::string const &fileName)
     if (_libsLoader.find(fileName) == _libsLoader.end()) {
         this->generateLoader(fileName);
     }
-    return _libsLoader[fileName]->getInstance();
+    if (_libsLoader.find(fileName) != _libsLoader.end()) {
+        return _libsLoader[fileName]->getInstance();
+    } else {
+        throw LibLoadingException("&DLManager<T>::getModule Loader not found");
+    }
 }
 
 /* --- Private --- */

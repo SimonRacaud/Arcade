@@ -40,6 +40,10 @@ class SDL2 : public IDisplayModule {
 
     protected:
     private:
+        void refreshEvent();
+        std::vector<SDL_Keycode> _keyStack;
+        bool _isMouseClicked;
+        bool _isOpen;
         float _scaleX;
         float _scaleY;
         size_t _textSize;
