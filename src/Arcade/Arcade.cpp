@@ -52,6 +52,7 @@ void Arcade::loop()
         if (this->_timer.shouldRefresh()) {
             if (this->_selectedGraphic) {
                 this->_selectedGraphic->clearScreen();
+                this->_selectedGraphic->refreshScreen();
             }
             if (this->_selectedGame == nullptr) {
                 // TODO: main menu
@@ -62,7 +63,6 @@ void Arcade::loop()
                 if (this->_selectedGraphic->isOpen() == false) {
                     this->_status = ExitStatus::SUCCESS;
                 } else {
-                    this->_selectedGraphic->refreshScreen();
                     this->_selectedGraphic->displayScreen();
                 }
             }
