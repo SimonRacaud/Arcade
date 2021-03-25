@@ -181,7 +181,7 @@ void SDL2::refreshEvent()
 {
     SDL_Event event = {0};
 
-    if (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             _isOpen = false;
         }
