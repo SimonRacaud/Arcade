@@ -30,23 +30,56 @@ const std::map <arcade::IDisplayModule::Color, short> Ncurses::_textColor = {
 };
 
 const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
-    //{arcade::IDisplayModule::KeyList::NEXT_GAME, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::PREV_GAME, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::NEXT_LIB, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::PREV_LIB, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::RESTART_GAME, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::MENU, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::EXIT, sf::Keyboard::Num0},
-    //{arcade::IDisplayModule::KeyList::PREV_GAME, sf::Keyboard::Num0},
-    {arcade::IDisplayModule::KeyList::KEY_Z, 'z'},
-    {arcade::IDisplayModule::KeyList::KEY_Q, 'q'},
-    {arcade::IDisplayModule::KeyList::KEY_S, 's'},
-    {arcade::IDisplayModule::KeyList::KEY_D, 'd'},
+    {arcade::IDisplayModule::KeyList::NEXT_GAME, '0'},
+    {arcade::IDisplayModule::KeyList::PREV_GAME, '0'},
+    {arcade::IDisplayModule::KeyList::NEXT_LIB, '0'},
+    {arcade::IDisplayModule::KeyList::PREV_LIB, '0'},
+    {arcade::IDisplayModule::KeyList::RESTART_GAME, '0'},
+    {arcade::IDisplayModule::KeyList::MENU, '0'},
+    {arcade::IDisplayModule::KeyList::EXIT, '0'},
+    {arcade::IDisplayModule::KeyList::PAUSE, '0'},
+    {arcade::IDisplayModule::KeyList::KEY_A, 'A'},
+    {arcade::IDisplayModule::KeyList::KEY_B, 'B'},
+    {arcade::IDisplayModule::KeyList::KEY_C, 'C'},
+    {arcade::IDisplayModule::KeyList::KEY_D, 'D'},
+    {arcade::IDisplayModule::KeyList::KEY_E, 'E'},
+    {arcade::IDisplayModule::KeyList::KEY_F, 'F'},
+    {arcade::IDisplayModule::KeyList::KEY_G, 'G'},
+    {arcade::IDisplayModule::KeyList::KEY_H, 'H'},
+    {arcade::IDisplayModule::KeyList::KEY_I, 'I'},
+    {arcade::IDisplayModule::KeyList::KEY_J, 'J'},
+    {arcade::IDisplayModule::KeyList::KEY_K, 'K'},
+    {arcade::IDisplayModule::KeyList::KEY_L, 'L'},
+    {arcade::IDisplayModule::KeyList::KEY_M, 'M'},
+    {arcade::IDisplayModule::KeyList::KEY_N, 'N'},
+    {arcade::IDisplayModule::KeyList::KEY_O, 'O'},
+    {arcade::IDisplayModule::KeyList::KEY_P, 'P'},
+    {arcade::IDisplayModule::KeyList::KEY_Q, 'Q'},
+    {arcade::IDisplayModule::KeyList::KEY_R, 'R'},
+    {arcade::IDisplayModule::KeyList::KEY_S, 'S'},
+    {arcade::IDisplayModule::KeyList::KEY_T, 'T'},
+    {arcade::IDisplayModule::KeyList::KEY_U, 'U'},
+    {arcade::IDisplayModule::KeyList::KEY_V, 'V'},
+    {arcade::IDisplayModule::KeyList::KEY_W, 'W'},
+    {arcade::IDisplayModule::KeyList::KEY_X, 'X'},
+    {arcade::IDisplayModule::KeyList::KEY_Y, 'Y'},
+    {arcade::IDisplayModule::KeyList::KEY_Z, 'Z'},
+    {arcade::IDisplayModule::KeyList::KEY_1, '1'},
+    {arcade::IDisplayModule::KeyList::KEY_2, '2'},
+    {arcade::IDisplayModule::KeyList::KEY_3, '3'},
+    {arcade::IDisplayModule::KeyList::KEY_4, '4'},
+    {arcade::IDisplayModule::KeyList::KEY_5, '5'},
+    {arcade::IDisplayModule::KeyList::KEY_6, '6'},
+    {arcade::IDisplayModule::KeyList::KEY_7, '7'},
+    {arcade::IDisplayModule::KeyList::KEY_8, '8'},
+    {arcade::IDisplayModule::KeyList::KEY_9, '9'},
+    {arcade::IDisplayModule::KeyList::KEY_0, '0'},
     {arcade::IDisplayModule::KeyList::ARROW_UP, KEY_UP},
     {arcade::IDisplayModule::KeyList::ARROW_DOWN, KEY_DOWN},
     {arcade::IDisplayModule::KeyList::ARROW_LEFT, KEY_LEFT},
-    {arcade::IDisplayModule::KeyList::ARROW_RIGHT,KEY_RIGHT},
+    {arcade::IDisplayModule::KeyList::ARROW_RIGHT, KEY_RIGHT},
     {arcade::IDisplayModule::KeyList::KEY_SPACE, ' '},
+    {arcade::IDisplayModule::KeyList::BACK_SPACE, KEY_BACKSPACE},
     {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, KEY_MOUSE},
 };
 
@@ -102,12 +135,12 @@ void Ncurses::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
 
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_caseColor.at(color)));
-    for (size_t i = 0; i < size.first; i++)
+    for (size_t i = 0; i < size.x; i++)
         line += "  ";
-    if (pos.first + size.first * 2 >= windowX)
-        line = line.substr(0, windowX - pos.first);
-    for (size_t i = 0; i < size.second; i++)
-        mvprintw(pos.second + i, pos.first, line.data());
+    if (pos.x + size.x * 2 >= windowX)
+        line = line.substr(0, windowX - pos.x);
+    for (size_t i = 0; i < size.y; i++)
+        mvprintw(pos.y + i, pos.x, line.data());
     attroff(COLOR_PAIR(_caseColor.at(color)));
 }
 
@@ -119,18 +152,18 @@ void Ncurses::putRectOutline(Color color, Coord size, Coord pos)
 
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_caseColor.at(color)));
-    for (size_t i = 0; i < size.first; i++)
+    for (size_t i = 0; i < size.x; i++)
         line += "  ";
-    if (pos.first + size.first * 2 >= windowX)
-        line = line.substr(0, windowX - pos.first);
-    mvprintw(pos.second, pos.first, line.data());
-    for (size_t i = 0; i < size.second; i++) {
-        mvprintw(pos.second + i, pos.first, line.substr(0, 2).data());
-        if (line.size() > size.first * 2 - 2)
-            mvprintw(pos.second + i, pos.first + size.first * 2 - 2,
-            line.substr(size.first * 2 - 2, 2).data());
+    if (pos.x + size.x * 2 >= windowX)
+        line = line.substr(0, windowX - pos.x);
+    mvprintw(pos.y, pos.x, line.data());
+    for (size_t i = 0; i < size.y; i++) {
+        mvprintw(pos.y + i, pos.x, line.substr(0, 2).data());
+        if (line.size() > size.x * 2 - 2)
+            mvprintw(pos.y + i, pos.x + size.x * 2 - 2,
+            line.substr(size.x * 2 - 2, 2).data());
     }
-    mvprintw(pos.second + size.second - 1, pos.first, line.data());
+    mvprintw(pos.y + size.y - 1, pos.x, line.data());
     attroff(COLOR_PAIR(_caseColor.at(color)));
 }
 
@@ -143,19 +176,19 @@ void Ncurses::putCircle(Color color, Coord pos, size_t radius)
 
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_caseColor.at(color)));
-    for (size_t y = pos.second; y < pos.second + 2 * radius; y++) {
-        for (size_t x = pos.first; x < pos.first + 2 * radius; x++) {
-            difx = x - pos.first - radius;
-            dify = y - pos.second - radius;
+    for (size_t y = pos.y; y < pos.y + 2 * radius; y++) {
+        for (size_t x = pos.x; x < pos.x + 2 * radius; x++) {
+            difx = x - pos.x - radius;
+            dify = y - pos.y - radius;
             if (sqrt((difx) * (difx) + (dify) * (dify)) > radius
             || sqrt((difx + 1) * (difx + 1) + (dify + 1) * (dify + 1)) > radius
             || sqrt((difx + 1) * (difx + 1) + (dify) * (dify)) > radius
             || sqrt((difx) * (difx) + (dify + 1) * (dify + 1)) > radius)
                 continue;
-            if (x + x - pos.first < windowX - 1)
-                mvprintw(y, x + x - pos.first, "  ");
-            else if (x + x - pos.first < windowX)
-                mvprintw(y, x + x - pos.first, " ");
+            if (x + x - pos.x < windowX - 1)
+                mvprintw(y, x + x - pos.x, "  ");
+            else if (x + x - pos.x < windowX)
+                mvprintw(y, x + x - pos.x, " ");
         }
     }
     attroff(COLOR_PAIR(_caseColor.at(color)));
@@ -169,19 +202,21 @@ void Ncurses::putText(Color color, Coord pos, std::string const &value)
 
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_textColor.at(color)));
-    if (pos.first + value.size() >= windowX)
-        mvprintw(pos.second, pos.first, value.substr(0, windowX - pos.first).data());
+    if (pos.x + value.size() >= windowX)
+        mvprintw(pos.y, pos.x, value.substr(0, windowX - pos.x).data());
     else
-        mvprintw(pos.second, pos.first, value.data());
+        mvprintw(pos.y, pos.x, value.data());
     attroff(COLOR_PAIR(_textColor.at(color)));
 }
 
-void Ncurses::displayScreen() {}
-
-void Ncurses::refreshScreen()
+void Ncurses::displayScreen()
 {
     if (refresh() == ERR)
         throw DisplayModuleException("The refreshment of the window failed !");
+}
+
+void Ncurses::refreshScreen()
+{
     cbreak();
     if (cbreak() == ERR)
         throw DisplayModuleException("The unblocking of the getch failed !");
