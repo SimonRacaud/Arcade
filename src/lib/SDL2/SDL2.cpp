@@ -31,14 +31,47 @@ const std::map<arcade::IDisplayModule::KeyList, SDL_Keycode> SDL2::_key = {
     {arcade::IDisplayModule::KeyList::MENU, SDLK_UNKNOWN},
     {arcade::IDisplayModule::KeyList::EXIT, SDLK_UNKNOWN},
     {arcade::IDisplayModule::KeyList::PAUSE, SDLK_UNKNOWN},
-    {arcade::IDisplayModule::KeyList::KEY_Z, SDLK_z},
-    {arcade::IDisplayModule::KeyList::KEY_Q, SDLK_q},
-    {arcade::IDisplayModule::KeyList::KEY_S, SDLK_s},
+    {arcade::IDisplayModule::KeyList::KEY_A, SDLK_a},
+    {arcade::IDisplayModule::KeyList::KEY_B, SDLK_b},
+    {arcade::IDisplayModule::KeyList::KEY_C, SDLK_c},
     {arcade::IDisplayModule::KeyList::KEY_D, SDLK_d},
+    {arcade::IDisplayModule::KeyList::KEY_E, SDLK_e},
+    {arcade::IDisplayModule::KeyList::KEY_F, SDLK_f},
+    {arcade::IDisplayModule::KeyList::KEY_G, SDLK_g},
+    {arcade::IDisplayModule::KeyList::KEY_H, SDLK_h},
+    {arcade::IDisplayModule::KeyList::KEY_I, SDLK_i},
+    {arcade::IDisplayModule::KeyList::KEY_J, SDLK_j},
+    {arcade::IDisplayModule::KeyList::KEY_K, SDLK_k},
+    {arcade::IDisplayModule::KeyList::KEY_L, SDLK_l},
+    {arcade::IDisplayModule::KeyList::KEY_M, SDLK_m},
+    {arcade::IDisplayModule::KeyList::KEY_N, SDLK_n},
+    {arcade::IDisplayModule::KeyList::KEY_O, SDLK_o},
+    {arcade::IDisplayModule::KeyList::KEY_P, SDLK_p},
+    {arcade::IDisplayModule::KeyList::KEY_Q, SDLK_q},
+    {arcade::IDisplayModule::KeyList::KEY_R, SDLK_r},
+    {arcade::IDisplayModule::KeyList::KEY_S, SDLK_s},
+    {arcade::IDisplayModule::KeyList::KEY_T, SDLK_t},
+    {arcade::IDisplayModule::KeyList::KEY_U, SDLK_u},
+    {arcade::IDisplayModule::KeyList::KEY_V, SDLK_v},
+    {arcade::IDisplayModule::KeyList::KEY_W, SDLK_w},
+    {arcade::IDisplayModule::KeyList::KEY_X, SDLK_x},
+    {arcade::IDisplayModule::KeyList::KEY_Y, SDLK_y},
+    {arcade::IDisplayModule::KeyList::KEY_Z, SDLK_z},
+    {arcade::IDisplayModule::KeyList::KEY_1, SDLK_1},
+    {arcade::IDisplayModule::KeyList::KEY_2, SDLK_2},
+    {arcade::IDisplayModule::KeyList::KEY_3, SDLK_3},
+    {arcade::IDisplayModule::KeyList::KEY_4, SDLK_4},
+    {arcade::IDisplayModule::KeyList::KEY_5, SDLK_5},
+    {arcade::IDisplayModule::KeyList::KEY_6, SDLK_6},
+    {arcade::IDisplayModule::KeyList::KEY_7, SDLK_7},
+    {arcade::IDisplayModule::KeyList::KEY_8, SDLK_8},
+    {arcade::IDisplayModule::KeyList::KEY_9, SDLK_9},
+    {arcade::IDisplayModule::KeyList::KEY_0, SDLK_0},
     {arcade::IDisplayModule::KeyList::ARROW_UP, SDLK_UP},
     {arcade::IDisplayModule::KeyList::ARROW_DOWN, SDLK_DOWN},
     {arcade::IDisplayModule::KeyList::ARROW_LEFT, SDLK_LEFT},
     {arcade::IDisplayModule::KeyList::ARROW_RIGHT, SDLK_RIGHT},
+    {arcade::IDisplayModule::KeyList::BACK_SPACE, SDLK_BACKSPACE},
     {arcade::IDisplayModule::KeyList::KEY_SPACE, SDLK_SPACE},
     {arcade::IDisplayModule::KeyList::KEY_MOUSE_CLICK, SDLK_UNKNOWN},
 };
@@ -101,10 +134,10 @@ void SDL2::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
     SDL_Color sdl_color = _color.at(color);
     SDL_Rect r;
 
-    r.x = pos.first * _scaleX;
-    r.y = pos.second * _scaleY;
-    r.w = size.first * _scaleX;
-    r.h = size.second * _scaleY;
+    r.x = pos.x * _scaleX;
+    r.y = pos.y * _scaleY;
+    r.w = size.x * _scaleX;
+    r.h = size.y * _scaleY;
 
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     SDL_RenderFillRect(_renderer, &r);
@@ -116,10 +149,10 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
     SDL_Color sdl_color = _color.at(color);
     SDL_Rect r;
 
-    r.x = pos.first * _scaleX;
-    r.y = pos.second * _scaleY;
-    r.w = size.first * _scaleX;
-    r.h = size.second * _scaleY;
+    r.x = pos.x * _scaleX;
+    r.y = pos.y * _scaleY;
+    r.w = size.x * _scaleX;
+    r.h = size.y * _scaleY;
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
     SDL_RenderDrawRect(_renderer, &r);
     SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
@@ -128,8 +161,8 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
     SDL_Color sdl_color = _color.at(color);
-    float position_x = pos.first * SCALE_X;
-    float position_y = pos.second * SCALE_Y;
+    float position_x = pos.x * SCALE_X;
+    float position_y = pos.y * SCALE_Y;
     Vector center( position_x + radius, position_y + radius);
     std::vector<float> v = {0, 0};
 
@@ -153,8 +186,8 @@ void SDL2::putText(Color color, Coord pos, std::string const &value)
 
     rect.w = surface->w;
     rect.h = surface->h;
-    rect.x = pos.first * SCALE_X;
-    rect.y = pos.second * SCALE_Y;
+    rect.x = pos.x * SCALE_X;
+    rect.y = pos.y * SCALE_Y;
     SDL_FreeSurface(surface);
     SDL_RenderCopy(_renderer, message, NULL, &rect);
 }
