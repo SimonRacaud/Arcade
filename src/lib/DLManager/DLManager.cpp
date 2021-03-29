@@ -103,7 +103,7 @@ void DLManager<T>::generateLoader(std::string const &fileName)
         _libsLoader[fileName] = new DLLoader<T>(*it);
     } else {
         throw LibNotFoundException(
-            fileName + " is not a whitelisted library name");
+            fileName + " is not a whitelisted library name or is not found");
     }
 }
 
