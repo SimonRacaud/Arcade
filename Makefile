@@ -11,7 +11,7 @@ DSRC	=	./src/
 CXXFLAGS	+= -std=c++11 -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
 DEBUG		= -g
 INCLUDE 	= -I./includes -I./src -I./src/exception/includes
-NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so
+NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so lib/arcade_pacman.sh
 LDFLAGS 	= $(INCLUDE) $(DEBUG)
 
 ### DEFAULT
@@ -30,7 +30,7 @@ DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 ###
 all:  core games graphicals
 
-games: nibbler
+games: nibbler pacman
 graphicals: sfml SDL2 ncurses
 
 ### DEFAUL_GAME_CLASSES
@@ -84,6 +84,18 @@ nibbler: LDFLAGS 	+= -shared -fPIC
 nibbler: CXXFLAGS 	+= -fPIC
 nibbler: $(NIBBLER_OBJ)
 
+PACMAN_SRC	=	$(DSRC)Game/Pacman/PacmanMap/PacmanMap.cpp			\
+				$(DSRC)Game/Pacman/PacmanPlayer/PacmanPlayer.cpp	\
+				$(DSRC)Game/Pacman/PacmanGameModule.cpp				\
+				$(DSRC)Game/Pacman/entrypoint.cpp					\
+
+PACMAN_OBJ	=	$(PACMAN_SRC:.cpp=.o)
+pacman: OBJ = $(PACMAN_OBJ) $(DEF_GAME_SRC)
+pacman: NAME	=	lib/arcade_pacman.so
+pacman: LDFLAGS 	+= -shared -fPIC
+pacman: CXXFLAGS 	+= -fPIC
+pacman: $(PACMAN_OBJ)
+
 ### GRAPHICALS
 SFML_SRC 	= 	$(DSRC)lib/SFML/SFML.cpp
 SFML_OBJ	= 	$(SFML_SRC:.cpp=.o)
@@ -118,7 +130,7 @@ graphicals: sfml ncurses
 %.o: %.cpp
 	g++ -c $(CXXFLAGS) -o $@ $<
 
-core nibbler sfml SDL2 ncurses: $(OBJ)
+core nibbler sfml SDL2 ncurses pacman: $(OBJ)
 	@g++ -o $(NAME) $(OBJ) $(DEF_SRC) $(LDFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)
