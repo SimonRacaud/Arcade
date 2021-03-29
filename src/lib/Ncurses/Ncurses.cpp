@@ -86,7 +86,7 @@ const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
 Ncurses::Ncurses() :
  _isOpen(false), _window(nullptr),
  _ch(-1),
- _scale(2, 1), _origin(ORIGIN_X, ORIGIN_Y),
+ _scale(2, 1), _origin(ORIGIN_X * 2, ORIGIN_Y),
  _textSize(1)
 {
 }
@@ -116,9 +116,12 @@ void Ncurses::open()
 
 void Ncurses::close()
 {
+    if (!_isOpen)
+        return;
     if (endwin() == ERR)
         throw DisplayModuleException("The closing of the window failed !");
     _isOpen = false;
+    std::cout << isendwin() << std::endl;
 }
 
 bool Ncurses::isOpen() const
