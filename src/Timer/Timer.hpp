@@ -17,9 +17,13 @@ class Timer {
 
   public:
     Timer(clock_t period);
+    Timer();
     virtual ~Timer() = default;
 
     bool shouldRefresh();
+
+    void setTimeout(clock_t duration);
+    bool isTimeout();
 
     clock_t getPeriod() const;
     void setPeriod(clock_t period);
