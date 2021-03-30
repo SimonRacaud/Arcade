@@ -6,21 +6,22 @@
 */
 
 #include <iostream>
-#include "Arcade/Arcade.hpp"
+#include "Core/Core.hpp"
 #include "./exception/BaseException.hpp"
 
 int main(int argc, char **argv)
 {
     if (argc == 2) {
-        arcade::Arcade core(argv[1]);
+        arcade::Core core(argv[1]);
+        arcade::CoreConfig &config = core.getConfig();
         try {
-            core.selectGame("./lib/arcade_nibbler.so"); // DEBUG TODO
+            config.selectGame("./lib/arcade_nibbler.so"); // DEBUG TODO
             core.loop();
         } catch (BaseException const& e) {
             std::cerr << e.what() << std::endl;
             return EXIT_ERROR;
         }
-        if (core.getStatus() == arcade::Arcade::ExitStatus::ERROR) {
+        if (config.getStatus() == arcade::CoreConfig::ExitStatus::ERROR) {
             return EXIT_ERROR;
         }
     } else {
