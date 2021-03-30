@@ -10,9 +10,11 @@
 
 #include "../../../includes/IDisplayModule.hpp"
 #include "../../exception/includes/DisplayModuleException.hpp"
+#include "../../../includes/config.h"
 #include <curses.h>
 #include <map>
 #include <iostream>
+#include <fstream>
 #include <math.h>
 
 using namespace arcade;
