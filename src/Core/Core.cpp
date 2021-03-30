@@ -57,7 +57,7 @@ void Core::eventManager()
     if (selectedGraphic == nullptr)
         return;
     if (selectedGraphic->isKeyPress(Key::NEXT_GAME)) {
-        _config.rotateGraphLib(false);
+        _config.rotateGameLib(false);
     }
     if (selectedGraphic->isKeyPress(Key::PREV_GAME)) {
         _config.rotateGameLib(true);
@@ -71,11 +71,12 @@ void Core::eventManager()
     if (selectedGraphic->isKeyPress(Key::RESTART_GAME)) {
         _config.resetGame();
     }
-    if (selectedGraphic->isKeyPress(Key::EXIT)) {
-        _config.setStatus(CoreConfig::ExitStatus::SUCCESS);
-    }
     if (selectedGame && selectedGraphic->isKeyPress(Key::MENU)) {
         _config.gotoMainMenu();
+    }
+    if (selectedGraphic->isKeyPress(Key::EXIT)) {
+        selectedGraphic->close();
+        _config.setStatus(CoreConfig::ExitStatus::SUCCESS);
     }
 }
 
