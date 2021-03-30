@@ -81,8 +81,10 @@ static const std::deque<Color> MAP = {c, c, c, c, c, c, c, c, c, c, c, c, c, c,
 static const clock_t COIN_GEN_PERIOD = 5000;
 static const size_t COIN_LIMIT = 10;
 
+static const clock_t LOOP_FREQ = 200;
+
 NibblerGameModule::NibblerGameModule()
-try : AbstractGameModule("Unknown", MAP_SIZE, MAP), _player(MAP_SIZE),
+try : AbstractGameModule("Unknown", LOOP_FREQ, MAP_SIZE, MAP), _player(MAP_SIZE),
     _coinGenTimer(COIN_GEN_PERIOD) {
     srand((unsigned) time(nullptr));
     this->generateCoin();

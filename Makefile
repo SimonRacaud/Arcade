@@ -33,32 +33,6 @@ all:  core games graphicals
 games: nibbler
 graphicals: sfml SDL2 ncurses
 
-### DEFAUL_GAME_CLASSES
-GAME_DSRC = $(DSRC)Game
-DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
-					$(GAME_DSRC)/GameMap/GameMap.cpp						\
-					$(GAME_DSRC)/GameObject/GameObject.cpp					\
-					$(GAME_DSRC)/Projectile/Projectile.cpp					\
-
-###
-all:  core games graphicals
-
-games: nibbler
-graphicals: sfml
-
-### DEFAUL_GAME_CLASSES
-GAME_DSRC = $(DSRC)Game
-DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
-					$(GAME_DSRC)/GameMap/GameMap.cpp						\
-					$(GAME_DSRC)/GameObject/GameObject.cpp					\
-					$(GAME_DSRC)/Projectile/Projectile.cpp					\
-
-###
-all:  core games graphicals
-
-games: nibbler
-graphicals: sfml
-
 ### CORE
 CORE_SRC_FILES = 	main.cpp						\
 					lib/DLLoader/DLLoader.cpp		\
@@ -109,11 +83,6 @@ SDL2: NAME	=	lib/arcade_sdl2.so
 SDL2: LDFLAGS	+= -shared -lSDL2 -lSDL2_ttf -fPIC
 SDL2: CXXFLAGS	+=	-fPIC
 SDL2: $(SDL2_OBJ)
-
-all:  core games graphicals
-
-games: nibbler
-graphicals: sfml ncurses
 
 ### BUILD
 %.o: %.cpp
