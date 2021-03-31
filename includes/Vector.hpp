@@ -23,6 +23,10 @@ namespace arcade
         Vector operator+(Vector const &v);
         Vector operator-(Vector const &v);
 
+        Vector &ceil();
+        Vector &round();
+        Vector &floor();
+
         double x;
         double y;
     };

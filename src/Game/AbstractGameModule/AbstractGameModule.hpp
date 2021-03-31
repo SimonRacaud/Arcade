@@ -15,6 +15,7 @@
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
 #include "ModuleException.hpp"
+#include "../../Timer/Timer.hpp"
 
 namespace Game
 {
@@ -26,9 +27,10 @@ namespace Game
 
     class AbstractGameModule : public arcade::IGameModule {
       public:
-        AbstractGameModule(std::string const &username, Vector const &mapSize);
-        AbstractGameModule(std::string const &username, Vector const &mapSize,
-            std::deque<Color> const &map);
+        AbstractGameModule(std::string const &username, clock_t frequency,
+            Vector const &mapSize);
+        AbstractGameModule(std::string const &username, clock_t frequency,
+            Vector const &mapSize, std::deque<Color> const &map);
         virtual ~AbstractGameModule() = default;
 
         GameStatus getStatus() const;
@@ -57,6 +59,7 @@ namespace Game
         void evalHighScore();
 
         GameStatus _status;
+        Timer _timer;
         size_t _score;
         size_t _highScore;
         std::string _username;

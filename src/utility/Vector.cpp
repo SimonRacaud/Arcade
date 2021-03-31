@@ -5,6 +5,7 @@
 ** Vector.cpp.c
 */
 
+#include <cmath>
 #include "Vector.hpp"
 
 using namespace arcade;
@@ -42,4 +43,28 @@ bool Vector::operator==(Vector const &v) const
 bool Vector::operator!=(Vector const &v) const
 {
     return this->x != v.x || this->y != v.y;
+}
+
+Vector &Vector::ceil()
+{
+    this->x = std::ceil(this->x);
+    this->y = std::ceil(this->y);
+
+    return *this;
+}
+
+Vector &Vector::round()
+{
+    this->x = std::round(this->x);
+    this->y = std::round(this->y);
+
+    return *this;
+}
+
+Vector &Vector::floor()
+{
+    this->x = std::floor(this->x);
+    this->y = std::floor(this->y);
+
+    return *this;
 }

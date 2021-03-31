@@ -2,27 +2,27 @@
 ** EPITECH PROJECT, 2021
 ** B-OOP-400-REN-4-1-arcade-aurelien.joncour
 ** File description:
-** Arcade.cpp.cc
+** CoreConfig
 */
 
-#include "Arcade.hpp"
+#include "CoreConfig.hpp"
 
 using namespace arcade;
 
 const std::deque<std::string> Arcade::GAME_LIB_NAMES = {
     "arcade_nibbler.so", "arcade_solarfox.so"};
 
-const std::deque<std::string> Arcade::GRAPHIC_LIB_NAMES = {
+const std::deque<std::string> CoreConfig::GRAPHIC_LIB_NAMES = {
     "arcade_sfml.so", "arcade_ncurses.so", "arcade_sdl2.so"};
 
-Arcade::Arcade(const std::string &defGraphicFile)
-    : _username("unknown"), _status(ExitStatus::LOOP), _selectedGame(nullptr),
-      _selectedGraphic(nullptr), _graphLibManager("./lib"),
-      _gameLibManager("./lib"), _timer(CORE_TIMER)
+CoreConfig::CoreConfig(const std::string &defGraphicFile) :
+    _username("unknow"), _status(ExitStatus::LOOP), _selectedGame(nullptr),
+    _selectedGraphic(nullptr), _graphLibManager("./lib"),
+    _gameLibManager("./lib")
 {
     try {
-        this->_gameLibManager.fetchAvailableLibs(Arcade::GAME_LIB_NAMES);
-        this->_graphLibManager.fetchAvailableLibs(Arcade::GRAPHIC_LIB_NAMES);
+        this->_gameLibManager.fetchAvailableLibs(CoreConfig::GAME_LIB_NAMES);
+        this->_graphLibManager.fetchAvailableLibs(CoreConfig::GRAPHIC_LIB_NAMES);
         try {
             IDisplayModule &displayMod =
                 this->_graphLibManager.getModule(defGraphicFile);
@@ -32,7 +32,7 @@ Arcade::Arcade(const std::string &defGraphicFile)
         } catch (LibNotFoundException const &e) {
             std::cerr << "Error: " << e.what() << std::endl;
             this->_status = ExitStatus::ERROR;
-            return;
+        return;
         }
     } catch (LibLoadingException const &e) {
         std::cerr << "Error: " << e.what() << std::endl;
@@ -40,46 +40,18 @@ Arcade::Arcade(const std::string &defGraphicFile)
     }
 }
 
-Arcade::~Arcade()
+CoreConfig::~CoreConfig()
 {
-    if (this->_selectedGraphic) {
-        this->_selectedGraphic->close();
-    }
 }
 
-void Arcade::loop()
-{
-    while (this->_status == ExitStatus::LOOP) {
-        if (this->_timer.shouldRefresh()) {
-            if (this->_selectedGraphic) {
-                this->_selectedGraphic->clearScreen();
-                this->_selectedGraphic->refreshScreen();
-            }
-            if (this->_selectedGame == nullptr) {
-                // TODO: main menu
-            } else {
-                this->_selectedGame->refresh();
-            }
-            if (this->_selectedGraphic) {
-                if (this->_selectedGraphic->isOpen() == false) {
-                    this->_status = ExitStatus::SUCCESS;
-                } else {
-                    this->_selectedGraphic->displayScreen();
-                }
-                this->eventManager();
-            }
-        }
-    }
-}
-
-void Arcade::resetGame()
+void CoreConfig::resetGame()
 {
     if (this->_selectedGame != nullptr) {
         this->_selectedGame->reset();
     }
 }
 
-void Arcade::setUsername(const std::string &username)
+void CoreConfig::setUsername(std::string const &username)
 {
     this->_username = username;
     if (this->_selectedGame != nullptr) {
@@ -87,14 +59,12 @@ void Arcade::setUsername(const std::string &username)
     }
 }
 
-std::string const &Arcade::getUsername() const
+std::string const &CoreConfig::getUsername() const
 {
     return _username;
 }
 
-/* Private */
-
-void Arcade::selectGame(std::string const &name)
+void CoreConfig::selectGame(std::string const &name)
 {
     try {
         IGameModule &gameMod = this->_gameLibManager.getModule(name);
@@ -107,14 +77,14 @@ void Arcade::selectGame(std::string const &name)
             this->_selectedGame->setDisplayModule(*this->_selectedGraphic);
         else
             std::cerr
-                << "Warning: Arcade::selectGame no selected graphic module"
+                << "Warning: CoreConfig::selectGame no selected graphic module"
                 << std::endl;
     } catch (LibNotFoundException const &e) {
-        std::cerr << "Arcade::selectGame Error: " << e.what() << std::endl;
+        std::cerr << "CoreConfig::selectGame Error: " << e.what() << std::endl;
     }
 }
 
-void Arcade::selectGraphic(std::string const &name)
+void CoreConfig::selectGraphic(std::string const &name)
 {
     try {
         IDisplayModule &displayMod = this->_graphLibManager.getModule(name);
@@ -127,45 +97,43 @@ void Arcade::selectGraphic(std::string const &name)
             this->_selectedGame->setDisplayModule(displayMod);
         }
     } catch (LibNotFoundException const &e) {
-        std::cerr << "Arcade::selectGraphic : " << e.what() << std::endl;
+        std::cerr << "CoreConfig::selectGraphic : " << e.what() << std::endl;
     }
 }
 
-Arcade::ExitStatus Arcade::getStatus() const
+CoreConfig::ExitStatus CoreConfig::getStatus() const
 {
     return _status;
 }
 
-void Arcade::eventManager()
+void CoreConfig::setStatus(ExitStatus const status)
 {
-    if (this->_selectedGraphic == nullptr)
-        return;
-    if (_selectedGraphic->isKeyPress(Key::NEXT_GAME)) {
-        this->rotateGameLib(false);
-    }
-    if (_selectedGraphic->isKeyPress(Key::PREV_GAME)) {
-        this->rotateGameLib(true);
-    }
-    if (_selectedGraphic->isKeyPress(Key::NEXT_LIB)) {
-        this->rotateGraphLib(false);
-    }
-    if (_selectedGraphic->isKeyPress(Key::PREV_LIB)) {
-        this->rotateGraphLib(true);
-    }
-    if (_selectedGraphic->isKeyPress(Key::RESTART_GAME)) {
-        this->resetGame();
-    }
-    if (_selectedGraphic->isKeyPress(Key::EXIT)) {
-        this->_status = ExitStatus::SUCCESS;
-    }
-    if (_selectedGame && _selectedGraphic->isKeyPress(Key::MENU)) {
-        this->gotoMainMenu();
-    }
+    _status = status;
+}
+
+IGameModule *CoreConfig::getSelectedGame()
+{
+    return _selectedGame;
+}
+
+IDisplayModule *CoreConfig::getSelectedGraphic()
+{
+    return _selectedGraphic;
+}
+
+std::deque<std::string> CoreConfig::getGameNames()
+{
+    return GAME_LIB_NAMES;
+}
+
+std::deque<std::string> CoreConfig::getGraphicNames()
+{
+    return GRAPHIC_LIB_NAMES;
 }
 
 /** Private **/
 
-void Arcade::gotoMainMenu()
+void CoreConfig::gotoMainMenu()
 {
     if (this->_selectedGame == nullptr)
         return;
@@ -173,7 +141,7 @@ void Arcade::gotoMainMenu()
     // TODO : open main menu
 }
 
-void Arcade::rotateGraphLib(bool rev)
+void CoreConfig::rotateGraphLib(bool rev)
 {
     const std::deque<std::string> &libNames =
         this->_graphLibManager.getAvailableLibs();
@@ -189,7 +157,7 @@ void Arcade::rotateGraphLib(bool rev)
                 return name.find(selectedName) != std::string::npos;
             });
         if (it == libNames.end()) {
-            std::cerr << "Warning: Arcade::rotateGraphLib() "
+            std::cerr << "Warning: CoreConfig::rotateGraphLib() "
                       << _selectedGraphicName << " Lib not found\n";
             return;
         } else {
@@ -210,7 +178,7 @@ void Arcade::rotateGraphLib(bool rev)
     }
 }
 
-void Arcade::rotateGameLib(bool rev)
+void CoreConfig::rotateGameLib(bool rev)
 {
     const std::deque<std::string> &libNames =
         this->_gameLibManager.getAvailableLibs();
@@ -227,7 +195,7 @@ void Arcade::rotateGameLib(bool rev)
                 return name.find(selectedName) != std::string::npos;
             });
         if (it == libNames.end()) {
-            std::cerr << "Warning: Arcade::rotateGameLib() "
+            std::cerr << "Warning: CoreConfig::rotateGameLib() "
                       << _selectedGameName << " Lib not found\n";
             return;
         } else {
