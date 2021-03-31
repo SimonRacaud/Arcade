@@ -15,7 +15,6 @@ int main(int argc, char **argv)
         arcade::Core core(argv[1]);
         arcade::CoreConfig &config = core.getConfig();
         try {
-            config.selectGame("./lib/arcade_nibbler.so"); // DEBUG TODO
             core.loop();
         } catch (BaseException const& e) {
             std::cerr << e.what() << std::endl;

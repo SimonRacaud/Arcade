@@ -12,9 +12,9 @@
 #define ORIGIN_Y 4
 #define SCALE_X 20
 #define SCALE_Y 20
-#define TEXT_SIZE 20
+#define TEXT_SIZE 17 //20 FOR ARIAL
 #define WINDOW_NAME "Arcade"
-#define FONT_PATH "assets/arial.ttf"
+#define FONT_PATH "assets/CourierPrime-Regular.ttf" //"assets/arial.ttf"
 #define W_WIDTH 1040
 #define W_HEIGH 920
 

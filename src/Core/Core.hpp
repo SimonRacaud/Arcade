@@ -8,7 +8,7 @@
 #ifndef CORE_HPP_
 #define CORE_HPP_
 
-//#include "../MainMenu/MainMenu.hpp"
+#include "../MainMenu/MainMenu.hpp"
 #include "../CoreConfig/CoreConfig.hpp"
 #include "../Timer/Timer.hpp"
 
@@ -35,7 +35,7 @@ namespace arcade
       private:
         CoreConfig _config;
         Timer _timer;
-        //MainMenu _mainMenu;
+        MainMenu _mainMenu;
     };
 } // namespace arcade
 
