@@ -27,24 +27,18 @@ void Core::loop()
         selectedGraphic = _config.getSelectedGraphic();
         selectedGame = _config.getSelectedGame();
         if (this->_timer.shouldRefresh()) {
-            if (selectedGraphic) {
-                selectedGraphic->clearScreen();
-                selectedGraphic->refreshScreen();
-            }
             if (selectedGame == nullptr) {
                 _mainMenu.refresh();
-            } else {
-                selectedGame->refresh();
             }
-            if (selectedGraphic) {
-                selectedGraphic = _config.getSelectedGraphic();
-                if (selectedGraphic->isOpen() == false) {
-                    this->_config.setStatus(CoreConfig::ExitStatus::SUCCESS);
-                } else {
-                    selectedGraphic->displayScreen();
-                }
-                this->eventManager();
+        }
+        if (selectedGame != nullptr) {
+            selectedGame->refresh();
+        }
+        if (selectedGraphic) {
+            if (selectedGraphic->isOpen() == false) {
+                this->_config.setStatus(CoreConfig::ExitStatus::SUCCESS);
             }
+            this->eventManager();
         }
     }
 }
@@ -57,7 +51,7 @@ void Core::eventManager()
     if (selectedGraphic == nullptr)
         return;
     if (selectedGraphic->isKeyPress(Key::NEXT_GAME)) {
-        _config.rotateGraphLib(false);
+        _config.rotateGameLib(false);
     }
     if (selectedGraphic->isKeyPress(Key::PREV_GAME)) {
         _config.rotateGameLib(true);
@@ -71,11 +65,12 @@ void Core::eventManager()
     if (selectedGraphic->isKeyPress(Key::RESTART_GAME)) {
         _config.resetGame();
     }
-    if (selectedGraphic->isKeyPress(Key::EXIT)) {
-        _config.setStatus(CoreConfig::ExitStatus::SUCCESS);
-    }
     if (selectedGame && selectedGraphic->isKeyPress(Key::MENU)) {
         _config.gotoMainMenu();
+    }
+    if (selectedGraphic->isKeyPress(Key::EXIT)) {
+        selectedGraphic->close();
+        _config.setStatus(CoreConfig::ExitStatus::SUCCESS);
     }
 }
 

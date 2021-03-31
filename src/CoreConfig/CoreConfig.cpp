@@ -42,9 +42,6 @@ CoreConfig::CoreConfig(const std::string &defGraphicFile) :
 
 CoreConfig::~CoreConfig()
 {
-    if (this->_selectedGraphic) {
-        this->_selectedGraphic->close();
-    }
 }
 
 void CoreConfig::resetGame()
