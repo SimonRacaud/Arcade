@@ -231,7 +231,6 @@ void MainMenu::displayMenu(IDisplayModule &selectedGraphic)
     displayFirstPanel(selectedGraphic);
     displaySecondPanel(selectedGraphic);
     displayThirdPanel(selectedGraphic);
-    eventHandler();
 }
 
 void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
@@ -261,11 +260,16 @@ void MainMenu::refresh()
 
     if (!selectedGraphic)
         return;
+    selectedGraphic->clearScreen();
+    selectedGraphic->refreshScreen();
     if (_isLoading) {
         displayLoading(*selectedGraphic);
     } else {
         displayMenu(*selectedGraphic);
     }
+    if (selectedGraphic)
+        selectedGraphic->displayScreen();
+    eventHandler();
 }
 
 /*
