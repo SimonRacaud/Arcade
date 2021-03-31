@@ -29,6 +29,7 @@ void Core::loop()
         if (this->_timer.shouldRefresh()) {
             if (selectedGame == nullptr) {
                 _mainMenu.refresh();
+                selectedGraphic = _config.getSelectedGraphic();
             }
         }
         if (selectedGame != nullptr) {
