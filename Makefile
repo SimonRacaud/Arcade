@@ -11,7 +11,7 @@ DSRC	=	./src/
 CXXFLAGS	+= -std=c++11 -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
 DEBUG		= -g
 INCLUDE 	= -I./includes -I./src -I./src/exception/includes
-NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so
+NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so lib/arcade_solarfox.so
 LDFLAGS 	= $(INCLUDE) $(DEBUG)
 
 ### DEFAULT
@@ -30,7 +30,7 @@ DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 ###
 all:  core games graphicals
 
-games: nibbler
+games: nibbler solarfox
 graphicals: sfml SDL2 ncurses
 
 ### DEFAUL_GAME_CLASSES
@@ -43,7 +43,7 @@ DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 ###
 all:  core games graphicals
 
-games: nibbler
+games: nibbler solarfox
 graphicals: sfml
 
 ### DEFAUL_GAME_CLASSES
@@ -56,7 +56,7 @@ DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 ###
 all:  core games graphicals
 
-games: nibbler
+games: nibbler solarfox
 graphicals: sfml
 
 ### CORE
@@ -83,6 +83,19 @@ nibbler: NAME	=	lib/arcade_nibbler.so
 nibbler: LDFLAGS 	+= -shared -fPIC
 nibbler: CXXFLAGS 	+= -fPIC
 nibbler: $(NIBBLER_OBJ)
+
+SOLARFOX_SRC	=	$(DSRC)Game/SolarFox/SolarFoxGameModule.cpp				\
+					$(DSRC)Game/SolarFox/Player/SolarFoxPlayer.cpp			\
+					$(DSRC)Game/SolarFox/Enemy/SolarFoxEnemy.cpp			\
+					$(DSRC)Game/SolarFox/Projectile/SolarFoxProjectile.cpp	\
+					$(DSRC)Game/SolarFox/entrypoint.cpp						\
+
+SOLARFOX_OBJ	=	$(SOLARFOX_SRC:.cpp=.o)
+solarfox: OBJ = $(SOLARFOX_OBJ) $(DEF_GAME_SRC)
+solarfox: NAME	=	lib/arcade_solarfox.so
+solarfox: LDFLAGS 	+= -shared -fPIC
+solarfox: CXXFLAGS 	+= -fPIC
+solarfox: $(SOLARFOX_OBJ)
 
 ### GRAPHICALS
 SFML_SRC 	= 	$(DSRC)lib/SFML/SFML.cpp
@@ -111,14 +124,14 @@ SDL2: $(SDL2_OBJ)
 
 all:  core games graphicals
 
-games: nibbler
+games: nibbler solarfox
 graphicals: sfml ncurses
 
 ### BUILD
 %.o: %.cpp
 	g++ -c $(CXXFLAGS) -o $@ $<
 
-core nibbler sfml SDL2 ncurses: $(OBJ)
+core nibbler sfml SDL2 ncurses solarfox: $(OBJ)
 	@g++ -o $(NAME) $(OBJ) $(DEF_SRC) $(LDFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)
