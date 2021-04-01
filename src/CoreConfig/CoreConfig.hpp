@@ -33,6 +33,7 @@ namespace arcade
             virtual ~CoreConfig();
 
             void resetGame();
+            void reloadLib();
 
             void setUsername(std::string const &username);
             std::string const &getUsername() const;

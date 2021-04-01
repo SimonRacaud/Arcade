@@ -44,6 +44,12 @@ CoreConfig::~CoreConfig()
 {
 }
 
+void CoreConfig::reloadLib()
+{
+    this->_gameLibManager.fetchAvailableLibs(CoreConfig::GAME_LIB_NAMES);
+    this->_graphLibManager.fetchAvailableLibs(CoreConfig::GRAPHIC_LIB_NAMES);
+}
+
 void CoreConfig::resetGame()
 {
     if (this->_selectedGame != nullptr) {
