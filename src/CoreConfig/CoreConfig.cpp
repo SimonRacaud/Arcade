@@ -9,7 +9,7 @@
 
 using namespace arcade;
 
-const std::deque<std::string> Arcade::GAME_LIB_NAMES = {
+const std::deque<std::string> CoreConfig::GAME_LIB_NAMES = {
     "arcade_nibbler.so", "arcade_solarfox.so"};
 
 const std::deque<std::string> CoreConfig::GRAPHIC_LIB_NAMES = {
