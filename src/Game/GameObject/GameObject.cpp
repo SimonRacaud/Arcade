@@ -111,7 +111,8 @@ bool GameObject::canMove(double offsetX, double offsetY) const
 bool GameObject::isCollideCoord(const Vector &pos) const
 {
     for (size_t i = 0; i < _positions.size(); i++) {
-        if (_positions[i].x == pos.x && _positions[i].y == pos.y) {
+        if (_positions[i].x - pos.x >= -0.0000001 && _positions[i].x - pos.x <= 0.0000001
+        && _positions[i].y - pos.y >= -0.0000001 && _positions[i].y - pos.y <= 0.0000001) {
             return true;
         }
     }

@@ -5,8 +5,8 @@
 ** SolarFoxGameModule.hpp
 */
 
-#ifndef NIBBLERGAMEMODULE_HPP_
-#define NIBBLERGAMEMODULE_HPP_
+#ifndef SOLAR_FOX_GAME_MODULE_HPP
+#define SOLAR_FOX_GAME_MODULE_HPP
 
 #include "../AbstractGameModule/AbstractGameModule.hpp"
 #include "../GameMap/GameMap.hpp"
@@ -23,32 +23,34 @@
 namespace Game
 {
     typedef arcade::IDisplayModule::Color Color;
+
     #define MAP_SIZE Vector(40, 40)
 
     class SolarFoxGameModule : public AbstractGameModule
     {
-      public :
-          SolarFoxGameModule();
-          ~SolarFoxGameModule() override;
+        public :
+            SolarFoxGameModule();
+            ~SolarFoxGameModule() override;
 
-          void reset();
+            enum class Difficulty {EASY = 0, MEDIUM = 1, HARD = 2};
 
-          enum class Difficulty { EASY = 0, MEDIUM = 1, HARD = 2};
+            void reset();
 
-      protected :
-          void refreshGame();
-          void generateCoin();
-          void eventManager(arcade::IDisplayModule &displayModule);
-          void updateDifficulty();
-          void generateEnemies();
+            void eventManager(arcade::IDisplayModule &displayModule);
 
-      private :
-          SolarFoxPlayer _player;
-          std::deque<GameObject *> _coins;
-          std::deque<SolarFoxEnemy *> _enemies;
-          Difficulty _difficulty;
+        private :
+            void refreshGame();
+            void updateDifficulty();
 
+            void generateCoin();
+            void generateEnemies();
+
+            SolarFoxPlayer _player;
+            std::deque<GameObject *> _goodCoins;
+            std::deque<GameObject *> _badCoins;
+            std::deque<SolarFoxEnemy *> _enemies;
+            Difficulty _difficulty;
     };
 }
 
-#endif // NIBBLERGAMEMODULE_HPP_
+#endif // SOLAR_FOX_GAME_MODULE_HPP

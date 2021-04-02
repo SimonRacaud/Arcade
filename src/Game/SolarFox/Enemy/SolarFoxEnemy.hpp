@@ -14,34 +14,45 @@
 #include "../../GameObject/GameObject.hpp"
 #include "Vector.hpp"
 #include "../Projectile/SolarFoxProjectile.hpp"
+#include "../../../Timer/Timer.hpp"
+#include "../../../exception/includes/ShootException.hpp"
 
 namespace Game
 {
+    class SolarFoxProjectile;
+
+    class SolarFoxPlayer;
+    
     class SolarFoxEnemy : public GameObject
     {
-      public:
-        enum class Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 };
+        public:
+            enum class Direction {UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3};
 
-      private:
-        Direction _movment;
-        double _speed;
-        const Vector &_originPos;
-        std::deque<SolarFoxProjectile *> _projectile;
+            SolarFoxEnemy(Vector const &mapSize, const Vector &originPos,
+            const Direction &originDir);
+            virtual ~SolarFoxEnemy();
 
-        void resetPosition(const Vector &originPos);
-        void handleProjectile();
+            void move();
+            void display(arcade::IDisplayModule &mod);
 
-      public:
-        SolarFoxEnemy(Vector const &mapSize, const Vector &originPos,
-        const Direction &originDir);
-        virtual ~SolarFoxEnemy();
+            void reset();
+            void updateMovment();
+            void shoot(const Vector &mapSize);
 
-        void move();
-        void reset();
-        void display(arcade::IDisplayModule &mod);
+            bool isInMovement();
+            void isShootCollideWith(const SolarFoxPlayer &player) const;
+            bool isShootCollideWith(const SolarFoxProjectile &projectile);
+        
+        private :
+            void resetPosition(const Vector &originPos);
+            void handleProjectile();
 
-        void updateMovment();
-        void shoot(const Vector &mapSize);
+            Direction _movment;
+            double _speed;
+            const Vector &_originPos;
+            std::deque<SolarFoxProjectile *> _projectile;
+            Timer _timer;
+            int _nbOfMovement;
     };
 } // namespace Game
 

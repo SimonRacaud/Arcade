@@ -13,32 +13,53 @@
 #include <iostream>
 #include "../../GameObject/GameObject.hpp"
 #include "Vector.hpp"
-
+#include "../../../Timer/Timer.hpp"
+#include "../Projectile/SolarFoxProjectile.hpp"
+#include "../Enemy/SolarFoxEnemy.hpp"
 
 namespace Game
 {
+    class SolarFoxProjectile;
+
+    class SolarFoxEnemy;
+
     class SolarFoxPlayer : public GameObject
     {
-      public:
-        enum class Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 };
+        public:
+            enum class Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 };
 
-      private:
-        Direction _movment;
-        double _speed;
+            SolarFoxPlayer(Vector const &mapSize);
+            virtual ~SolarFoxPlayer();
 
-        void resetPosition();
+            void move();
+            void display(arcade::IDisplayModule &mod);
 
-      public:
-        SolarFoxPlayer(Vector const &mapSize);
-        virtual ~SolarFoxPlayer();
+            void reset();
+            void shoot(const Vector &mapSize);
+            void prepareShooting();
 
-        void move();
-        void reset();
+            void setMovment(const Direction &movment);
+            void setMovePeriod(clock_t newPeriod);
 
-        void setMovment(const Direction &movment);
+            clock_t getMovePeriod() const;
+            Vector getPosition() const;
 
-        bool isOutsideOfWalkableArea() const;
-        ssize_t isCollideWith(std::deque<GameObject *> const &coins) const;
+            bool isInMovement();
+            bool isOutsideOfWalkableArea() const;
+            ssize_t isShootCollideWith(std::deque<GameObject *> const &coins) const;
+            void isCollideWith(std::deque<SolarFoxEnemy *> const &enemies);
+
+        private :
+            void resetPosition();
+            void handleProjectile();
+
+            Direction _currentMovment;
+            Direction _newMovment;
+            double _speed;
+            Timer _timer;
+            int _nbOfMovement;
+            std::deque<SolarFoxProjectile *> _projectile;
+            size_t _shootCounter;
     };
 } // namespace Game
 
