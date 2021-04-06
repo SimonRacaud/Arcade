@@ -178,7 +178,7 @@ void NibblerGameModule::generateCoin()
         }
         this->_coins.push_back(new GameObject(Color::YELLOW, _map.getSize()));
         this->_coins.back()->setPosition(position);
-        this->_coins.back()->setAnimation(Color::BLUE, 4);
+        this->_coins.back()->setAnimation(Color::BLUE, 100000);
         return;
     }
     std::cerr << "Warning: NibblerGameModule::generateCoin() fail"
