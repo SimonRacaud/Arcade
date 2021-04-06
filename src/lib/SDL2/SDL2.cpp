@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <memory>
 #include <vector>
 #include "./SDL2.hpp"
 #include "../../../includes/config.h"
@@ -255,7 +256,7 @@ Coord SDL2::getMousePos() const
     return Coord(x, y);
 }
 
-extern "C" arcade::IDisplayModule *entryPoint()
+extern "C" std::unique_ptr<arcade::IDisplayModule> entryPoint()
 {
-    return new SDL2;
+    return std::make_unique<SDL2>();
 }

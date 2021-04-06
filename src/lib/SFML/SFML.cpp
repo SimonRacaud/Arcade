@@ -5,6 +5,7 @@
 ** SFML
 */
 
+#include <memory>
 #include "./SFML.hpp"
 #include "../../../includes/config.h"
 
@@ -220,7 +221,7 @@ Coord SFML::getMousePos() const
     return Coord(localPosition.x, localPosition.y);
 }
 
-extern "C" arcade::IDisplayModule *entryPoint()
+extern "C" std::unique_ptr<arcade::IDisplayModule> entryPoint()
 {
-    return new SFML;
+    return std::make_unique<SFML>();
 }

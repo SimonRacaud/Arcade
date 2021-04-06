@@ -5,6 +5,7 @@
 ** Ncurses
 */
 
+#include <memory>
 #include "Ncurses.hpp"
 
 const std::map <arcade::IDisplayModule::Color, short> Ncurses::_caseColor = {
@@ -260,7 +261,7 @@ Coord Ncurses::getMousePos() const
     return Coord(0, 0);
 }
 
-extern "C" arcade::IDisplayModule *entryPoint()
+extern "C" std::unique_ptr<arcade::IDisplayModule> entryPoint()
 {
-    return new Ncurses;
+    return std::make_unique<Ncurses>();
 }

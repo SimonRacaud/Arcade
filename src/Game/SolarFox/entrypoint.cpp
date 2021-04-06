@@ -5,10 +5,11 @@
 ** entrypoint.c
 */
 
+#include <memory>
 #include "./SolarFoxGameModule.hpp"
 #include "IGameModule.hpp"
 
-extern "C" arcade::IGameModule *entryPoint()
+extern "C" std::unique_ptr<arcade::IGameModule> entryPoint()
 {
-    return new Game::SolarFoxGameModule;
+    return std::make_unique<Game::SolarFoxGameModule>();
 }

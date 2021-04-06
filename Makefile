@@ -8,7 +8,7 @@
 DSRC	=	./src/
 
 ### COMPILE
-CXXFLAGS	+= -std=c++11 -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
+CXXFLAGS	+= -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
 DEBUG		= -g
 INCLUDE 	= -I./includes -I./src -I./src/exception/includes
 NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so lib/arcade_solarfox.so
