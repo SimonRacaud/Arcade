@@ -58,7 +58,8 @@ MainMenu::MainMenu(CoreConfig &coreConfig) :
     _selectedCategorie("GAMES"),
     _selectedSetting("USERNAME"),
     _selectedPanel(0),
-    _isLoading(true)
+    _isLoading(true),
+    _animationTimer(1000)
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
@@ -152,6 +153,16 @@ void MainMenu::eventHandler()
                 _selectedGraphic = rotate(GraphicNames, _selectedGraphic, true);
         }
         if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
+            if (std::string(_settings.at(0)).find(_selectedSetting) != std::string::npos) {
+                //TODO USERNAME
+            }
+            if (std::string(_settings.at(1)).find(_selectedSetting) != std::string::npos) {
+                if (selectedGraphic->isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
+                    _coreConfig.reloadLib();
+                    _coreConfig.selectGraphic("./lib/" + _selectedGraphic);
+                    selectedGraphic = _coreConfig.getSelectedGraphic();
+                }
+            }
             if (selectedGraphic->isKeyPress(IDisplayModule::KeyList::ARROW_UP))
                 _selectedSetting = rotate(_settings, _selectedSetting, false);
             if (selectedGraphic->isKeyPress(IDisplayModule::KeyList::ARROW_DOWN))
@@ -244,7 +255,10 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
         selectedGraphic.putText(IDisplayModule::Color::BLUE, Coord(3, 10 + i), line);
         i++;
     }
-    selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(17, 15 + i), startMsg);
+    // if (_animationTimer.shouldRefresh()) {
+    //     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(17, 15 + i), startMsg);
+    //     std::cout << "Refresh" << std::endl;
+    // }
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(0, 41), studio);
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(15, 41), credits);
     if (selectedGraphic.isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
