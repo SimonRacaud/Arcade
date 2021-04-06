@@ -256,7 +256,7 @@ Coord SDL2::getMousePos() const
     return Coord(x, y);
 }
 
-extern "C" std::unique_ptr<arcade::IDisplayModule> entryPoint()
+extern "C" std::shared_ptr<arcade::IDisplayModule> entryPoint()
 {
-    return std::make_unique<SDL2>();
+    return std::make_shared<SDL2>();
 }

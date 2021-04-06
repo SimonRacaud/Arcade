@@ -223,7 +223,7 @@ Coord SFML::getMousePos() const
     return Coord(localPosition.x, localPosition.y);
 }
 
-extern "C" std::unique_ptr<arcade::IDisplayModule> entryPoint()
+extern "C" std::shared_ptr<arcade::IDisplayModule> entryPoint()
 {
-    return std::make_unique<SFML>();
+    return std::make_shared<SFML>();
 }

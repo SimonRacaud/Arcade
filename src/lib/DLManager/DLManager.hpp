@@ -35,7 +35,7 @@ namespace DL {
         void fetchAvailableLibs(std::deque<std::string> const& libNames);
 
         std::deque<std::string> const& getAvailableLibs(void) const;
-        T &getModule(std::string const& fileName);
+        std::shared_ptr<T> getModule(std::string const& fileName);
 
     protected:
         void fetchLibFiles(std::deque<std::string> const& libNames);

@@ -44,8 +44,8 @@ namespace arcade
             ExitStatus getStatus() const;
             void setStatus(ExitStatus const status);
 
-            IGameModule *getSelectedGame();
-            IDisplayModule *getSelectedGraphic();
+            std::shared_ptr<IGameModule> getSelectedGame();
+            std::shared_ptr<IDisplayModule> getSelectedGraphic();
             void rotateGraphLib(bool rev);
             void rotateGameLib(bool rev);
             void gotoMainMenu();
@@ -59,8 +59,8 @@ namespace arcade
         private:
             std::string _username;
             ExitStatus _status;
-            IGameModule *_selectedGame;
-            IDisplayModule *_selectedGraphic;
+            std::shared_ptr<IGameModule> _selectedGame;
+            std::shared_ptr<IDisplayModule> _selectedGraphic;
             DL::DLManager<IDisplayModule> _graphLibManager;
             DL::DLManager<IGameModule> _gameLibManager;
             std::string _selectedGameName;

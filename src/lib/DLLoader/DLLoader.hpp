@@ -22,13 +22,13 @@ namespace DL
     template<typename T>
     class DLLoader {
     public:
-        typedef std::unique_ptr<T> (* entryPoint)(void);
+        typedef std::shared_ptr<T> (* entryPoint)(void);
 
         DLLoader(std::string const &filepath);
 
         virtual ~DLLoader(void);
 
-        T &getInstance(void);
+        std::shared_ptr<T> getInstance(void);
         std::string const& getName(void) const;
 
     private:
@@ -36,7 +36,7 @@ namespace DL
         void fetchInstance(void);
 
         void *_lib;
-        std::unique_ptr<T> *_instance;
+        std::shared_ptr<T> _instance;
         std::string _filepath;
         std::string _name;
         const std::string _entryPointName;

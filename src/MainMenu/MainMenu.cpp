@@ -120,7 +120,7 @@ void MainMenu::eventHandler()
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
-    IDisplayModule *selectedGraphic = _coreConfig.getSelectedGraphic();
+    std::shared_ptr<IDisplayModule> selectedGraphic = _coreConfig.getSelectedGraphic();
 
     if (_selectedPanel == 0) {
         if (selectedGraphic->isKeyPress(IDisplayModule::KeyList::ARROW_UP))
@@ -268,7 +268,7 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
 
 void MainMenu::refresh()
 {
-    IDisplayModule *selectedGraphic = _coreConfig.getSelectedGraphic();
+    std::shared_ptr<IDisplayModule> selectedGraphic = _coreConfig.getSelectedGraphic();
 
     std::string categoriesName;
 

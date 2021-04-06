@@ -24,9 +24,9 @@ CoreConfig::CoreConfig(const std::string &defGraphicFile) :
         this->_gameLibManager.fetchAvailableLibs(CoreConfig::GAME_LIB_NAMES);
         this->_graphLibManager.fetchAvailableLibs(CoreConfig::GRAPHIC_LIB_NAMES);
         try {
-            IDisplayModule &displayMod =
+            std::shared_ptr<IDisplayModule> displayMod =
                 this->_graphLibManager.getModule(defGraphicFile);
-            this->_selectedGraphic = &displayMod;
+            this->_selectedGraphic = displayMod;
             this->_selectedGraphic->open();
             this->_selectedGraphicName = defGraphicFile;
         } catch (LibNotFoundException const &e) {
@@ -73,10 +73,10 @@ std::string const &CoreConfig::getUsername() const
 void CoreConfig::selectGame(std::string const &name)
 {
     try {
-        IGameModule &gameMod = this->_gameLibManager.getModule(name);
+        std::shared_ptr<IGameModule> gameMod = this->_gameLibManager.getModule(name);
         if (this->_selectedGame != nullptr)
             this->_selectedGame->reset();
-        this->_selectedGame = &gameMod;
+        this->_selectedGame = gameMod;
         this->_selectedGame->setUsername(this->getUsername());
         this->_selectedGameName = name;
         if (this->_selectedGraphic)
@@ -93,14 +93,14 @@ void CoreConfig::selectGame(std::string const &name)
 void CoreConfig::selectGraphic(std::string const &name)
 {
     try {
-        IDisplayModule &displayMod = this->_graphLibManager.getModule(name);
+        std::shared_ptr<IDisplayModule> displayMod = this->_graphLibManager.getModule(name);
         if (this->_selectedGraphic)
             this->_selectedGraphic->close();
-        this->_selectedGraphic = &displayMod;
+        this->_selectedGraphic = displayMod;
         this->_selectedGraphic->open();
         this->_selectedGraphicName = name;
         if (this->_selectedGame) {
-            this->_selectedGame->setDisplayModule(displayMod);
+            this->_selectedGame->setDisplayModule(*displayMod);
         }
     } catch (LibNotFoundException const &e) {
         std::cerr << "CoreConfig::selectGraphic : " << e.what() << std::endl;
@@ -117,12 +117,12 @@ void CoreConfig::setStatus(ExitStatus const status)
     _status = status;
 }
 
-IGameModule *CoreConfig::getSelectedGame()
+std::shared_ptr<IGameModule> CoreConfig::getSelectedGame()
 {
     return _selectedGame;
 }
 
-IDisplayModule *CoreConfig::getSelectedGraphic()
+std::shared_ptr<IDisplayModule> CoreConfig::getSelectedGraphic()
 {
     return _selectedGraphic;
 }

@@ -9,7 +9,7 @@
 #include "./SolarFoxGameModule.hpp"
 #include "IGameModule.hpp"
 
-extern "C" std::unique_ptr<arcade::IGameModule> entryPoint()
+extern "C" std::shared_ptr<arcade::IGameModule> entryPoint()
 {
-    return std::make_unique<Game::SolarFoxGameModule>();
+    return std::make_shared<Game::SolarFoxGameModule>();
 }

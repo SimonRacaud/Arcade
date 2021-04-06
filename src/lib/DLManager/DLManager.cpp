@@ -42,7 +42,7 @@ std::deque<std::string> const &DLManager<T>::getAvailableLibs() const
  * LibNotFoundException
  * LibLoadingException
  */
-template <class T> T &DLManager<T>::getModule(std::string const &fileName)
+template <class T> std::shared_ptr<T> DLManager<T>::getModule(std::string const &fileName)
 {
     if (_libsLoader.find(fileName) == _libsLoader.end()) {
         this->generateLoader(fileName);

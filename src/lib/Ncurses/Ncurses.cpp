@@ -261,7 +261,7 @@ Coord Ncurses::getMousePos() const
     return Coord(0, 0);
 }
 
-extern "C" std::unique_ptr<arcade::IDisplayModule> entryPoint()
+extern "C" std::shared_ptr<arcade::IDisplayModule> entryPoint()
 {
-    return std::make_unique<Ncurses>();
+    return std::make_shared<Ncurses>();
 }

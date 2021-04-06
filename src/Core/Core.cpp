@@ -20,8 +20,8 @@ Core::~Core()
 
 void Core::loop()
 {
-    IDisplayModule *selectedGraphic = _config.getSelectedGraphic();
-    IGameModule *selectedGame = _config.getSelectedGame();
+    std::shared_ptr<IDisplayModule> selectedGraphic = _config.getSelectedGraphic();
+    std::shared_ptr<IGameModule> selectedGame = _config.getSelectedGame();
 
     while (_config.getStatus() == CoreConfig::ExitStatus::LOOP) {
         selectedGraphic = _config.getSelectedGraphic();
@@ -48,8 +48,8 @@ void Core::loop()
 
 void Core::eventManager()
 {
-    IDisplayModule *selectedGraphic = _config.getSelectedGraphic();
-    IGameModule *selectedGame = _config.getSelectedGame();
+    std::shared_ptr<IDisplayModule> selectedGraphic = _config.getSelectedGraphic();
+    std::shared_ptr<IGameModule> selectedGame = _config.getSelectedGame();
 
     if (selectedGraphic == nullptr)
         return;

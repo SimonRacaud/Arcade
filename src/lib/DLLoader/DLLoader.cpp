@@ -44,19 +44,19 @@ void DL::DLLoader<T>::setName(const std::string &filepath)
 }
 
 template <typename T>
-T &DL::DLLoader<T>::getInstance(void)
+std::shared_ptr<T> DL::DLLoader<T>::getInstance(void)
 {
     if (_instance == nullptr) {
         this->fetchInstance();
     }
-    return (*static_cast<T *>(_instance->get()));
+    return _instance;
 }
 
 template <typename T>
 void DL::DLLoader<T>::fetchInstance(void)
 {
     DLLoader::entryPoint func;
-    std::unique_ptr<T> uptr;
+    std::shared_ptr<T> uptr;
 
     func = (DLLoader::entryPoint)dlsym(this->_lib, this->_entryPointName.c_str());
     if (func == nullptr) {
@@ -66,7 +66,7 @@ void DL::DLLoader<T>::fetchInstance(void)
     if (uptr.get() == nullptr) {
         throw LibLoadingException("Fail to get lib module");
     }
-    this->_instance = &uptr;
+    this->_instance = uptr;
 }
 
 
