@@ -11,6 +11,7 @@
 #include <string>
 #include <dlfcn.h>
 #include <iostream>
+#include <memory>
 
 #include "LibLoadingException.hpp"
 #include "IDisplayModule.hpp"
@@ -21,7 +22,7 @@ namespace DL
     template<typename T>
     class DLLoader {
     public:
-        typedef T *(* entryPoint)(void);
+        typedef std::unique_ptr<T> (* entryPoint)(void);
 
         DLLoader(std::string const &filepath);
 
@@ -35,7 +36,7 @@ namespace DL
         void fetchInstance(void);
 
         void *_lib;
-        T *_instance;
+        std::unique_ptr<T> *_instance;
         std::string _filepath;
         std::string _name;
         const std::string _entryPointName;

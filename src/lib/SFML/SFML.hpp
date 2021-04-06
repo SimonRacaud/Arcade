@@ -12,10 +12,10 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-using namespace arcade;
-
-class SFML : public IDisplayModule {
-    public:
+namespace arcade
+{
+    class SFML : public IDisplayModule {
+      public:
         ~SFML();
         SFML();
 
@@ -36,8 +36,8 @@ class SFML : public IDisplayModule {
         bool isMouseClicked() const; // Any key of the mouse
         Coord getMousePos() const;
 
-    protected:
-    private:
+      protected:
+      private:
         void refreshEvent();
         std::vector<sf::Keyboard::Key> _keyStack;
         bool _isMouseClicked;
@@ -49,6 +49,7 @@ class SFML : public IDisplayModule {
         static const std::map<Color, sf::Color> _color;
         static const std::map<KeyList, sf::Keyboard::Key> _key;
         sf::RenderWindow *_window;
-};
+    };
+}
 
 #endif /* !SFML_HPP_ */

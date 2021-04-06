@@ -9,6 +9,8 @@
 #include "./SFML.hpp"
 #include "../../../includes/config.h"
 
+using namespace arcade;
+
 const std::map<arcade::IDisplayModule::Color, sf::Color> SFML::_color = {
     {arcade::IDisplayModule::Color::BLACK, sf::Color::Black},
     {arcade::IDisplayModule::Color::RED, sf::Color::Red},

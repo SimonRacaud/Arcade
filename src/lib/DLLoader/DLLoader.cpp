@@ -22,8 +22,6 @@ DL::DLLoader<T>::DLLoader(std::string const &filepath)
 template <typename T>
 DL::DLLoader<T>::~DLLoader(void)
 {
-    if (_instance != nullptr)
-        delete _instance;
     if (this->_lib != nullptr) {
         dlclose(this->_lib);
     }
@@ -51,24 +49,24 @@ T &DL::DLLoader<T>::getInstance(void)
     if (_instance == nullptr) {
         this->fetchInstance();
     }
-    return *_instance;
+    return (*static_cast<T *>(_instance->get()));
 }
 
 template <typename T>
 void DL::DLLoader<T>::fetchInstance(void)
 {
     DLLoader::entryPoint func;
-    T *res;
+    std::unique_ptr<T> uptr;
 
     func = (DLLoader::entryPoint)dlsym(this->_lib, this->_entryPointName.c_str());
     if (func == nullptr) {
         throw LibLoadingException("Lib entry point not found");
     }
-    res = (*func)();
-    if (res == nullptr) {
+    uptr = (*func)();
+    if (uptr.get() == nullptr) {
         throw LibLoadingException("Fail to get lib module");
     }
-    this->_instance = res;
+    this->_instance = &uptr;
 }
 
 
