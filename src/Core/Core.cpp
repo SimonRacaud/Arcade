@@ -10,7 +10,7 @@
 using namespace arcade;
 
 Core::Core(const std::string &defGraphicFile) :
- _config(defGraphicFile), _timer(CORE_TIMER) ,_mainMenu(_config)
+ _config(defGraphicFile) ,_mainMenu(_config)
 {
 }
 
@@ -26,13 +26,14 @@ void Core::loop()
     while (_config.getStatus() == CoreConfig::ExitStatus::LOOP) {
         selectedGraphic = _config.getSelectedGraphic();
         selectedGame = _config.getSelectedGame();
-        if (this->_timer.shouldRefresh()) {
-            if (selectedGame == nullptr) {
-                _mainMenu.refresh();
-                selectedGraphic = _config.getSelectedGraphic();
-            }
+        if (selectedGraphic) {
+            selectedGraphic->clearScreen();
+            selectedGraphic->refreshScreen();
         }
-        if (selectedGame != nullptr) {
+        if (selectedGame == nullptr) {
+            _mainMenu.refresh();
+            selectedGraphic = _config.getSelectedGraphic();
+        } else {
             selectedGame->refresh();
         }
         if (selectedGraphic) {
@@ -40,6 +41,7 @@ void Core::loop()
                 this->_config.setStatus(CoreConfig::ExitStatus::SUCCESS);
             }
             this->eventManager();
+            selectedGraphic->displayScreen();
         }
     }
 }

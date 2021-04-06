@@ -67,33 +67,28 @@ void AbstractGameModule::setStatus(GameStatus status)
 
 void AbstractGameModule::refresh()
 {
+    bool refreshLogic = _timer.shouldRefresh();
+
     if (_graphModule == nullptr)
         return;
-    if (_timer.shouldRefresh()) {
-        try {
-            if (_graphModule != nullptr) {
-                _graphModule->clearScreen();
-                _graphModule->refreshScreen();
-            }
-            if (_status == GameStatus::SUCCESS) {
-                this->refreshGame();
-            } else if (_status == GameStatus::GAMEOVER) {
-                this->refreshEndMenu();
-            } else if (_status == GameStatus::PAUSE) {
-                this->refreshPauseMenu();
-            }
+    try {
+        if (refreshLogic) {
             this->eventManager(*this->_graphModule);
-            if (_graphModule) {
-                _graphModule->displayScreen();
-            }
-        } catch (BaseException const &e) {
-            this->_status = GameStatus::ERROR;
-            std::cerr << e.what() << std::endl;
-        } catch (...) {
-            std::cerr
-                << "AbstractGameModule::refresh() An exception occured\n";
-            this->_status = GameStatus::ERROR;
         }
+        if (_status == GameStatus::SUCCESS) {
+            this->refreshGame(refreshLogic);
+        } else if (_status == GameStatus::GAMEOVER) {
+            this->refreshEndMenu();
+        } else if (_status == GameStatus::PAUSE) {
+            this->refreshPauseMenu();
+        }
+    } catch (BaseException const &e) {
+        this->_status = GameStatus::ERROR;
+        std::cerr << e.what() << std::endl;
+    } catch (...) {
+        std::cerr
+            << "AbstractGameModule::refresh() An exception occured\n";
+        this->_status = GameStatus::ERROR;
     }
 }
 

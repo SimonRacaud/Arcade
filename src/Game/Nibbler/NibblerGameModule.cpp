@@ -84,8 +84,8 @@ static const size_t COIN_LIMIT = 10;
 static const clock_t LOOP_FREQ = 200;
 
 NibblerGameModule::NibblerGameModule()
-try : AbstractGameModule("Unknown", LOOP_FREQ, MAP_SIZE, MAP), _player(MAP_SIZE),
-    _coinGenTimer(COIN_GEN_PERIOD) {
+try : AbstractGameModule("Unknown", LOOP_FREQ, MAP_SIZE, MAP),
+    _player(MAP_SIZE), _coinGenTimer(COIN_GEN_PERIOD) {
     srand((unsigned) time(nullptr));
     this->generateCoin();
 } catch (BaseException const &e) {
@@ -100,7 +100,24 @@ NibblerGameModule::~NibblerGameModule()
     }
 }
 
-void NibblerGameModule::refreshGame()
+void NibblerGameModule::refreshGame(bool refreshActions)
+{
+    if (refreshActions) {
+        this->refreshLogic();
+    }
+    this->_map.display(*this->_graphModule);
+    this->_player.display(*this->_graphModule);
+    for (size_t i = 0; i < _coins.size(); i++) {
+        this->_coins[i]->display(*this->_graphModule);
+    }
+    if (refreshActions) {
+        if (_coins.size() < COIN_LIMIT && this->_coinGenTimer.shouldRefresh()) {
+            this->generateCoin();
+        }
+    }
+}
+
+void NibblerGameModule::refreshLogic()
 {
     ssize_t coinIdx;
 
@@ -127,15 +144,8 @@ void NibblerGameModule::refreshGame()
             this->generateCoin();
         }
     }
-    this->_map.display(*this->_graphModule);
-    this->_player.display(*this->_graphModule);
-    for (size_t i = 0; i < _coins.size(); i++) {
-        this->_coins[i]->display(*this->_graphModule);
-    }
-    if (_coins.size() < COIN_LIMIT && this->_coinGenTimer.shouldRefresh()) {
-        this->generateCoin();
-    }
 }
+
 
 void NibblerGameModule::reset()
 {
@@ -191,4 +201,3 @@ void NibblerGameModule::eventManager(arcade::IDisplayModule &displayModule)
         this->_player.setMovment(NibblerPlayer::Direction::DOWN);
     }
 }
-
