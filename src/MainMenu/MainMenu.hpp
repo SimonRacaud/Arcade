@@ -8,6 +8,7 @@
 #ifndef MAINMENU_HPP_
 #define MAINMENU_HPP_
 
+#include "../Timer/Timer.hpp"
 #include "../CoreConfig/CoreConfig.hpp"
 #include <string>
 #include <vector>
@@ -49,6 +50,7 @@ namespace arcade
                 std::string _selectedSetting;
                 size_t _selectedPanel;
                 bool _isLoading;
+                Timer _animationTimer;
     };
 } // namespace arcade
 
