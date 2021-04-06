@@ -39,7 +39,7 @@ namespace Game
             void eventManager(arcade::IDisplayModule &displayModule);
 
         private :
-            void refreshGame();
+            void refreshGame(bool refreshActions);
             void updateDifficulty();
 
             void generateCoin();

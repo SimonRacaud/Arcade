@@ -151,52 +151,54 @@ void SolarFoxGameModule::eventManager(arcade::IDisplayModule &displayModule)
         this->_player.prepareShooting();
 }
 
-void SolarFoxGameModule::refreshGame()
+void SolarFoxGameModule::refreshGame(bool refreshActions)
 {
     ssize_t coinIdx;
 
-    // Player Move
-    try {
-        this->_player.move();
-    } catch (OutOfBoundException const &e) {
-        this->_status = GameStatus::GAMEOVER;
-        return;
-    }
-    // Player Shoot
-    this->_player.shoot(MAP_SIZE);
-    // Check Collision With Border
-    if (this->_player.isOutsideOfWalkableArea()) {
-        this->_status = GameStatus::GAMEOVER;
-        return;
-    }
-    // Check Collision With Coins
-    coinIdx = this->_player.isShootCollideWith(_goodCoins);
-    if (coinIdx != -1) {
-        delete *(_goodCoins.begin() + coinIdx);
-        _goodCoins.erase(_goodCoins.begin() + coinIdx);
-        this->increaseScore(10);
-        if (_goodCoins.empty()) {
-            updateDifficulty();
-            this->generateCoin();
-            this->generateEnemies();
+    if (refreshActions) {
+        // Player Move
+        try {
+            this->_player.move();
+        } catch (OutOfBoundException const &e) {
+            this->_status = GameStatus::GAMEOVER;
+            return;
         }
-    }
-    if (this->_player.isShootCollideWith(_badCoins) != -1) {
-        this->_status = GameStatus::GAMEOVER;
-        return;
-    }
-    // Check Collision With Enemies Projectile
-    try {
-        this->_player.isCollideWith(_enemies);
-    } catch (ShootException const &e) {
-        this->_status = GameStatus::GAMEOVER;
-        return;
-    }
-    // Handle Enemies
-    for (size_t i = 0; i < _enemies.size(); i++) {
-        this->_enemies[i]->move();
-        this->_enemies[i]->shoot(MAP_SIZE);
-        this->_enemies[i]->updateMovment();
+        // Player Shoot
+        this->_player.shoot(MAP_SIZE);
+        // Check Collision With Border
+        if (this->_player.isOutsideOfWalkableArea()) {
+            this->_status = GameStatus::GAMEOVER;
+            return;
+        }
+        // Check Collision With Coins
+        coinIdx = this->_player.isShootCollideWith(_goodCoins);
+        if (coinIdx != -1) {
+            delete *(_goodCoins.begin() + coinIdx);
+            _goodCoins.erase(_goodCoins.begin() + coinIdx);
+            this->increaseScore(10);
+            if (_goodCoins.empty()) {
+                updateDifficulty();
+                this->generateCoin();
+                this->generateEnemies();
+            }
+        }
+        if (this->_player.isShootCollideWith(_badCoins) != -1) {
+            this->_status = GameStatus::GAMEOVER;
+            return;
+        }
+        // Check Collision With Enemies Projectile
+        try {
+            this->_player.isCollideWith(_enemies);
+        } catch (ShootException const &e) {
+            this->_status = GameStatus::GAMEOVER;
+            return;
+        }
+        // Handle Enemies
+        for (size_t i = 0; i < _enemies.size(); i++) {
+            this->_enemies[i]->move();
+            this->_enemies[i]->shoot(MAP_SIZE);
+            this->_enemies[i]->updateMovment();
+        }
     }
     // Display
     this->_map.display(*this->_graphModule);

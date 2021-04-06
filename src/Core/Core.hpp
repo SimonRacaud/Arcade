@@ -14,13 +14,9 @@
 
 #include <string>
 
-#define CORE_TIMER 200
-
 namespace arcade
 {
     typedef IDisplayModule::KeyList Key;
-
-    //class MainMenu;
 
     class Core {
       public:
@@ -34,7 +30,6 @@ namespace arcade
       protected:
       private:
         CoreConfig _config;
-        Timer _timer;
         MainMenu _mainMenu;
     };
 } // namespace arcade

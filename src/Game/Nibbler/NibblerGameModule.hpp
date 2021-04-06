@@ -36,7 +36,8 @@ namespace Game
         void reset();
 
       protected:
-        void refreshGame();
+        void refreshLogic();
+        void refreshGame(bool refreshActions);
         void generateCoin();
         void eventManager(arcade::IDisplayModule &displayModule);
 

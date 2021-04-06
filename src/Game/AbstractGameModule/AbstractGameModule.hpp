@@ -53,7 +53,7 @@ namespace Game
 
         virtual void eventManager(arcade::IDisplayModule &displayModule);
 
-        virtual void refreshGame() = 0;
+        virtual void refreshGame(bool refreshActions) = 0;
 
         void increaseScore(size_t val);
         void evalHighScore();

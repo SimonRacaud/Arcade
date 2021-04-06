@@ -274,15 +274,11 @@ void MainMenu::refresh()
 
     if (!selectedGraphic)
         return;
-    selectedGraphic->clearScreen();
-    selectedGraphic->refreshScreen();
     if (_isLoading) {
         displayLoading(*selectedGraphic);
     } else {
         displayMenu(*selectedGraphic);
     }
-    if (selectedGraphic)
-        selectedGraphic->displayScreen();
     eventHandler();
 }
 
