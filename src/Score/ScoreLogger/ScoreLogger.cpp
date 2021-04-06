@@ -42,9 +42,9 @@ void ScoreLogger::saveScores(
     }
     for (std::string const &libName : libs) {
         try {
-            IGameModule &gameModule = gameDLManager.getModule(libName);
-            file << libName << "," << gameModule.getScore() << ","
-                 << gameModule.getScoreHigh() << "\n";
+            auto const& gameModule = gameDLManager.getModule(libName);
+            file << libName << "," << gameModule->getScore() << ","
+                 << gameModule->getScoreHigh() << "\n";
         } catch (BaseException const &e) {
             std::cerr << "ScoreLogger::saveScores : " << e.what() << std::endl;
         }
