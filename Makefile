@@ -97,12 +97,14 @@ SDL2: LDFLAGS	+= -shared -lSDL2 -lSDL2_ttf -fPIC
 SDL2: CXXFLAGS	+=	-fPIC
 SDL2: $(SDL2_OBJ)
 
+GPP=g++
+
 ### BUILD
 %.o: %.cpp
-	g++ -c $(CXXFLAGS) -o $@ $<
+	$(GPP) -c $(CXXFLAGS) -o $@ $<
 
 core nibbler sfml SDL2 ncurses solarfox: $(OBJ)
-	@g++ -o $(NAME) $(OBJ) $(DEF_SRC) $(LDFLAGS) && \
+	@$(GPP) -o $(NAME) $(OBJ) $(DEF_SRC) $(LDFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)
 

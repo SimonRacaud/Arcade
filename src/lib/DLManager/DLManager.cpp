@@ -129,5 +129,5 @@ std::string DLManager<T>::mergeFilePath(
     return result;
 }
 
-template class DLManager<arcade::IDisplayModule>;
-template class DLManager<arcade::IGameModule>;
+template class DL::DLManager<arcade::IDisplayModule>;
+template class DL::DLManager<arcade::IGameModule>;

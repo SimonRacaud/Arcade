@@ -15,24 +15,24 @@ const std::deque<std::string> CoreConfig::GAME_LIB_NAMES = {
 const std::deque<std::string> CoreConfig::GRAPHIC_LIB_NAMES = {
     "arcade_sfml.so", "arcade_ncurses.so", "arcade_sdl2.so"};
 
-CoreConfig::CoreConfig(const std::string &defGraphicFile) :
-    _username("unknow"), _status(ExitStatus::LOOP), _selectedGame(nullptr),
-    _selectedGraphic(nullptr), _graphLibManager("./lib"),
-    _gameLibManager("./lib")
+CoreConfig::CoreConfig(const std::string &defGraphicFile)
+    : _username("unknow"), _status(ExitStatus::LOOP), _selectedGame(nullptr),
+      _selectedGraphic(nullptr), _graphLibManager("./lib"),
+      _gameLibManager("./lib")
 {
     try {
         this->_gameLibManager.fetchAvailableLibs(CoreConfig::GAME_LIB_NAMES);
-        this->_graphLibManager.fetchAvailableLibs(CoreConfig::GRAPHIC_LIB_NAMES);
+        this->_graphLibManager.fetchAvailableLibs(
+            CoreConfig::GRAPHIC_LIB_NAMES);
         try {
-            std::shared_ptr<IDisplayModule> displayMod =
+            this->_selectedGraphic =
                 this->_graphLibManager.getModule(defGraphicFile);
-            this->_selectedGraphic = displayMod;
             this->_selectedGraphic->open();
             this->_selectedGraphicName = defGraphicFile;
         } catch (LibNotFoundException const &e) {
             std::cerr << "Error: " << e.what() << std::endl;
             this->_status = ExitStatus::ERROR;
-        return;
+            return;
         }
     } catch (LibLoadingException const &e) {
         std::cerr << "Error: " << e.what() << std::endl;
@@ -73,7 +73,8 @@ std::string const &CoreConfig::getUsername() const
 void CoreConfig::selectGame(std::string const &name)
 {
     try {
-        std::shared_ptr<IGameModule> gameMod = this->_gameLibManager.getModule(name);
+        std::shared_ptr<IGameModule> gameMod =
+            this->_gameLibManager.getModule(name);
         if (this->_selectedGame != nullptr)
             this->_selectedGame->reset();
         this->_selectedGame = gameMod;
@@ -93,7 +94,8 @@ void CoreConfig::selectGame(std::string const &name)
 void CoreConfig::selectGraphic(std::string const &name)
 {
     try {
-        std::shared_ptr<IDisplayModule> displayMod = this->_graphLibManager.getModule(name);
+        std::shared_ptr<IDisplayModule> displayMod =
+            this->_graphLibManager.getModule(name);
         if (this->_selectedGraphic)
             this->_selectedGraphic->close();
         this->_selectedGraphic = displayMod;
@@ -143,8 +145,8 @@ void CoreConfig::gotoMainMenu()
 {
     if (this->_selectedGame == nullptr)
         return;
+    this->_selectedGame.reset();
     this->_selectedGame = nullptr;
-    // TODO : open main menu
 }
 
 void CoreConfig::rotateGraphLib(bool rev)
