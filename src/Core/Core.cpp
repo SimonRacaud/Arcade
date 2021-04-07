@@ -40,6 +40,7 @@ void Core::loop()
         if (selectedGraphic) {
             selectedGraphic->displayScreen();
             this->eventManager();
+            selectedGraphic = _config.getSelectedGraphic();
             if (selectedGraphic->isOpen() == false) {
                 this->_config.setStatus(CoreConfig::ExitStatus::SUCCESS);
             }
