@@ -99,7 +99,7 @@ static const std::deque<Vector> PATTERN_HARD = {{9, 9}, {10, 5}, {19, 9}, {20, 5
     {9, 29}, {10, 25}, {19, 29}, {20, 25}, {29, 29}, {30, 25},
     {5, 34}, {14, 30}, {15, 34}, {24, 30}, {25, 34}, {34, 30}};
 
-static const clock_t LOOP_FREQ = 10;
+static const clock_t LOOP_FREQ = 5;
 
 SolarFoxGameModule::SolarFoxGameModule()
 try : AbstractGameModule("Unknown", LOOP_FREQ, MAP_SIZE, MAP), _player(MAP_SIZE),
@@ -120,6 +120,8 @@ void SolarFoxGameModule::reset()
         _badCoins.clear();
         _enemies.clear();
         _difficulty = Difficulty::EASY;
+        this->evalHighScore();
+        this->resetScore();
         this->generateCoin();
         this->generateEnemies();
         this->_player.reset();
@@ -176,6 +178,7 @@ void SolarFoxGameModule::refreshGame(bool refreshActions)
             delete *(_goodCoins.begin() + coinIdx);
             _goodCoins.erase(_goodCoins.begin() + coinIdx);
             this->increaseScore(10);
+            this->evalHighScore();
             if (_goodCoins.empty()) {
                 updateDifficulty();
                 this->generateCoin();

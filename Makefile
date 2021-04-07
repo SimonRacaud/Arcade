@@ -25,7 +25,6 @@ GAME_DSRC = $(DSRC)Game
 DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 					$(GAME_DSRC)/GameMap/GameMap.cpp						\
 					$(GAME_DSRC)/GameObject/GameObject.cpp					\
-					$(GAME_DSRC)/Projectile/Projectile.cpp					\
 
 ###
 all:  core games graphicals

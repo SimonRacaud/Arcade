@@ -16,6 +16,7 @@
 #include "IGameModule.hpp"
 #include "ModuleException.hpp"
 #include "../../Timer/Timer.hpp"
+#include "config.h"
 
 namespace Game
 {
@@ -54,9 +55,11 @@ namespace Game
         virtual void eventManager(arcade::IDisplayModule &displayModule);
 
         virtual void refreshGame(bool refreshActions) = 0;
+        void displayInfo();
 
         void increaseScore(size_t val);
         void evalHighScore();
+        void resetScore();
 
         GameStatus _status;
         Timer _timer;

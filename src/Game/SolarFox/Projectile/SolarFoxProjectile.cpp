@@ -11,7 +11,7 @@ using namespace Game;
 
 static const double DEF_SPEED = 0.1;
 
-static const clock_t PROJECTILE_MOVE_PERIOD = 1;
+static const clock_t PROJECTILE_MOVE_PERIOD = 0.3;
 
 SolarFoxProjectile::SolarFoxProjectile(const Vector &mapSize, const Vector &originPos,
 const Direction &originDir, const double &lifeTime)

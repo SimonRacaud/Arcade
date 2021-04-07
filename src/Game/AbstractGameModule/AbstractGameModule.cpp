@@ -75,6 +75,7 @@ void AbstractGameModule::refresh()
         this->eventManager(*this->_graphModule);
         if (_status == GameStatus::SUCCESS) {
             this->refreshGame(refreshLogic);
+            this->displayInfo();
         } else if (_status == GameStatus::GAMEOVER) {
             this->refreshEndMenu();
         } else if (_status == GameStatus::PAUSE) {
@@ -130,6 +131,11 @@ void AbstractGameModule::evalHighScore()
     }
 }
 
+void AbstractGameModule::resetScore()
+{
+    _score = 0;
+}
+
 void AbstractGameModule::eventManager(arcade::IDisplayModule &displayModule)
 {
     if (displayModule.isKeyPress(KeyList::PAUSE)) {
@@ -147,4 +153,14 @@ void AbstractGameModule::eventManager(arcade::IDisplayModule &displayModule)
             this->_status = GameStatus::SUCCESS;
         }
     }
+}
+
+void AbstractGameModule::displayInfo()
+{
+    this->_graphModule->putText(Color::WHITE,
+    {-ORIGIN_X, -ORIGIN_Y}, "Username : " + this->_username);
+    this->_graphModule->putText(Color::WHITE,
+    {-ORIGIN_X, -ORIGIN_Y + 1}, "Score : " + std::to_string(this->getScore()));
+    this->_graphModule->putText(Color::WHITE,
+    {-ORIGIN_X, -ORIGIN_Y + 2}, "High Score : " + std::to_string(this->getScoreHigh()));
 }
