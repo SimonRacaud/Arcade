@@ -122,7 +122,6 @@ void Ncurses::close()
     if (endwin() == ERR)
         throw DisplayModuleException("The closing of the window failed !");
     _isOpen = false;
-    std::cout << isendwin() << std::endl;
 }
 
 bool Ncurses::isOpen() const
