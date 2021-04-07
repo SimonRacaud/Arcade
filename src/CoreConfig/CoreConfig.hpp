@@ -10,8 +10,10 @@
 
 #include <deque>
 #include <string>
+#include <algorithm>
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
+#include "LibNotFoundException.hpp"
 
 #include "lib/DLManager/DLManager.hpp"
 

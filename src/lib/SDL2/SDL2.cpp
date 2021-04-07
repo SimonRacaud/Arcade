@@ -84,6 +84,14 @@ SDL2::SDL2() :
     _textSize(TEXT_SIZE),
     _window(NULL), _renderer(NULL)
 {
+}
+
+SDL2::~SDL2()
+{
+}
+
+void SDL2::open()
+{
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH, _textSize);
@@ -91,19 +99,6 @@ SDL2::SDL2() :
         std::cout << "font is null" << std::endl;
         //throw error
     }
-}
-
-SDL2::~SDL2()
-{
-    if (_font) {
-        TTF_CloseFont(_font);
-    }
-    SDL_Quit();
-    TTF_Quit();
-}
-
-void SDL2::open()
-{
     _window = SDL_CreateWindow(
         WINDOW_NAME,
         SDL_WINDOWPOS_UNDEFINED,
@@ -124,6 +119,11 @@ void SDL2::close()
 {
     _isOpen = false;
     SDL_DestroyWindow(_window);
+    if (_font) {
+        TTF_CloseFont(_font);
+    }
+    SDL_Quit();
+    TTF_Quit();
 }
 
 bool SDL2::isOpen() const

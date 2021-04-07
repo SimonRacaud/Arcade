@@ -46,7 +46,9 @@ void Core::loop()
             }
         }
     }
-    selectedGraphic->close();
+    if (selectedGraphic) {
+        selectedGraphic->close();
+    }
 }
 
 void Core::eventManager()

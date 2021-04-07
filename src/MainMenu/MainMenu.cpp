@@ -159,7 +159,6 @@ void MainMenu::eventHandler()
             if (std::string(_settings.at(1)).find(_selectedSetting) != std::string::npos) {
                 if (selectedGraphic->isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
                     _coreConfig.reloadLib();
-                    _coreConfig.selectGraphic("./lib/" + _selectedGraphic);
                     selectedGraphic = _coreConfig.getSelectedGraphic();
                 }
             }
@@ -269,7 +268,6 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
 void MainMenu::refresh()
 {
     std::shared_ptr<IDisplayModule> selectedGraphic = _coreConfig.getSelectedGraphic();
-
     std::string categoriesName;
 
     if (!selectedGraphic)

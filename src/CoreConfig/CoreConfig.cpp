@@ -46,8 +46,29 @@ CoreConfig::~CoreConfig()
 
 void CoreConfig::reloadLib()
 {
+    std::deque<std::string> graphic_names;
+
+    if (_selectedGraphic) {
+        _selectedGraphic->close();
+    }
     this->_gameLibManager.fetchAvailableLibs(CoreConfig::GAME_LIB_NAMES);
     this->_graphLibManager.fetchAvailableLibs(CoreConfig::GRAPHIC_LIB_NAMES);
+    this->_selectedGraphic = nullptr;
+    this->_selectedGame = nullptr;
+    graphic_names = this->_graphLibManager.getAvailableLibs();
+    if (graphic_names.size() == 0) {
+        throw LibNotFoundException("Warning: lib graphical lib found, exit");
+    }
+    const std::string previousGraphLib = _selectedGraphicName;
+    if (std::find_if(graphic_names.begin(), graphic_names.end(),
+            [previousGraphLib](std::string const &name) {
+                return name.find(previousGraphLib) != std::string::npos;
+            }) != graphic_names.end()) {
+        this->selectGraphic(previousGraphLib);
+    } else {
+        std::cerr << "Warning: previous graphical lib not found" << std::endl;
+        this->selectGraphic(graphic_names[0]);
+    }
 }
 
 void CoreConfig::resetGame()
@@ -131,12 +152,30 @@ std::shared_ptr<IDisplayModule> CoreConfig::getSelectedGraphic()
 
 std::deque<std::string> CoreConfig::getGameNames()
 {
-    return GAME_LIB_NAMES;
+    std::deque<std::string> names = this->_gameLibManager.getAvailableLibs();
+    size_t idx = 0;
+
+    for (std::string &name : names) {
+        idx = name.find_last_of('/');
+        if (idx != std::string::npos) {
+            name = name.substr(idx + 1);
+        }
+    }
+    return names;
 }
 
 std::deque<std::string> CoreConfig::getGraphicNames()
 {
-    return GRAPHIC_LIB_NAMES;
+    std::deque<std::string> names = this->_graphLibManager.getAvailableLibs();
+    size_t idx = 0;
+
+    for (std::string &name : names) {
+        idx = name.find_last_of('/');
+        if (idx != std::string::npos) {
+            name = name.substr(idx + 1);
+        }
+    }
+    return names;
 }
 
 /** Private **/

@@ -11,6 +11,7 @@
 #include "../Timer/Timer.hpp"
 #include "../CoreConfig/CoreConfig.hpp"
 #include <string>
+#include <unistd.h>
 #include <vector>
 #include <deque>
 

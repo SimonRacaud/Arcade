@@ -11,6 +11,7 @@
 #include "../../../includes/IDisplayModule.hpp"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 namespace arcade
 {
@@ -45,7 +46,7 @@ namespace arcade
         Vector _scale;
         Vector _origin;
         size_t _textSize;
-        sf::Font _font;
+        sf::Font *_font;
         static const std::map<Color, sf::Color> _color;
         static const std::map<KeyList, sf::Keyboard::Key> _key;
         sf::RenderWindow *_window;

@@ -84,9 +84,6 @@ SFML::SFML() :
  _origin(ORIGIN_X * SCALE_X, ORIGIN_Y * SCALE_Y),
  _textSize(TEXT_SIZE)
 {
-    if (!_font.loadFromFile(FONT_PATH)) {
-        // throw error ?
-    }
 }
 
 SFML::~SFML()
@@ -95,6 +92,10 @@ SFML::~SFML()
 
 void SFML::open()
 {
+    _font = new sf::Font;
+    if (!_font->loadFromFile(FONT_PATH)) {
+        // throw error ?
+    }
     _isOpen = true;
     _window =
         new sf::RenderWindow(sf::VideoMode(W_WIDTH, W_HEIGH), WINDOW_NAME);
@@ -105,6 +106,7 @@ void SFML::close()
     _isOpen = false;
     _window->close();
     delete _window;
+    delete _font;
 }
 
 bool SFML::isOpen() const
@@ -155,7 +157,7 @@ void SFML::putText(Color color, Coord pos, std::string const &value)
 {
     sf::Text text;
 
-    text.setFont(_font);
+    text.setFont(*_font);
     text.setString(value.c_str());
     text.setCharacterSize(_textSize);
     text.setFillColor(_color.at(color));
