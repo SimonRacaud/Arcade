@@ -85,7 +85,7 @@ const std::map <arcade::IDisplayModule::KeyList, int> Ncurses::_key = {
 };
 
 Ncurses::Ncurses() :
- _isOpen(false), _window(nullptr),
+ _isOpen(false), _timer(80), _refresh(false), _window(nullptr),
  _ch(-1),
  _scale(2, 1), _origin(ORIGIN_X * 2, ORIGIN_Y),
  _textSize(1)
@@ -214,8 +214,12 @@ void Ncurses::putText(Color color, Coord pos, std::string const &value)
 
 void Ncurses::displayScreen()
 {
-    if (refresh() == ERR)
-        throw DisplayModuleException("The refreshment of the window failed !");
+    if (_refresh) {
+        _refresh = false;
+        if (refresh() == ERR)
+            throw DisplayModuleException(
+                "The refreshment of the window failed !");
+    }
 }
 
 void Ncurses::refreshScreen()
@@ -228,8 +232,12 @@ void Ncurses::refreshScreen()
 
 void Ncurses::clearScreen()
 {
-    if (clear() == ERR)
-        throw DisplayModuleException("The cleaning of the window failed !");
+    if (_timer.shouldRefresh()) {
+        _refresh = true;
+        if (clear() == ERR)
+            throw DisplayModuleException(
+                "The cleaning of the window failed !");
+    }
 }
 
 bool Ncurses::isKeyPress(const KeyList key) const

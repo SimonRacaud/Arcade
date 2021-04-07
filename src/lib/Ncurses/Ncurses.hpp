@@ -11,6 +11,7 @@
 #include "../../../includes/IDisplayModule.hpp"
 #include "../../exception/includes/DisplayModuleException.hpp"
 #include "../../../includes/config.h"
+#include "Timer/Timer.hpp"
 #include <curses.h>
 #include <map>
 #include <iostream>
@@ -44,6 +45,8 @@ class Ncurses : public IDisplayModule {
     protected:
     private:
         bool _isOpen;
+        Timer _timer;
+        bool _refresh;
         WINDOW *_window;
         int _ch;
         Vector _scale;
