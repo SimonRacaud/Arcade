@@ -14,6 +14,7 @@
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
 #include "LibNotFoundException.hpp"
+#include "Score/ScoreLogger/ScoreLogger.hpp"
 
 #include "lib/DLManager/DLManager.hpp"
 
@@ -67,7 +68,8 @@ namespace arcade
             DL::DLManager<IGameModule> _gameLibManager;
             std::string _selectedGameName;
             std::string _selectedGraphicName;
-};
+            ScoreLogger _scoreLogger;
+    };
 
 }
 

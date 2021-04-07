@@ -10,7 +10,7 @@
 using namespace arcade;
 
 const std::deque<std::string> CoreConfig::GAME_LIB_NAMES = {
-    "arcade_nibbler.so", "arcade_solarfox.so"};
+    "arcade_nibbler.so", "arcade_solarfox.so", "arcade_pacman.so"};
 
 const std::deque<std::string> CoreConfig::GRAPHIC_LIB_NAMES = {
     "arcade_sfml.so", "arcade_ncurses.so", "arcade_sdl2.so"};
@@ -42,6 +42,7 @@ CoreConfig::CoreConfig(const std::string &defGraphicFile)
 
 CoreConfig::~CoreConfig()
 {
+    _scoreLogger.saveScores(this->_gameLibManager);
 }
 
 void CoreConfig::reloadLib()

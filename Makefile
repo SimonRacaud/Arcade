@@ -39,6 +39,7 @@ CORE_SRC_FILES = 	main.cpp						\
 					CoreConfig/CoreConfig.cpp		\
 					Core/Core.cpp					\
 					MainMenu/MainMenu.cpp			\
+					Score/ScoreLogger/ScoreLogger.cpp	\
 
 CORE_SRC			= $(addprefix $(DSRC), $(CORE_SRC_FILES))
 CORE_OBJ			= $(CORE_SRC:.cpp=.o)
