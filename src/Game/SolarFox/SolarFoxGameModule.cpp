@@ -235,11 +235,11 @@ void SolarFoxGameModule::generateCoin()
         if (rand() % 100 < 95) {
             this->_goodCoins.push_back(new GameObject(Color::YELLOW, _map.getSize()));
             this->_goodCoins.back()->setPosition(pattern[i]);
-            this->_goodCoins.back()->setAnimation(Color::GREEN, 500000);
+            this->_goodCoins.back()->setAnimation(Color::GREEN, 500);
         } else {
             this->_badCoins.push_back(new GameObject(Color::YELLOW, _map.getSize()));
             this->_badCoins.back()->setPosition(pattern[i]);
-            this->_badCoins.back()->setAnimation(Color::RED, 500000);
+            this->_badCoins.back()->setAnimation(Color::RED, 500);
         }
     }
 }
