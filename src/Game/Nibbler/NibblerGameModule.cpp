@@ -80,6 +80,7 @@ static const std::deque<Color> MAP = {c, c, c, c, c, c, c, c, c, c, c, c, c, c,
 
 static const clock_t COIN_GEN_PERIOD = 5000;
 static const size_t COIN_LIMIT = 10;
+static const size_t COIN_BLINK_FREQ = 500;
 
 static const clock_t LOOP_FREQ = 200;
 
@@ -112,7 +113,7 @@ void NibblerGameModule::refreshGame(bool refreshActions)
     }
     if (refreshActions) {
         if (_coins.size() < COIN_LIMIT && this->_coinGenTimer.shouldRefresh()) {
-            this->generateCoin();
+            //this->generateCoin();
         }
     }
 }
@@ -178,7 +179,7 @@ void NibblerGameModule::generateCoin()
         }
         this->_coins.push_back(new GameObject(Color::YELLOW, _map.getSize()));
         this->_coins.back()->setPosition(position);
-        this->_coins.back()->setAnimation(Color::BLUE, 100000);
+        this->_coins.back()->setAnimation(Color::BLUE, COIN_BLINK_FREQ);
         return;
     }
     std::cerr << "Warning: NibblerGameModule::generateCoin() fail"

@@ -72,9 +72,7 @@ void AbstractGameModule::refresh()
     if (_graphModule == nullptr)
         return;
     try {
-        if (refreshLogic) {
-            this->eventManager(*this->_graphModule);
-        }
+        this->eventManager(*this->_graphModule);
         if (_status == GameStatus::SUCCESS) {
             this->refreshGame(refreshLogic);
         } else if (_status == GameStatus::GAMEOVER) {

@@ -122,7 +122,7 @@ bool GameObject::isCollideCoord(const Vector &pos) const
 void GameObject::setAnimation(Color secondary, size_t freq)
 {
     this->_anim = true;
-    this->_animFreq = freq;
+    this->_animFreq = (freq * CLOCKS_PER_SEC) / 1000;
     this->_colorState = false;
     this->_animColor[0] = _color;
     this->_animColor[1] = secondary;
