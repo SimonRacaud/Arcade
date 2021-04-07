@@ -9,8 +9,8 @@
 
 using namespace arcade;
 
-Core::Core(const std::string &defGraphicFile) :
- _config(defGraphicFile) ,_mainMenu(_config)
+Core::Core(const std::string &defGraphicFile)
+    : _config(defGraphicFile), _mainMenu(_config)
 {
 }
 
@@ -20,7 +20,8 @@ Core::~Core()
 
 void Core::loop()
 {
-    std::shared_ptr<IDisplayModule> selectedGraphic = _config.getSelectedGraphic();
+    std::shared_ptr<IDisplayModule> selectedGraphic =
+        _config.getSelectedGraphic();
     std::shared_ptr<IGameModule> selectedGame = _config.getSelectedGame();
 
     while (_config.getStatus() == CoreConfig::ExitStatus::LOOP) {
@@ -37,18 +38,20 @@ void Core::loop()
             selectedGame->refresh();
         }
         if (selectedGraphic) {
+            selectedGraphic->displayScreen();
+            this->eventManager();
             if (selectedGraphic->isOpen() == false) {
                 this->_config.setStatus(CoreConfig::ExitStatus::SUCCESS);
             }
-            selectedGraphic->displayScreen();
-            this->eventManager();
         }
     }
+    selectedGraphic->close();
 }
 
 void Core::eventManager()
 {
-    std::shared_ptr<IDisplayModule> selectedGraphic = _config.getSelectedGraphic();
+    std::shared_ptr<IDisplayModule> selectedGraphic =
+        _config.getSelectedGraphic();
     std::shared_ptr<IGameModule> selectedGame = _config.getSelectedGame();
 
     if (selectedGraphic == nullptr)
@@ -72,7 +75,6 @@ void Core::eventManager()
         _config.gotoMainMenu();
     }
     if (selectedGraphic->isKeyPress(Key::EXIT)) {
-        selectedGraphic->close();
         _config.setStatus(CoreConfig::ExitStatus::SUCCESS);
     }
 }
