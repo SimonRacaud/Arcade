@@ -154,13 +154,9 @@ std::shared_ptr<IDisplayModule> CoreConfig::getSelectedGraphic()
 std::deque<std::string> CoreConfig::getGameNames()
 {
     std::deque<std::string> names = this->_gameLibManager.getAvailableLibs();
-    size_t idx = 0;
 
     for (std::string &name : names) {
-        idx = name.find_last_of('/');
-        if (idx != std::string::npos) {
-            name = name.substr(idx + 1);
-        }
+        name = extractFilename(name);
     }
     return names;
 }
@@ -168,13 +164,9 @@ std::deque<std::string> CoreConfig::getGameNames()
 std::deque<std::string> CoreConfig::getGraphicNames()
 {
     std::deque<std::string> names = this->_graphLibManager.getAvailableLibs();
-    size_t idx = 0;
 
     for (std::string &name : names) {
-        idx = name.find_last_of('/');
-        if (idx != std::string::npos) {
-            name = name.substr(idx + 1);
-        }
+        name = extractFilename(name);
     }
     return names;
 }

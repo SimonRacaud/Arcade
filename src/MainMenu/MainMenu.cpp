@@ -67,8 +67,10 @@ MainMenu::MainMenu(CoreConfig &coreConfig) :
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
 
-    _selectedGame = GameNames.at(0);
-    _selectedGraphic = GraphicNames.at(0);
+    if (GameNames.size() != 0 && GraphicNames.size() != 0) {
+        _selectedGame = GameNames.at(0);
+        _selectedGraphic = GraphicNames.at(0);
+    }
 }
 
 MainMenu::~MainMenu() {}

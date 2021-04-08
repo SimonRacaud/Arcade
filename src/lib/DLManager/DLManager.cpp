@@ -42,12 +42,28 @@ std::deque<std::string> const &DLManager<T>::getAvailableLibs() const
  * LibNotFoundException
  * LibLoadingException
  */
-template <class T> std::shared_ptr<T> DLManager<T>::getModule(std::string const &fileName)
+template <class T>
+std::shared_ptr<T> DLManager<T>::getModule(std::string const &filePath)
 {
-    if (_libsLoader.find(fileName) == _libsLoader.end()) {
-        this->generateLoader(fileName);
+    bool loaderExist = false;
+    std::string fileName = extractFilename(filePath);
+
+    for (auto const &pair : _libsLoader) {
+        if (pair.first.find(fileName) != std::string::npos) {
+            loaderExist = true;
+            break;
+        }
     }
-    if (_libsLoader.find(fileName) != _libsLoader.end()) {
+    if (false == loaderExist) {
+        this->generateLoader(fileName);
+        for (auto const &pair : _libsLoader) {
+            if (pair.first.find(fileName) != std::string::npos) {
+                loaderExist = true;
+                break;
+            }
+        }
+    }
+    if (loaderExist) {
         return _libsLoader[fileName]->getInstance();
     } else {
         throw LibLoadingException("&DLManager<T>::getModule Loader not found");

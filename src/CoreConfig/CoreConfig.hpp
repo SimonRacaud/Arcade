@@ -13,6 +13,7 @@
 #include <algorithm>
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
+#include "utility.hpp"
 #include "LibNotFoundException.hpp"
 #include "Score/ScoreLogger/ScoreLogger.hpp"
 

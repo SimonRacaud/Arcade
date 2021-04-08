@@ -12,5 +12,6 @@
 #include <string>
 
 std::string &trim(std::string &s);
+std::string extractFilename(std::string const &filepath);
 
 #endif //UTILITY_HPP_

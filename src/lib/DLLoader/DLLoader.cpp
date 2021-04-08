@@ -22,6 +22,7 @@ DL::DLLoader<T>::DLLoader(std::string const &filepath)
 template <typename T>
 DL::DLLoader<T>::~DLLoader(void)
 {
+    this->_instance.reset();
     if (this->_lib != nullptr) {
         dlclose(this->_lib);
     }
@@ -30,17 +31,7 @@ DL::DLLoader<T>::~DLLoader(void)
 template <typename T>
 void DL::DLLoader<T>::setName(const std::string &filepath)
 {
-    const size_t posPath = filepath.find_last_of('/');
-    const size_t posExt = filepath.find_last_of('.');
-    std::string result = filepath;
-
-    if (posExt != std::string::npos) {
-        result = filepath.substr(0, posExt);
-    }
-    if (posPath != std::string::npos) {
-        result = result.substr(posPath);
-    }
-    this->_name = result;
+    this->_name = extractFilename(filepath);
 }
 
 template <typename T>
@@ -56,17 +47,15 @@ template <typename T>
 void DL::DLLoader<T>::fetchInstance(void)
 {
     DLLoader::entryPoint func;
-    std::shared_ptr<T> uptr;
 
     func = (DLLoader::entryPoint)dlsym(this->_lib, this->_entryPointName.c_str());
     if (func == nullptr) {
         throw LibLoadingException("Lib entry point not found");
     }
-    uptr = (*func)();
-    if (uptr.get() == nullptr) {
+    this->_instance = (*func)();
+    if (this->_instance.get() == nullptr) {
         throw LibLoadingException("Fail to get lib module");
     }
-    this->_instance = uptr;
 }
 
 

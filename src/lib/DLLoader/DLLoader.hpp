@@ -16,6 +16,7 @@
 #include "LibLoadingException.hpp"
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
+#include "utility.hpp"
 
 namespace DL
 {
@@ -42,6 +43,5 @@ namespace DL
         const std::string _entryPointName;
     };
 }
-
 
 #endif //DLLOADER_H
