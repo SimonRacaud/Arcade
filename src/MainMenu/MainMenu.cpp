@@ -56,6 +56,7 @@ const std::deque<std::string> MainMenu::_settings = {
 MainMenu::MainMenu(CoreConfig &coreConfig) :
     _coreConfig(coreConfig),
     _textInput("USERNAME"),
+    _gamesScores(coreConfig.getScores()),
     _selectedCategorie("GAMES"),
     _selectedSetting("USERNAME"),
     _selectedPanel(0),
@@ -229,11 +230,19 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
 
 void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
 {
+    std::string highScore("0");
+    std::string score("0");
     std::string username;
 
+    for (auto it = _gamesScores.begin(); it != _gamesScores.end(); it++) {
+        if ((*it)->name.find(_selectedGame) != std::string::npos) {
+            highScore = std::to_string((*it)->highScore);
+            score = std::to_string((*it)->score);
+        }
+    }
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), "SCORE: ");
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 11), "HIGH SCORE: ");
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), "SCORE: " + score);
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 11), "HIGH SCORE: " + highScore);
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 12), "USER: ");
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {

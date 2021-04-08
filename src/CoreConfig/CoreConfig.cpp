@@ -173,6 +173,11 @@ std::deque<std::string> CoreConfig::getGraphicNames()
     return names;
 }
 
+const std::deque<std::shared_ptr<GameScore>> CoreConfig::getScores() const
+{
+    return _scoreLogger.getGameScores();
+}
+
 /** Private **/
 
 void CoreConfig::gotoMainMenu()
