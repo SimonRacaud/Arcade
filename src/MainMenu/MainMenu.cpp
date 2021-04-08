@@ -38,14 +38,14 @@ const std::deque<std::string> MainMenu::CATEGORIE_NAMES = {
 };
 
 const std::deque<std::string> MainMenu::_helpText = {
-    "PAUSE: X",
-    "EXIT: X",
-    "GO TO MENU: X",
-    "RESTART GAME: X",
-    "NEXT GAME: X",
-    "PREV GAME: X",
+    "PAUSE: P",
+    "EXIT: EXIT",
+    "GO TO MENU: Q",
+    "RESTART GAME: R",
+    "NEXT GAME: Z",
+    "PREV GAME: W",
     "NEXT GRAPHIC: X",
-    "PREV GRAPHIC: X"
+    "PREV GRAPHIC: W"
 };
 
 const std::deque<std::string> MainMenu::_settings = {
