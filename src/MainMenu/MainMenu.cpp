@@ -257,7 +257,7 @@ void MainMenu::displayMenu(IDisplayModule &selectedGraphic)
 
 void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
 {
-    const std::string startMsg("PRESS SPACE TO START");
+    const std::string startMsg("PRESS SPACE OR CLICK TO START");
     const std::string studio("Epietch Games");
     const std::string credits("Made by Simon Racaud, Aurelien Joncour and Thomas Jouanolle");
     size_t i = 0;
@@ -267,11 +267,14 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
         i++;
     }
     if (_pressStart) {
-        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(17, 15 + i), startMsg);
+        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(14, 15 + i), startMsg);
     }
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(0, 41), studio);
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(15, 41), credits);
     if (selectedGraphic.isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
+        _isLoading = false;
+    }
+    if (selectedGraphic.isMouseClicked()) {
         _isLoading = false;
     }
 }
