@@ -47,7 +47,7 @@ $> ./arcade lib/arcade_{lib_name}
 # Documentation
 
 - Interfaces:  
-[Interfaces_Documentaion]()
+[Interfaces_Documentaion](./doc/Implementation.odg)
 
 - Class Diagram:  
 ![Class_Diagram](.github/img/)
