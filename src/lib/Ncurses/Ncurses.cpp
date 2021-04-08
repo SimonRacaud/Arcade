@@ -117,6 +117,7 @@ void Ncurses::open()
 
 void Ncurses::close()
 {
+    _ch = -1;
     if (!_isOpen)
         return;
     if (endwin() == ERR)

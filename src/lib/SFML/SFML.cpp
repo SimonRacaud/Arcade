@@ -103,6 +103,7 @@ void SFML::open()
 
 void SFML::close()
 {
+    _keyStack.clear();
     _isOpen = false;
     _window->close();
     delete _window;
