@@ -38,14 +38,14 @@ const std::deque<std::string> MainMenu::CATEGORIE_NAMES = {
 };
 
 const std::deque<std::string> MainMenu::_helpText = {
-    "PAUSE: X",
-    "EXIT: X",
-    "GO TO MENU: X",
-    "RESTART GAME: X",
-    "NEXT GAME: X",
-    "PREV GAME: X",
+    "PAUSE: P",
+    "EXIT: EXIT",
+    "GO TO MENU: Q",
+    "RESTART GAME: R",
+    "NEXT GAME: Z",
+    "PREV GAME: W",
     "NEXT GRAPHIC: X",
-    "PREV GRAPHIC: X"
+    "PREV GRAPHIC: W"
 };
 
 const std::deque<std::string> MainMenu::_settings = {
@@ -259,7 +259,7 @@ void MainMenu::displayMenu(IDisplayModule &selectedGraphic)
 
 void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
 {
-    const std::string startMsg("PRESS SPACE TO START");
+    const std::string startMsg("PRESS SPACE OR CLICK TO START");
     const std::string studio("Epietch Games");
     const std::string credits("Made by Simon Racaud, Aurelien Joncour and Thomas Jouanolle");
     size_t i = 0;
@@ -269,11 +269,14 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
         i++;
     }
     if (_pressStart) {
-        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(17, 15 + i), startMsg);
+        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(14, 15 + i), startMsg);
     }
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(0, 41), studio);
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(15, 41), credits);
     if (selectedGraphic.isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
+        _isLoading = false;
+    }
+    if (selectedGraphic.isMouseClicked()) {
         _isLoading = false;
     }
 }

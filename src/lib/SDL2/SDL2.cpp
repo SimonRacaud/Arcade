@@ -117,6 +117,7 @@ void SDL2::open()
 
 void SDL2::close()
 {
+    _keyStack.clear();
     _isOpen = false;
     SDL_DestroyWindow(_window);
     if (_font) {
