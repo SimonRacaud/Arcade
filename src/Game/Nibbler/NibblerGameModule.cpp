@@ -113,7 +113,7 @@ void NibblerGameModule::refreshGame(bool refreshActions)
     }
     if (refreshActions) {
         if (_coins.size() < COIN_LIMIT && this->_coinGenTimer.shouldRefresh()) {
-            //this->generateCoin();
+            this->generateCoin();
         }
     }
 }
@@ -140,6 +140,7 @@ void NibblerGameModule::refreshLogic()
         delete *(_coins.begin() + coinIdx);
         _coins.erase(_coins.begin() + coinIdx);
         this->increaseScore(10);
+        this->evalHighScore();
         this->_player.increaseLength();
         if (_coins.empty()) {
             this->generateCoin();
