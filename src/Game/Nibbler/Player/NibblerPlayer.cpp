@@ -40,7 +40,7 @@ void NibblerPlayer::increaseLength()
     if (_positions.size() >= 2) {
         Vector delta = _positions[_positions.size() - 1]
             - _positions[_positions.size() - 2];
-        Vector newBlock = _positions.back() + delta;
+        Vector newBlock = _positions.back() - delta;
 
         _positions.push_back(newBlock);
     } else {
@@ -73,6 +73,7 @@ ssize_t NibblerPlayer::isCollideWith(const std::deque<GameObject *> &coins) cons
 void NibblerPlayer::reset()
 {
     this->_speed = DEF_SPEED;
+    this->_movment = Direction::UP;
     this->resetPosition();
 }
 
