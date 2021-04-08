@@ -59,7 +59,8 @@ MainMenu::MainMenu(CoreConfig &coreConfig) :
     _selectedSetting("USERNAME"),
     _selectedPanel(0),
     _isLoading(true),
-    _animationTimer(1000)
+    _animationTimer(500),
+    _pressStart(true)
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
@@ -242,7 +243,7 @@ void MainMenu::displayMenu(IDisplayModule &selectedGraphic)
     displaySecondPanel(selectedGraphic);
     displayThirdPanel(selectedGraphic);
 }
-
+#include <iostream>
 void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
 {
     const std::string startMsg("PRESS SPACE TO START");
@@ -254,10 +255,9 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
         selectedGraphic.putText(IDisplayModule::Color::BLUE, Coord(3, 10 + i), line);
         i++;
     }
-    // if (_animationTimer.shouldRefresh()) {
-    //     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(17, 15 + i), startMsg);
-    //     std::cout << "Refresh" << std::endl;
-    // }
+    if (_pressStart) {
+        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(17, 15 + i), startMsg);
+    }
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(0, 41), studio);
     selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(15, 41), credits);
     if (selectedGraphic.isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
@@ -270,14 +270,17 @@ void MainMenu::refresh()
     std::shared_ptr<IDisplayModule> selectedGraphic = _coreConfig.getSelectedGraphic();
     std::string categoriesName;
 
+    if (_animationTimer.shouldRefresh()) {
+        _pressStart = !_pressStart;
+    }
     if (!selectedGraphic)
         return;
     if (_isLoading) {
         displayLoading(*selectedGraphic);
     } else {
         displayMenu(*selectedGraphic);
+        eventHandler();
     }
-    eventHandler();
 }
 
 /*

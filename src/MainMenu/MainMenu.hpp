@@ -52,6 +52,7 @@ namespace arcade
                 size_t _selectedPanel;
                 bool _isLoading;
                 Timer _animationTimer;
+                bool _pressStart;
     };
 } // namespace arcade
 
