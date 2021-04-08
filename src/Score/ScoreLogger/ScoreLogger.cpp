@@ -44,8 +44,9 @@ void ScoreLogger::saveScores(
     for (std::string const &libName : libs) {
         try {
             auto const &gameModule = gameDLManager.getModule(libName);
-            file << libName << "," << gameModule->getScore() << ","
-                 << gameModule->getScoreHigh() << "\n";
+            GameScore gs = this->getGameScore(libName, gameModule, _data);
+
+            file << gs.name << "," << gs.score << "," << gs.highScore << "\n";
         } catch (BaseException const &e) {
             std::cerr << "ScoreLogger::saveScores : " << e.what() << std::endl;
         }
@@ -53,7 +54,8 @@ void ScoreLogger::saveScores(
     file.close();
 }
 
-std::deque<std::shared_ptr<GameScore>> const &ScoreLogger::getGameScores() const
+std::deque<std::shared_ptr<GameScore>> const &
+ScoreLogger::getGameScores() const
 {
     return _data;
 }
@@ -103,4 +105,26 @@ std::shared_ptr<GameScore> arcade::ScoreLogger::parseFileLine(
         throw ScoreException("Score log load : invalid score values");
     }
     return parsedLine;
+}
+
+GameScore ScoreLogger::getGameScore(std::string const &libName,
+    std::shared_ptr<IGameModule> const &gameModule,
+    const std::deque<std::shared_ptr<GameScore>> &log)
+{
+    GameScore gs;
+
+    gs.name = libName;
+    gs.score = gameModule->getScore();
+    gs.highScore = gameModule->getScoreHigh();
+    auto it =
+        std::find_if(log.begin(), log.end(), [libName](auto const &gameScore) {
+            return gameScore->name == libName;
+        });
+    if (it != log.end()) {
+        if ((*it)->score > gs.score)
+            gs.score = (*it)->score;
+        if ((*it)->highScore > gs.highScore)
+            gs.highScore = (*it)->highScore;
+    }
+    return gs;
 }
