@@ -39,6 +39,10 @@ namespace arcade
             std::string const &filename);
         std::shared_ptr<GameScore> parseFileLine(std::string const &line);
 
+        GameScore getGameScore(std::string const &libName,
+            std::shared_ptr<IGameModule> const &gameModule,
+            std::deque<std::shared_ptr<GameScore>> const &log);
+
         std::deque<std::shared_ptr<GameScore>> _data;
     };
 } // namespace arcade
