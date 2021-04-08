@@ -55,12 +55,14 @@ const std::deque<std::string> MainMenu::_settings = {
 
 MainMenu::MainMenu(CoreConfig &coreConfig) :
     _coreConfig(coreConfig),
+    _textInput("USERNAME"),
     _selectedCategorie("GAMES"),
     _selectedSetting("USERNAME"),
     _selectedPanel(0),
     _isLoading(true),
     _animationTimer(500),
-    _pressStart(true)
+    _pressStart(true),
+    _eventLocked(false)
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
@@ -155,7 +157,8 @@ void MainMenu::eventHandler()
         }
         if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
             if (std::string(_settings.at(0)).find(_selectedSetting) != std::string::npos) {
-                //TODO USERNAME
+                _textInput.refresh(*selectedGraphic.get());
+                _eventLocked = true;
             }
             if (std::string(_settings.at(1)).find(_selectedSetting) != std::string::npos) {
                 if (selectedGraphic->isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
@@ -224,10 +227,18 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
 
 void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
 {
+    std::string username;
+
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), "SCORE: ");
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 11), "HIGH SCORE: ");
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 12), "USER: ");
+    }
+    if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
+        username = _textInput.getInputText();
+        if (username.size()) {
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username);
+        }
     }
 }
 
@@ -243,7 +254,7 @@ void MainMenu::displayMenu(IDisplayModule &selectedGraphic)
     displaySecondPanel(selectedGraphic);
     displayThirdPanel(selectedGraphic);
 }
-#include <iostream>
+
 void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
 {
     const std::string startMsg("PRESS SPACE TO START");
@@ -265,11 +276,22 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
     }
 }
 
+std::string MainMenu::getUsername() const
+{
+    return _textInput.getInputText();
+}
+
+bool MainMenu::eventLocked() const
+{
+    return _eventLocked;
+}
+
 void MainMenu::refresh()
 {
     std::shared_ptr<IDisplayModule> selectedGraphic = _coreConfig.getSelectedGraphic();
     std::string categoriesName;
 
+    _eventLocked = false;
     if (_animationTimer.shouldRefresh()) {
         _pressStart = !_pressStart;
     }
@@ -282,34 +304,3 @@ void MainMenu::refresh()
         eventHandler();
     }
 }
-
-/*
-//selectedGraphic.putRectFill(IDisplayModule::Color::WHITE, Coord(44, 38), Coord(0, 0));
-selectedGraphic.putText(IDisplayModule::Color::BLUE, Coord(3, 9), std::string("|_$$______|_$$__\\_$$__|_$$_____|_$$___|_$$______|_$$$$|_$$|_$$__\\_$$|_$$__\\_$)"));
-selectedGraphic.putText(IDisplayModule::Color::BLUE, Coord(0, 20), std::string("________________________________________________________________________________________ "));
-*/
-
-/*
-void MainMenu::rotateCategorie(bool rev)
-{
-    const std::deque<std::string> &categorieNames = CATEGORIE_NAMES;
-    std::string selectedName = _selectedCategorie;
-    auto it = std::find_if(categorieNames.begin(), categorieNames.end(),
-        [selectedName](std::string const &name) {
-            return name.find(selectedName) != std::string::npos;
-    });
-    if (rev) {
-        if (it == categorieNames.end() - 1) {
-            _selectedCategorie = categorieNames.front();
-        } else {
-            _selectedCategorie = *(it + 1);
-        }
-    } else {
-        if (it == categorieNames.begin()) {
-            _selectedCategorie = categorieNames.back();
-        } else {
-            _selectedCategorie = *(it - 1);
-        }
-    }
-}
-*/

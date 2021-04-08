@@ -10,6 +10,7 @@
 
 #include "../Timer/Timer.hpp"
 #include "../CoreConfig/CoreConfig.hpp"
+#include "./TextInput/TextInput.hpp"
 #include <string>
 #include <unistd.h>
 #include <vector>
@@ -22,6 +23,8 @@ namespace arcade
             MainMenu(CoreConfig &coreConfig);
             virtual ~MainMenu();
 
+            std::string getUsername() const;
+            bool eventLocked() const;
             void refresh();
 
             protected:
@@ -45,6 +48,7 @@ namespace arcade
                 static const std::deque<std::string> _settings;
 
                 CoreConfig &_coreConfig;
+                TextInput _textInput;
                 std::string _selectedCategorie;
                 std::string _selectedGame;
                 std::string _selectedGraphic;
@@ -53,6 +57,7 @@ namespace arcade
                 bool _isLoading;
                 Timer _animationTimer;
                 bool _pressStart;
+                bool _eventLocked;
     };
 } // namespace arcade
 

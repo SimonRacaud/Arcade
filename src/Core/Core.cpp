@@ -35,6 +35,7 @@ void Core::loop()
             _mainMenu.refresh();
             selectedGraphic = _config.getSelectedGraphic();
         } else {
+            selectedGame->setUsername(_mainMenu.getUsername());
             selectedGame->refresh();
         }
         if (selectedGraphic) {
@@ -59,23 +60,25 @@ void Core::eventManager()
 
     if (selectedGraphic == nullptr)
         return;
-    if (selectedGraphic->isKeyPress(Key::NEXT_GAME)) {
+    if (!_mainMenu.eventLocked()) {
+        if (selectedGraphic->isKeyPress(Key::NEXT_GAME)) {
         _config.rotateGameLib(false);
-    }
-    if (selectedGraphic->isKeyPress(Key::PREV_GAME)) {
-        _config.rotateGameLib(true);
-    }
-    if (selectedGraphic->isKeyPress(Key::NEXT_LIB)) {
-        _config.rotateGraphLib(false);
-    }
-    if (selectedGraphic->isKeyPress(Key::PREV_LIB)) {
-        _config.rotateGraphLib(true);
-    }
-    if (selectedGraphic->isKeyPress(Key::RESTART_GAME)) {
-        _config.resetGame();
-    }
-    if (selectedGame && selectedGraphic->isKeyPress(Key::MENU)) {
-        _config.gotoMainMenu();
+        }
+        if (selectedGraphic->isKeyPress(Key::PREV_GAME)) {
+            _config.rotateGameLib(true);
+        }
+        if (selectedGraphic->isKeyPress(Key::NEXT_LIB)) {
+            _config.rotateGraphLib(false);
+        }
+        if (selectedGraphic->isKeyPress(Key::PREV_LIB)) {
+            _config.rotateGraphLib(true);
+        }
+        if (selectedGraphic->isKeyPress(Key::RESTART_GAME)) {
+            _config.resetGame();
+        }
+        if (selectedGame && selectedGraphic->isKeyPress(Key::MENU)) {
+            _config.gotoMainMenu();
+        }
     }
     if (selectedGraphic->isKeyPress(Key::EXIT)) {
         _config.setStatus(CoreConfig::ExitStatus::SUCCESS);
