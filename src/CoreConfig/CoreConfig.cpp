@@ -43,6 +43,8 @@ CoreConfig::CoreConfig(const std::string &defGraphicFile)
 CoreConfig::~CoreConfig()
 {
     _scoreLogger.saveScores(this->_gameLibManager);
+    _selectedGraphic.reset();
+    _selectedGame.reset();
 }
 
 void CoreConfig::reloadLib()
