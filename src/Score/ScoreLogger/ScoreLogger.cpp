@@ -27,7 +27,8 @@ void ScoreLogger::loadScores(const std::string &filename)
     try {
         this->_data = this->readParseFile(filename);
     } catch (ScoreException const &e) {
-        this->_data.push_back("no scores.");
+        this->_data.clear();
+        std::cerr << "Warning: Score log loading fail" << std::endl;
     }
 }
 
@@ -42,7 +43,7 @@ void ScoreLogger::saveScores(
     }
     for (std::string const &libName : libs) {
         try {
-            auto const& gameModule = gameDLManager.getModule(libName);
+            auto const &gameModule = gameDLManager.getModule(libName);
             file << libName << "," << gameModule->getScore() << ","
                  << gameModule->getScoreHigh() << "\n";
         } catch (BaseException const &e) {
@@ -52,19 +53,19 @@ void ScoreLogger::saveScores(
     file.close();
 }
 
-std::deque<std::string> const &ScoreLogger::getGameScores() const
+std::deque<std::shared_ptr<GameScore>> const &ScoreLogger::getGameScores() const
 {
     return _data;
 }
 
 /* Private */
 
-const std::deque<std::string> ScoreLogger::readParseFile(
+std::deque<std::shared_ptr<GameScore>> ScoreLogger::readParseFile(
     const std::string &filename)
 {
     std::ifstream file(filename);
     std::string line;
-    std::deque<std::string> result;
+    std::deque<std::shared_ptr<GameScore>> result;
 
     if (file.is_open() == false) {
         throw ScoreException("Score file not found or unavailable");
@@ -76,22 +77,30 @@ const std::deque<std::string> ScoreLogger::readParseFile(
     return result;
 }
 
-std::string arcade::ScoreLogger::parseFileLine(const std::string &line)
+std::shared_ptr<GameScore> arcade::ScoreLogger::parseFileLine(
+    const std::string &line)
 {
     std::stringstream sbuf(line);
     std::deque<std::string> splitLine;
+    std::shared_ptr<GameScore> parsedLine = std::make_shared<GameScore>();
 
     for (size_t i = 0; sbuf.good() && i < (COLUMNS + 1); i++) {
         std::string substr;
         getline(sbuf, substr, ',');
         if (substr.size() > MAX_BLOCK_SIZE) {
-            throw ScoreException("too long score case");
+            throw ScoreException("Score log load : too much score cases");
         }
         splitLine.push_back(substr);
     }
     if (splitLine.size() != COLUMNS) {
-        throw ScoreException("invalid columns size");
+        throw ScoreException("Score log load : invalid columns size");
     }
-    return splitLine[0] + ": Score " + splitLine[1] + ", HScore "
-        + splitLine[2];
+    parsedLine->name = splitLine[0];
+    try {
+        parsedLine->score = std::stoul(splitLine[1]);
+        parsedLine->highScore = std::stoul(splitLine[2]);
+    } catch (std::invalid_argument const &e) {
+        throw ScoreException("Score log load : invalid score values");
+    }
+    return parsedLine;
 }

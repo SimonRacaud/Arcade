@@ -17,6 +17,12 @@
 
 namespace arcade
 {
+    struct GameScore {
+        std::string name;
+        size_t score;
+        size_t highScore;
+    };
+
     class ScoreLogger {
       public:
         ScoreLogger(std::string const &filename = "scores.log");
@@ -26,14 +32,14 @@ namespace arcade
         void saveScores(DL::DLManager<IGameModule> &gameDLManager,
             std::string const &filename = "scores.log");
 
-        std::deque<std::string> const &getGameScores() const;
+        std::deque<std::shared_ptr<GameScore>> const &getGameScores() const;
 
       private:
-        std::deque<std::string> const readParseFile(
+        std::deque<std::shared_ptr<GameScore>> readParseFile(
             std::string const &filename);
-        std::string parseFileLine(std::string const &line);
+        std::shared_ptr<GameScore> parseFileLine(std::string const &line);
 
-        std::deque<std::string> _data;
+        std::deque<std::shared_ptr<GameScore>> _data;
     };
 } // namespace arcade
 
