@@ -119,12 +119,13 @@ void SDL2::close()
 {
     _keyStack.clear();
     _isOpen = false;
+    SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
     if (_font) {
         TTF_CloseFont(_font);
     }
-    SDL_Quit();
     TTF_Quit();
+    SDL_Quit();
 }
 
 bool SDL2::isOpen() const
