@@ -31,6 +31,10 @@ void Core::loop()
             selectedGraphic->clearScreen();
             selectedGraphic->refreshScreen();
         }
+        if (selectedGraphic->isOpen() == false) {
+            this->_config.setStatus(CoreConfig::ExitStatus::SUCCESS);
+            continue;
+        }
         if (selectedGame == nullptr) {
             _mainMenu.refresh();
             selectedGraphic = _config.getSelectedGraphic();
@@ -47,7 +51,7 @@ void Core::loop()
             }
         }
     }
-    if (selectedGraphic) {
+    if (selectedGraphic && selectedGraphic->isOpen()) {
         selectedGraphic->close();
     }
 }

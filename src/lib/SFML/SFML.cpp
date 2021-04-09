@@ -192,7 +192,8 @@ void SFML::refreshEvent()
 
     while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-            _isOpen = false;
+            this->close();
+            return;
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             _isMouseClicked = true;
