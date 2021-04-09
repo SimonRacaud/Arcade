@@ -55,7 +55,7 @@ std::shared_ptr<T> DLManager<T>::getModule(std::string const &filePath)
         }
     }
     if (false == loaderExist) {
-        this->generateLoader(fileName);
+        this->generateLoader(fileName, filePath);
         for (auto const &pair : _libsLoader) {
             if (pair.first.find(fileName) != std::string::npos) {
                 loaderExist = true;
@@ -105,13 +105,13 @@ void DLManager<T>::fetchLibFiles(std::deque<std::string> const &libNames)
  * LibNotFoundException
  */
 template <class T>
-void DLManager<T>::generateLoader(std::string const &fileName)
+void DLManager<T>::generateLoader(std::string const &fileName,
+std::string const &filePath)
 {
     auto it = std::find_if(_libFilePath.begin(), _libFilePath.end(),
-        [fileName](std::string const &path) {
-            return fileName.compare(path) == 0
-            || fileName.compare(&path[2]) == 0
-            || fileName.compare(&path[6]) == 0;
+        [filePath](std::string const &path) {
+            return filePath.compare(path) == 0
+            || filePath.compare(&path[2]) == 0;
         });
 
     if (it != _libFilePath.end()) {
