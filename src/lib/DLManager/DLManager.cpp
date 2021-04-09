@@ -107,9 +107,12 @@ void DLManager<T>::fetchLibFiles(std::deque<std::string> const &libNames)
 template <class T>
 void DLManager<T>::generateLoader(std::string const &fileName)
 {
+    std::cerr << fileName << std::endl;
     auto it = std::find_if(_libFilePath.begin(), _libFilePath.end(),
         [fileName](std::string const &path) {
-            return path.find(fileName) != std::string::npos;
+            return fileName.compare(path) == 0
+            || fileName.compare(&path[2]) == 0
+            || fileName.compare(&path[6]) == 0;
         });
 
     if (it != _libFilePath.end()) {
