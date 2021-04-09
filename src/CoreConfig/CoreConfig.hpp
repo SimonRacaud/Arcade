@@ -58,6 +58,7 @@ namespace arcade
             std::deque<std::string> getGameNames();
             std::deque<std::string> getGraphicNames();
             const std::deque<std::shared_ptr<GameScore>> getScores() const;
+            void updateScores();
 
         protected:
             static const std::deque<std::string> GAME_LIB_NAMES;
