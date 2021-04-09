@@ -157,10 +157,10 @@ void AbstractGameModule::eventManager(arcade::IDisplayModule &displayModule)
 
 void AbstractGameModule::displayInfo()
 {
-    this->_graphModule->putText(Color::WHITE,
-    {-ORIGIN_X, -ORIGIN_Y}, "Username : " + this->_username);
-    this->_graphModule->putText(Color::WHITE,
-    {-ORIGIN_X, -ORIGIN_Y + 1}, "Score : " + std::to_string(this->getScore()));
-    this->_graphModule->putText(Color::WHITE,
-    {-ORIGIN_X, -ORIGIN_Y + 2}, "High Score : " + std::to_string(this->getScoreHigh()));
+    this->_graphModule->putText(Color::RED,
+    {PANEL_X, PANEL_Y}, "Username : " + this->_username);
+    this->_graphModule->putText(Color::RED,
+    {PANEL_X, PANEL_Y + 1}, "Score : " + std::to_string(this->getScore()));
+    this->_graphModule->putText(Color::RED,
+    {PANEL_X, PANEL_Y + 2}, "High Score : " + std::to_string(this->getScoreHigh()));
 }

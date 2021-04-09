@@ -81,7 +81,6 @@ const std::map<arcade::IDisplayModule::KeyList, sf::Keyboard::Key> SFML::_key =
 SFML::SFML() :
  _isMouseClicked(false), _isOpen(false),
  _scale(SCALE_X, SCALE_Y),
- _origin(ORIGIN_X * SCALE_X, ORIGIN_Y * SCALE_Y),
  _textSize(TEXT_SIZE)
 {
 }
@@ -126,7 +125,7 @@ void SFML::putRectFill(Color color, arcade::Coord size, arcade::Coord pos)
     rectangle.setSize(
         sf::Vector2f(size.x * _scale.x, size.y * _scale.y));
     rectangle.setPosition(
-        sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
+        sf::Vector2f(pos.x * _scale.x, pos.y * _scale.y));
     rectangle.setFillColor(_color.at(color));
     _window->draw(rectangle);
 }
@@ -138,7 +137,7 @@ void SFML::putRectOutline(Color color, Coord size, Coord pos)
     rectangle.setSize(
         sf::Vector2f(size.x * _scale.x, size.y * _scale.y));
     rectangle.setPosition(
-        sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
+        sf::Vector2f(pos.x * _scale.x, pos.y * _scale.y));
     rectangle.setOutlineColor(_color.at(color));
     rectangle.setOutlineThickness(_scale.x);
     rectangle.setFillColor(sf::Color(0, 0, 0, 0));
@@ -151,7 +150,7 @@ void SFML::putCircle(Color color, Coord pos, size_t radius)
 
     circle.setRadius((float)radius);
     circle.setPosition(
-        sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
+        sf::Vector2f(pos.x * _scale.x, pos.y * _scale.y));
     circle.setFillColor(_color.at(color));
     _window->draw(circle);
 }
@@ -165,7 +164,7 @@ void SFML::putText(Color color, Coord pos, std::string const &value)
     text.setCharacterSize(_textSize);
     text.setFillColor(_color.at(color));
     text.setPosition(
-        sf::Vector2f(_origin.x + pos.x * _scale.x, _origin.y + pos.y * _scale.y));
+        sf::Vector2f(pos.x * _scale.x, pos.y * _scale.y));
     _window->draw(text);
 }
 

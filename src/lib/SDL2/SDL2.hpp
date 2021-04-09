@@ -45,7 +45,6 @@ class SDL2 : public IDisplayModule {
         bool _isMouseClicked;
         bool _isOpen;
         Vector _scale;
-        Vector _origin;
         size_t _textSize;
         TTF_Font *_font;
         static const std::map<Color, SDL_Color> _color;

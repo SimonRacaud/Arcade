@@ -50,7 +50,6 @@ class Ncurses : public IDisplayModule {
         WINDOW *_window;
         int _ch;
         Vector _scale;
-        Vector _origin;
         size_t _textSize;
         static const std::map<Color, short> _caseColor;
         static const std::map<Color, short> _textColor;

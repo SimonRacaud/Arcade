@@ -8,8 +8,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#define ORIGIN_X 4
-#define ORIGIN_Y 4
+#define MAP_MAX_WIDTH 40
+#define PANEL_X MAP_MAX_WIDTH + 1
+#define PANEL_Y 2
 #define SCALE_X 20
 #define SCALE_Y 20
 #define TEXT_SIZE 17 //20 FOR ARIAL
