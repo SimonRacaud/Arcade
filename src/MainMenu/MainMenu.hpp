@@ -49,6 +49,7 @@ namespace arcade
 
                 CoreConfig &_coreConfig;
                 TextInput _textInput;
+                std::deque<std::shared_ptr<GameScore>> _gamesScores;
                 std::string _selectedCategorie;
                 std::string _selectedGame;
                 std::string _selectedGraphic;

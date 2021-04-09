@@ -25,7 +25,7 @@ class Ncurses : public IDisplayModule {
         ~Ncurses();
         Ncurses();
 
-        void open();
+        void open(Coord screenSize, Coord screenScale);
         void close();
         bool isOpen() const;
 

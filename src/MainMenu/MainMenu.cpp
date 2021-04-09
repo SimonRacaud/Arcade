@@ -45,7 +45,8 @@ const std::deque<std::string> MainMenu::_helpText = {
     "NEXT GAME: Z",
     "PREV GAME: W",
     "NEXT GRAPHIC: X",
-    "PREV GRAPHIC: W"
+    "PREV GRAPHIC: W",
+    "MENU VALIDATION: SPACE"
 };
 
 const std::deque<std::string> MainMenu::_settings = {
@@ -56,6 +57,7 @@ const std::deque<std::string> MainMenu::_settings = {
 MainMenu::MainMenu(CoreConfig &coreConfig) :
     _coreConfig(coreConfig),
     _textInput("USERNAME"),
+    _gamesScores(coreConfig.getScores()),
     _selectedCategorie("GAMES"),
     _selectedSetting("USERNAME"),
     _selectedPanel(0),
@@ -192,6 +194,7 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
+    size_t count = 0;
 
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
         for (auto i = GameNames.begin(); i != GameNames.end(); i++) {
@@ -222,25 +225,34 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
     }
     if (std::string("HELP").find(_selectedCategorie) != std::string::npos) {
         for (auto i = _helpText.begin(); i != _helpText.end(); i++) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - _helpText.begin()), *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + count), *i);
+            count += 1;
         }
     }
 }
 
 void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
 {
+    std::string highScore("0");
+    std::string score("0");
     std::string username;
 
+    for (auto it = _gamesScores.begin(); it != _gamesScores.end(); it++) {
+        if ((*it)->name.find(_selectedGame) != std::string::npos) {
+            highScore = std::to_string((*it)->highScore);
+            score = std::to_string((*it)->score);
+        }
+    }
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), "SCORE: ");
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 11), "HIGH SCORE: ");
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), "SCORE: " + score);
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 11), "HIGH SCORE: " + highScore);
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 12), "USER: ");
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         username = _textInput.getInputText();
-        if (username.size()) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username);
-        }
+        //if (username.size()) {
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
+        //}
     }
 }
 
@@ -297,6 +309,8 @@ void MainMenu::refresh()
     std::string categoriesName;
 
     _eventLocked = false;
+    _coreConfig.updateScores();
+    _gamesScores = _coreConfig.getScores();
     if (_animationTimer.shouldRefresh()) {
         _pressStart = !_pressStart;
     }

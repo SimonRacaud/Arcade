@@ -27,7 +27,7 @@ CoreConfig::CoreConfig(const std::string &defGraphicFile)
         try {
             this->_selectedGraphic =
                 this->_graphLibManager.getModule(defGraphicFile);
-            this->_selectedGraphic->open();
+            this->_selectedGraphic->open(Vector(W_WIDTH, W_HEIGH), Vector(SCALE_X, SCALE_Y));
             this->_selectedGraphicName = defGraphicFile;
         } catch (LibNotFoundException const &e) {
             std::cerr << "Error: " << e.what() << std::endl;
@@ -123,7 +123,7 @@ void CoreConfig::selectGraphic(std::string const &name)
         if (this->_selectedGraphic)
             this->_selectedGraphic->close();
         this->_selectedGraphic = displayMod;
-        this->_selectedGraphic->open();
+        this->_selectedGraphic->open(Vector(W_WIDTH, W_HEIGH), Vector(SCALE_X, SCALE_Y));
         this->_selectedGraphicName = name;
         if (this->_selectedGame) {
             this->_selectedGame->setDisplayModule(*displayMod);
@@ -171,6 +171,11 @@ std::deque<std::string> CoreConfig::getGraphicNames()
         name = extractFilename(name);
     }
     return names;
+}
+
+const std::deque<std::shared_ptr<GameScore>> CoreConfig::getScores() const
+{
+    return _scoreLogger.getGameScores();
 }
 
 /** Private **/
@@ -256,4 +261,10 @@ void CoreConfig::rotateGameLib(bool rev)
             }
         }
     }
+}
+
+void CoreConfig::updateScores()
+{
+    _scoreLogger.saveScores(this->_gameLibManager);
+    _scoreLogger.loadScores("scores.log");
 }

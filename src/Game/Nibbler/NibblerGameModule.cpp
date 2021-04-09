@@ -154,6 +154,7 @@ void NibblerGameModule::reset()
     try {
         _coins.clear();
         this->generateCoin();
+        this->resetScore();
         this->_player.reset();
         this->_status = GameStatus::SUCCESS;
     } catch (BaseException const &e) {

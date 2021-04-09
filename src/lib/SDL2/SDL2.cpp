@@ -90,8 +90,10 @@ SDL2::~SDL2()
 {
 }
 
-void SDL2::open()
+void SDL2::open(Coord screenSize, Coord screenScale)
 {
+    _scale.x = screenScale.x;
+    _scale.y = screenScale.y;
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH, _textSize);
@@ -103,8 +105,8 @@ void SDL2::open()
         WINDOW_NAME,
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        W_WIDTH,
-        W_HEIGH,
+        screenSize.x,
+        screenSize.y,
         SDL_WINDOW_OPENGL
     );
     if (_window == NULL) {

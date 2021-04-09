@@ -20,7 +20,7 @@ namespace arcade
         ~SFML();
         SFML();
 
-        void open();
+        void open(Coord screenSize, Coord screenScale);
         void close();
         bool isOpen() const;
 
@@ -49,7 +49,7 @@ namespace arcade
         sf::Font *_font;
         static const std::map<Color, sf::Color> _color;
         static const std::map<KeyList, sf::Keyboard::Key> _key;
-        sf::RenderWindow *_window;
+        std::unique_ptr<sf::RenderWindow> _window;
     };
 }
 
