@@ -96,7 +96,8 @@ void SFML::open(Coord screenSize, Coord screenScale)
     _scale.y = screenScale.y;
     _font = new sf::Font;
     if (!_font->loadFromFile(FONT_PATH)) {
-        // throw error ?
+        std::cerr << "SFML : The loading "
+                  << "of the font failed !" << std::endl;
     }
     _isOpen = true;
     _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), WINDOW_NAME);

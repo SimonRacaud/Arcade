@@ -103,7 +103,8 @@ void Ncurses::open(Coord screenSize, Coord screenScale)
     (void)screenScale;
     _window = initscr();
     if (_window == NULL)
-        throw DisplayModuleException("The initialization of the window failed !");
+        std::cerr << "Ncurses : The initialization "
+                  << "of the window failed !" << std::endl;
     timeout(1);
     _isOpen = true;
     keypad(_window, true);
@@ -123,7 +124,8 @@ void Ncurses::close()
     if (!_isOpen)
         return;
     if (endwin() == ERR)
-        throw DisplayModuleException("The closing of the window failed !");
+        std::cerr << "Ncurses : The closing "
+                  << "of the window failed !" << std::endl;
     _isOpen = false;
 }
 
@@ -219,8 +221,8 @@ void Ncurses::displayScreen()
     if (_refresh) {
         _refresh = false;
         if (refresh() == ERR)
-            throw DisplayModuleException(
-                "The refreshment of the window failed !");
+            std::cerr << "Ncurses : The refreshment "
+                      << "of the window failed !" << std::endl;
     }
 }
 
@@ -228,7 +230,8 @@ void Ncurses::refreshScreen()
 {
     cbreak();
     if (cbreak() == ERR)
-        throw DisplayModuleException("The unblocking of the getch failed !");
+        std::cerr << "Ncurses : The unblocking "
+                  << "of the getch failed !" << std::endl;
     _ch = wgetch(_window);
 }
 
@@ -237,8 +240,8 @@ void Ncurses::clearScreen()
     if (_timer.shouldRefresh()) {
         _refresh = true;
         if (clear() == ERR)
-            throw DisplayModuleException(
-                "The cleaning of the window failed !");
+            std::cerr << "Ncurses : The cleaning "
+                      << "of the window failed !" << std::endl;
     }
 }
 
