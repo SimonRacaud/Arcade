@@ -194,6 +194,7 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
+    size_t count = 0;
 
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
         for (auto i = GameNames.begin(); i != GameNames.end(); i++) {
@@ -224,7 +225,8 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
     }
     if (std::string("HELP").find(_selectedCategorie) != std::string::npos) {
         for (auto i = _helpText.begin(); i != _helpText.end(); i++) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - _helpText.begin()), *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + count), *i);
+            count += 1;
         }
     }
 }
