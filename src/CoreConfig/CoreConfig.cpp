@@ -262,3 +262,9 @@ void CoreConfig::rotateGameLib(bool rev)
         }
     }
 }
+
+void CoreConfig::updateScores()
+{
+    _scoreLogger.saveScores(this->_gameLibManager);
+    _scoreLogger.loadScores("scores.log");
+}
