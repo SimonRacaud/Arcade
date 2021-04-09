@@ -11,6 +11,7 @@
 #include <deque>
 #include <string>
 #include <algorithm>
+#include "config.h"
 #include "IDisplayModule.hpp"
 #include "IGameModule.hpp"
 #include "utility.hpp"
