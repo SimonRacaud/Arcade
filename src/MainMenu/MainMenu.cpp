@@ -250,9 +250,7 @@ void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         username = _textInput.getInputText();
-        //if (username.size()) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
-        //}
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
     }
 }
 
