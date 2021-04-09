@@ -94,12 +94,13 @@ Ncurses::Ncurses() :
 
 Ncurses::~Ncurses() {}
 
-void Ncurses::open(Coord screenSize)
+void Ncurses::open(Coord screenSize, Coord screenScale)
 {
     short colorList[] = {COLOR_BLACK, COLOR_RED, COLOR_GREEN,
     COLOR_YELLOW, COLOR_BLUE, COLOR_MAGENTA, COLOR_CYAN, COLOR_WHITE};
 
     (void)screenSize;
+    (void)screenScale;
     _window = initscr();
     if (_window == NULL)
         throw DisplayModuleException("The initialization of the window failed !");

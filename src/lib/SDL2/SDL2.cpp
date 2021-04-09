@@ -90,8 +90,10 @@ SDL2::~SDL2()
 {
 }
 
-void SDL2::open(Coord screenSize)
+void SDL2::open(Coord screenSize, Coord screenScale)
 {
+    _scale.x = screenScale.x;
+    _scale.y = screenScale.y;
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH, _textSize);
@@ -119,12 +121,13 @@ void SDL2::close()
 {
     _keyStack.clear();
     _isOpen = false;
+    SDL_DestroyRenderer(_renderer);
     SDL_DestroyWindow(_window);
     if (_font) {
         TTF_CloseFont(_font);
     }
-    SDL_Quit();
     TTF_Quit();
+    SDL_Quit();
 }
 
 bool SDL2::isOpen() const
