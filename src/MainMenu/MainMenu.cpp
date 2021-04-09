@@ -187,9 +187,9 @@ void MainMenu::displayFirstPanel(IDisplayModule &selectedGraphic)
 {
     for (auto i = CATEGORIE_NAMES.begin(); i != CATEGORIE_NAMES.end(); i++) {
         if ((*i).find(_selectedCategorie) != std::string::npos && _selectedPanel == 0) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(2, 10 + i - CATEGORIE_NAMES.begin()), "> " + *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(6, 14 + i - CATEGORIE_NAMES.begin()), "> " + *i);
         } else {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(2, 10 + i - CATEGORIE_NAMES.begin()), *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(6, 14 + i - CATEGORIE_NAMES.begin()), *i);
         }
     }
 }
@@ -203,33 +203,33 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
         for (auto i = GameNames.begin(); i != GameNames.end(); i++) {
             if ((*i).find(_selectedGame) != std::string::npos && _selectedPanel == 1) {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - GameNames.begin()), "> " + *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GameNames.begin()), "> " + *i);
             } else {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - GameNames.begin()), *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GameNames.begin()), *i);
             }
         }
     }
     if (std::string("GRAPHICS").find(_selectedCategorie) != std::string::npos) {
         for (auto i = GraphicNames.begin(); i != GraphicNames.end(); i++) {
             if ((*i).find(_selectedGraphic) != std::string::npos && _selectedPanel == 1) {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - GraphicNames.begin()), "> " + *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GraphicNames.begin()), "> " + *i);
             } else {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - GraphicNames.begin()), *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GraphicNames.begin()), *i);
             }
         }
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         for (auto i = _settings.begin(); i != _settings.end(); i++) {
             if ((*i).find(_selectedSetting) != std::string::npos && _selectedPanel == 1) {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - _settings.begin()), "> " + *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - _settings.begin()), "> " + *i);
             } else {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + i - _settings.begin()), *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - _settings.begin()), *i);
             }
         }
     }
     if (std::string("HELP").find(_selectedCategorie) != std::string::npos) {
         for (auto i = _helpText.begin(); i != _helpText.end(); i++) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(14, 10 + count), *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + count), *i);
             count += 1;
         }
     }
@@ -248,13 +248,13 @@ void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
         }
     }
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), "SCORE: " + score);
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 11), "HIGH SCORE: " + highScore);
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 12), "USER: ");
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 14), "SCORE: " + score);
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 15), "HIGH SCORE: " + highScore);
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 16), "USER: ");
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         username = _textInput.getInputText();
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 14), username + " (select to change)");
     }
 }
 
@@ -263,7 +263,7 @@ void MainMenu::displayMenu(IDisplayModule &selectedGraphic)
     size_t i = 0;
 
     for (std::string line : _menuTitle) {
-        selectedGraphic.putText(IDisplayModule::Color::MAGENTA, Coord(10, 0 + i), line);
+        selectedGraphic.putText(IDisplayModule::Color::MAGENTA, Coord(14, 4 + i), line);
         i++;
     }
     displayFirstPanel(selectedGraphic);
@@ -279,14 +279,14 @@ void MainMenu::displayLoading(IDisplayModule &selectedGraphic)
     size_t i = 0;
 
     for (std::string line : _title) {
-        selectedGraphic.putText(IDisplayModule::Color::BLUE, Coord(3, 10 + i), line);
+        selectedGraphic.putText(IDisplayModule::Color::BLUE, Coord(7, 14 + i), line);
         i++;
     }
     if (_pressStart) {
-        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(14, 15 + i), startMsg);
+        selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(18, 19 + i), startMsg);
     }
-    selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(0, 41), studio);
-    selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(15, 41), credits);
+    selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(4, 45), studio);
+    selectedGraphic.putText(IDisplayModule::Color::WHITE, Coord(19, 45), credits);
     if (selectedGraphic.isKeyPress(IDisplayModule::KeyList::KEY_SPACE)) {
         _isLoading = false;
     }
