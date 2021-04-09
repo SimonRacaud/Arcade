@@ -90,7 +90,7 @@ SFML::~SFML()
 {
 }
 
-void SFML::open()
+void SFML::open(Coord screenSize)
 {
     _font = new sf::Font;
     if (!_font->loadFromFile(FONT_PATH)) {
@@ -98,7 +98,7 @@ void SFML::open()
     }
     _isOpen = true;
     _window =
-        new sf::RenderWindow(sf::VideoMode(W_WIDTH, W_HEIGH), WINDOW_NAME);
+        new sf::RenderWindow(sf::VideoMode(screenSize.x, screenSize.y), WINDOW_NAME);
 }
 
 void SFML::close()

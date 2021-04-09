@@ -86,7 +86,7 @@ namespace arcade
 
         virtual ~IDisplayModule() = default;
 
-        virtual void open() = 0;
+        virtual void open(Coord screenSize) = 0;
         virtual void close() = 0;
         virtual bool isOpen() const = 0;
 

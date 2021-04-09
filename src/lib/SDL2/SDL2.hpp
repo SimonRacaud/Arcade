@@ -21,7 +21,7 @@ class SDL2 : public IDisplayModule {
         SDL2();
         ~SDL2();
 
-        void open();
+        void open(Coord screenSize);
         void close();
         bool isOpen() const;
 

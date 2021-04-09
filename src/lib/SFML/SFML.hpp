@@ -20,7 +20,7 @@ namespace arcade
         ~SFML();
         SFML();
 
-        void open();
+        void open(Coord screenSize);
         void close();
         bool isOpen() const;
 
