@@ -45,7 +45,8 @@ const std::deque<std::string> MainMenu::_helpText = {
     "NEXT GAME: Z",
     "PREV GAME: W",
     "NEXT GRAPHIC: X",
-    "PREV GRAPHIC: W"
+    "PREV GRAPHIC: W",
+    "MENU VALIDATION: SPACE"
 };
 
 const std::deque<std::string> MainMenu::_settings = {
@@ -247,9 +248,9 @@ void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         username = _textInput.getInputText();
-        if (username.size()) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username);
-        }
+        //if (username.size()) {
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
+        //}
     }
 }
 
