@@ -121,8 +121,6 @@ GameScore ScoreLogger::getGameScore(std::string const &libName,
             return gameScore->name == libName;
         });
     if (it != log.end()) {
-        if ((*it)->score > gs.score)
-            gs.score = (*it)->score;
         if ((*it)->highScore > gs.highScore)
             gs.highScore = (*it)->highScore;
     }

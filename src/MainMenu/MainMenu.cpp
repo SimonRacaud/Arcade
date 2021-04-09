@@ -309,7 +309,6 @@ void MainMenu::refresh()
     std::string categoriesName;
 
     _eventLocked = false;
-    _coreConfig.updateScores();
     _gamesScores = _coreConfig.getScores();
     if (_animationTimer.shouldRefresh()) {
         _pressStart = !_pressStart;

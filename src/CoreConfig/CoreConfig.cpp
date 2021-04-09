@@ -186,6 +186,7 @@ void CoreConfig::gotoMainMenu()
         return;
     this->_selectedGame.reset();
     this->_selectedGame = nullptr;
+    this->updateScores();
 }
 
 void CoreConfig::rotateGraphLib(bool rev)
@@ -266,5 +267,5 @@ void CoreConfig::rotateGameLib(bool rev)
 void CoreConfig::updateScores()
 {
     _scoreLogger.saveScores(this->_gameLibManager);
-    _scoreLogger.loadScores("scores.log");
+    _scoreLogger.loadScores();
 }

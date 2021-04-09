@@ -23,14 +23,16 @@ namespace arcade
         size_t highScore;
     };
 
+    #define ARCADE_DEF_SCORE_FILE "scores.log"
+
     class ScoreLogger {
       public:
-        ScoreLogger(std::string const &filename = "scores.log");
+        ScoreLogger(std::string const &filename = ARCADE_DEF_SCORE_FILE);
         ~ScoreLogger();
 
-        void loadScores(std::string const &filename);
+        void loadScores(std::string const &filename = ARCADE_DEF_SCORE_FILE);
         void saveScores(DL::DLManager<IGameModule> &gameDLManager,
-            std::string const &filename = "scores.log");
+            std::string const &filename = ARCADE_DEF_SCORE_FILE);
 
         std::deque<std::shared_ptr<GameScore>> const &getGameScores() const;
 
