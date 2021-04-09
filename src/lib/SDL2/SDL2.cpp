@@ -90,8 +90,10 @@ SDL2::~SDL2()
 {
 }
 
-void SDL2::open(Coord screenSize)
+void SDL2::open(Coord screenSize, Coord screenScale)
 {
+    _scale.x = screenScale.x;
+    _scale.y = screenScale.y;
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     _font = TTF_OpenFont(FONT_PATH, _textSize);

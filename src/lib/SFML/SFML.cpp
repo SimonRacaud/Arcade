@@ -90,15 +90,16 @@ SFML::~SFML()
 {
 }
 
-void SFML::open(Coord screenSize)
+void SFML::open(Coord screenSize, Coord screenScale)
 {
+    _scale.x = screenScale.x;
+    _scale.y = screenScale.y;
     _font = new sf::Font;
     if (!_font->loadFromFile(FONT_PATH)) {
         // throw error ?
     }
     _isOpen = true;
-    _window =
-        new sf::RenderWindow(sf::VideoMode(screenSize.x, screenSize.y), WINDOW_NAME);
+    _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), WINDOW_NAME);
 }
 
 void SFML::close()
@@ -106,7 +107,7 @@ void SFML::close()
     _keyStack.clear();
     _isOpen = false;
     _window->close();
-    delete _window;
+    _window.release();
     delete _font;
 }
 
