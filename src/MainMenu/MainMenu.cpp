@@ -38,15 +38,19 @@ const std::deque<std::string> MainMenu::CATEGORIE_NAMES = {
 };
 
 const std::deque<std::string> MainMenu::_helpText = {
+    "MENU VALIDATION: SPACE",
+    "MOVE UP: ARROW UP",
+    "MOVE DOWN: ARROW DOWN",
+    "MOVE RIGHT: ARROW RIGHT",
+    "MOVE LEFT: ARROW LEFT",
     "PAUSE: P",
-    "EXIT: EXIT",
+    "EXIT: ESCAPE",
     "GO TO MENU: Q",
     "RESTART GAME: R",
     "NEXT GAME: Z",
     "PREV GAME: W",
     "NEXT GRAPHIC: X",
-    "PREV GRAPHIC: W",
-    "MENU VALIDATION: SPACE"
+    "PREV GRAPHIC: W"
 };
 
 const std::deque<std::string> MainMenu::_settings = {
@@ -58,7 +62,7 @@ MainMenu::MainMenu(CoreConfig &coreConfig) :
     _coreConfig(coreConfig),
     _textInput("USERNAME"),
     _gamesScores(coreConfig.getScores()),
-    _selectedCategorie("GAMES"),
+    _selectedCategorie("HELP"),
     _selectedSetting("USERNAME"),
     _selectedPanel(0),
     _isLoading(true),
@@ -250,9 +254,7 @@ void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         username = _textInput.getInputText();
-        //if (username.size()) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
-        //}
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(28, 10), username + " (select to change)");
     }
 }
 

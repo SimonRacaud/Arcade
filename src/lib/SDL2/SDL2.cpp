@@ -99,7 +99,8 @@ void SDL2::open(Coord screenSize, Coord screenScale)
     _font = TTF_OpenFont(FONT_PATH, _textSize);
     if (_font == NULL) {
         std::cout << "font is null" << std::endl;
-        //throw error
+        std::cerr << "SDL2 : The loading "
+                  << "of the font failed !" << std::endl;
     }
     _window = SDL_CreateWindow(
         WINDOW_NAME,
@@ -110,8 +111,8 @@ void SDL2::open(Coord screenSize, Coord screenScale)
         SDL_WINDOW_OPENGL
     );
     if (_window == NULL) {
-        fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
-        //THROW ERROR
+        std::cerr << "SDL2 : The creation "
+                  << "of the window failed !" << std::endl;
     }
     _isOpen = true;
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
