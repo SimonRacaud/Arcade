@@ -9,7 +9,7 @@
 
 using namespace Game;
 
-static const double SUPER_GUM_ANIM_FREQ = 2;
+static const double SUPER_GUM_ANIM_FREQ = 400;
 
 #define F Color::BLACK
 #define W Color::WHITE

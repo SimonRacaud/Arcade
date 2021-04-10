@@ -50,9 +50,9 @@ void PacmanPlayer::move()
         if (_map) {
             Vector mapSize = this->_map->getSize();
 
-            if (std::ceil(_positions[0].x) == mapSize.x - 1) {
-                GameObject::move(-mapSize.x + 1, 0);
-            } else if (std::floor(_positions[0].x) == 0) {
+            if (std::floor(_positions[0].x) >= mapSize.x - 1) {
+                GameObject::move((-mapSize.x) + 1, 0);
+            } else if (std::floor(_positions[0].x) <= 0) {
                 GameObject::move(mapSize.x - 1, 0);
             }
         }
@@ -77,7 +77,18 @@ void PacmanPlayer::setDirection(PacmanPlayer::Direction dir)
         } else if (dir == Direction::RIGHT) {
             currentPos.x += 1;
         }
-        if (_map->isCollideToCoord(currentPos.x, currentPos.y)) {
+        try {
+            if (_map->isCollideToCoord(
+                    std::floor(currentPos.x), std::floor(currentPos.y))
+                || _map->isCollideToCoord(
+                    std::ceil(currentPos.x), std::floor(currentPos.y))
+                || _map->isCollideToCoord(
+                    std::floor(currentPos.x), std::ceil(currentPos.y))
+                || _map->isCollideToCoord(
+                    std::ceil(currentPos.x), std::ceil(currentPos.y))) {
+                return;
+            }
+        } catch (OutOfBoundException const &e) {
             return;
         }
         _dir = dir;
@@ -101,19 +112,19 @@ bool PacmanPlayer::isCollideWithMap(const Vector &offset)
     if (_map == nullptr)
         return false;
     if (_map->isCollideToCoord(std::floor(_positions[0].x + offset.x),
-                             std::floor(_positions[0].y + offset.y))) {
+            std::floor(_positions[0].y + offset.y))) {
         return true;
     }
     if (_map->isCollideToCoord(std::ceil(_positions[0].x + offset.x),
-                             std::ceil(_positions[0].y + offset.y))) {
+            std::ceil(_positions[0].y + offset.y))) {
         return true;
     }
     if (_map->isCollideToCoord(std::floor(_positions[0].x + offset.x),
-                              std::ceil(_positions[0].y + offset.y))) {
+            std::ceil(_positions[0].y + offset.y))) {
         return true;
     }
     if (_map->isCollideToCoord(std::ceil(_positions[0].x + offset.x),
-                              std::floor(_positions[0].y + offset.y))) {
+            std::floor(_positions[0].y + offset.y))) {
         return true;
     }
     return false;
