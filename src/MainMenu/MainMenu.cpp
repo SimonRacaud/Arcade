@@ -187,9 +187,9 @@ void MainMenu::displayFirstPanel(IDisplayModule &selectedGraphic)
 {
     for (auto i = CATEGORIE_NAMES.begin(); i != CATEGORIE_NAMES.end(); i++) {
         if ((*i).find(_selectedCategorie) != std::string::npos && _selectedPanel == 0) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(6, 14 + i - CATEGORIE_NAMES.begin()), "> " + *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(6, 14 + (i - CATEGORIE_NAMES.begin())), "> " + *i);
         } else {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(6, 14 + i - CATEGORIE_NAMES.begin()), *i);
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(6, 14 + (i - CATEGORIE_NAMES.begin())), *i);
         }
     }
 }
@@ -198,39 +198,37 @@ void MainMenu::displaySecondPanel(IDisplayModule &selectedGraphic)
 {
     const std::deque<std::string> &GameNames = _coreConfig.getGameNames();
     const std::deque<std::string> &GraphicNames = _coreConfig.getGraphicNames();
-    size_t count = 0;
 
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
         for (auto i = GameNames.begin(); i != GameNames.end(); i++) {
             if ((*i).find(_selectedGame) != std::string::npos && _selectedPanel == 1) {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GameNames.begin()), "> " + *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - GameNames.begin())), "> " + *i);
             } else {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GameNames.begin()), *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - GameNames.begin())), *i);
             }
         }
     }
     if (std::string("GRAPHICS").find(_selectedCategorie) != std::string::npos) {
         for (auto i = GraphicNames.begin(); i != GraphicNames.end(); i++) {
             if ((*i).find(_selectedGraphic) != std::string::npos && _selectedPanel == 1) {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GraphicNames.begin()), "> " + *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - GraphicNames.begin())), "> " + *i);
             } else {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - GraphicNames.begin()), *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - GraphicNames.begin())), *i);
             }
         }
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         for (auto i = _settings.begin(); i != _settings.end(); i++) {
             if ((*i).find(_selectedSetting) != std::string::npos && _selectedPanel == 1) {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - _settings.begin()), "> " + *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - _settings.begin())), "> " + *i);
             } else {
-                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + i - _settings.begin()), *i);
+                selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - _settings.begin())), *i);
             }
         }
     }
     if (std::string("HELP").find(_selectedCategorie) != std::string::npos) {
         for (auto i = _helpText.begin(); i != _helpText.end(); i++) {
-            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + count), *i);
-            count += 1;
+            selectedGraphic.putText(IDisplayModule::Color::RED, Coord(18, 14 + (i - _helpText.begin())), *i);
         }
     }
 }
