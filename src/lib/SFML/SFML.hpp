@@ -44,7 +44,6 @@ namespace arcade
         bool _isMouseClicked;
         bool _isOpen;
         Vector _scale;
-        Vector _origin;
         size_t _textSize;
         sf::Font *_font;
         static const std::map<Color, sf::Color> _color;
