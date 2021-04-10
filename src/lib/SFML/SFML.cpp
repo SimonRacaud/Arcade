@@ -148,9 +148,9 @@ void SFML::putCircle(Color color, Coord pos, size_t radius)
 {
     sf::CircleShape circle;
 
-    circle.setRadius((float)radius);
+    circle.setRadius((float)radius * 4);
     circle.setPosition(
-        sf::Vector2f(pos.x * _scale.x, pos.y * _scale.y));
+        sf::Vector2f(pos.x * _scale.x + radius * 4, pos.y * _scale.y + radius * 4));
     circle.setFillColor(_color.at(color));
     _window->draw(circle);
 }
@@ -225,7 +225,7 @@ Coord SFML::getMousePos() const
 {
     sf::Vector2i localPosition = sf::Mouse::getPosition(*_window);
 
-    return Coord(localPosition.x, localPosition.y);
+    return Coord(localPosition.x / _scale.x, localPosition.y / _scale.y);
 }
 
 extern "C" std::shared_ptr<arcade::IDisplayModule> entryPoint()

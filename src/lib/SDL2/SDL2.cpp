@@ -166,18 +166,19 @@ void SDL2::putRectOutline(Color color, Coord size, Coord pos)
 
 void SDL2::putCircle(Color color, Coord pos, size_t radius)
 {
+    size_t _radius = radius * 4;
     SDL_Color sdl_color = _color.at(color);
     float position_x = pos.x * _scale.x;
     float position_y = pos.y * _scale.y;
-    Vector center( position_x + radius, position_y + radius);
+    Vector center(position_x + _radius, position_y + _radius);
     std::vector<float> v = {0, 0};
 
     SDL_SetRenderDrawColor(_renderer, sdl_color.r, sdl_color.g, sdl_color.b, sdl_color.a);
-    for (size_t x = 0; x < radius * 2; x++) {
-        for (size_t y = 0; y < radius * 2; y++) {
+    for (size_t x = 0; x < _radius * 2; x++) {
+        for (size_t y = 0; y < _radius * 2; y++) {
             v[0] = position_x + x - center.x;
             v[1] = position_y + y - center.y;
-            if ((pow(v[0], 2) + pow(v[1], 2)) <= pow(radius, 2)) {
+            if ((pow(v[0], 2) + pow(v[1], 2)) <= pow(_radius, 2)) {
                 SDL_RenderDrawPoint(_renderer, position_x + x, position_y + y);
             }
         }
@@ -222,7 +223,8 @@ void SDL2::refreshEvent()
 
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            _isOpen = false;
+            this->close();
+            return;
         }
         if (event.type == SDL_MOUSEBUTTONUP) {
             _isMouseClicked = true;
@@ -257,7 +259,7 @@ Coord SDL2::getMousePos() const
     int y = 0;
 
     SDL_GetMouseState(&x, &y);
-    return Coord(x, y);
+    return Coord(x / _scale.x, y / _scale.y);
 }
 
 extern "C" std::shared_ptr<arcade::IDisplayModule> entryPoint()
