@@ -10,10 +10,16 @@
 using namespace arcade;
 
 const std::deque<std::string> CoreConfig::GAME_LIB_NAMES = {
-    "arcade_nibbler.so", "arcade_solarfox.so", "arcade_pacman.so"};
+    "arcade_nibbler.so", "arcade_solarfox.so", "arcade_pacman.so"
+    "arcade_qix.so", "arcade_centipede.so",
+};
 
 const std::deque<std::string> CoreConfig::GRAPHIC_LIB_NAMES = {
-    "arcade_sfml.so", "arcade_ncurses.so", "arcade_sdl2.so"};
+    "arcade_sfml.so", "arcade_ncurses.so", "arcade_sdl2.so",
+    "arcade_ndk++.so", "arcade_aalib.so", "arcade_libcaca.so",
+    "arcade_allegro5.so", "arcade_xlib.so", "arcade_gtk+.so",
+    "arcade_qt5.so", "arcade_opengl.so", "arcade_vulkan.so",
+};
 
 CoreConfig::CoreConfig(const std::string &defGraphicFile)
     : _username("unknow"), _status(ExitStatus::LOOP), _selectedGame(nullptr),
