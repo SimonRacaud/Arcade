@@ -182,6 +182,10 @@ void Ncurses::putCircle(Color color, Coord pos, size_t radius)
     size_t windowX = 0;
     __attribute__((unused)) size_t windowY = 0;
 
+    if (radius == 1) {
+        this->putText(color, pos, "o");
+        return;
+    }
     getmaxyx(_window, windowY, windowX);
     attron(COLOR_PAIR(_caseColor.at(color)));
     for (size_t y = pos.y * _scale.y; y < pos.y * _scale.y + 2 * radius; y++) {
