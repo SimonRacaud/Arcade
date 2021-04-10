@@ -135,12 +135,14 @@ void SFML::putRectOutline(Color color, Coord size, Coord pos)
     sf::RectangleShape rectangle;
 
     rectangle.setSize(
-        sf::Vector2f(size.x * _scale.x, size.y * _scale.y));
+        sf::Vector2f(size.x * _scale.x - _scale.x, size.y * _scale.y - _scale.x));
     rectangle.setPosition(
-        sf::Vector2f(pos.x * _scale.x, pos.y * _scale.y));
+        sf::Vector2f(pos.x * _scale.x + _scale.x / 2, pos.y * _scale.y + _scale.x / 2));
     rectangle.setOutlineColor(_color.at(color));
-    rectangle.setOutlineThickness(_scale.x);
+    rectangle.setOutlineThickness(_scale.x / 2);
     rectangle.setFillColor(sf::Color(0, 0, 0, 0));
+    this->putRectFill(color, Coord(size.x, 1), Coord(pos.x, pos.y + 0.1));
+    this->putRectFill(color, Coord(size.x, 1), Coord(pos.x, pos.y + size.y - 1));
     _window->draw(rectangle);
 }
 
