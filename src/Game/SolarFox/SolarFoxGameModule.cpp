@@ -156,40 +156,14 @@ void SolarFoxGameModule::eventManager(arcade::IDisplayModule &displayModule)
 
 void SolarFoxGameModule::refreshGame(bool refreshActions)
 {
-    ssize_t coinIdx;
-
     if (refreshActions) {
-        // Player Move
-        try {
-            this->_player.move();
-        } catch (OutOfBoundException const &e) {
-            this->_status = GameStatus::GAMEOVER;
-            return;
-        }
-        // Player Shoot
-        this->_player.shoot(MAP_SIZE);
+        this->handlePlayer();
         // Check Collision With Border
         if (this->_player.isOutsideOfWalkableArea()) {
             this->_status = GameStatus::GAMEOVER;
             return;
         }
-        // Check Collision With Coins
-        coinIdx = this->_player.isShootCollideWith(_goodCoins);
-        if (coinIdx != -1) {
-            delete *(_goodCoins.begin() + coinIdx);
-            _goodCoins.erase(_goodCoins.begin() + coinIdx);
-            this->increaseScore(10);
-            this->evalHighScore();
-            if (_goodCoins.empty()) {
-                updateDifficulty();
-                this->generateCoin();
-                this->generateEnemies();
-            }
-        }
-        if (this->_player.isShootCollideWith(_badCoins) != -1) {
-            this->_status = GameStatus::GAMEOVER;
-            return;
-        }
+        this->handleCollisionWithCoin();
         // Check Collision With Enemies Projectile
         try {
             this->_player.isCollideWith(_enemies);
@@ -204,15 +178,7 @@ void SolarFoxGameModule::refreshGame(bool refreshActions)
             this->_enemies[i]->updateMovment();
         }
     }
-    // Display
-    this->_map.display(*this->_graphModule);
-    this->_player.display(*this->_graphModule);
-    for (size_t i = 0; i < _goodCoins.size(); i++)
-        this->_goodCoins[i]->display(*this->_graphModule);
-    for (size_t i = 0; i < _badCoins.size(); i++)
-        this->_badCoins[i]->display(*this->_graphModule);
-    for (size_t i = 0; i < _enemies.size(); i++)
-        this->_enemies[i]->display(*this->_graphModule);
+    this->display();
 }
 
 void SolarFoxGameModule::updateDifficulty()
@@ -223,6 +189,53 @@ void SolarFoxGameModule::updateDifficulty()
     }
     if (_difficulty == Difficulty::MEDIUM)
         _difficulty = Difficulty::HARD;
+}
+
+void SolarFoxGameModule::display()
+{
+    this->_map.display(*this->_graphModule);
+    this->_player.display(*this->_graphModule);
+    for (size_t i = 0; i < _goodCoins.size(); i++)
+        this->_goodCoins[i]->display(*this->_graphModule);
+    for (size_t i = 0; i < _badCoins.size(); i++)
+        this->_badCoins[i]->display(*this->_graphModule);
+    for (size_t i = 0; i < _enemies.size(); i++)
+        this->_enemies[i]->display(*this->_graphModule);
+}
+
+void SolarFoxGameModule::handlePlayer()
+{
+    // Player Move
+    try {
+        this->_player.move();
+    } catch (OutOfBoundException const &e) {
+        this->_status = GameStatus::GAMEOVER;
+        return;
+    }
+    // Player Shoot
+    this->_player.shoot(MAP_SIZE);
+}
+
+void SolarFoxGameModule::handleCollisionWithCoin()
+{
+    ssize_t coinIdx;
+
+    coinIdx = this->_player.isShootCollideWith(_goodCoins);
+    if (coinIdx != -1) {
+        delete *(_goodCoins.begin() + coinIdx);
+        _goodCoins.erase(_goodCoins.begin() + coinIdx);
+        this->increaseScore(10);
+        this->evalHighScore();
+        if (_goodCoins.empty()) {
+            updateDifficulty();
+            this->generateCoin();
+            this->generateEnemies();
+        }
+    }
+    if (this->_player.isShootCollideWith(_badCoins) != -1) {
+        this->_status = GameStatus::GAMEOVER;
+        return;
+    }
 }
 
 void SolarFoxGameModule::generateCoin()

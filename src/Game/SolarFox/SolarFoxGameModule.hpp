@@ -41,6 +41,9 @@ namespace Game
         private :
             void refreshGame(bool refreshActions);
             void updateDifficulty();
+            void display();
+            void handlePlayer();
+            void handleCollisionWithCoin();
 
             void generateCoin();
             void generateEnemies();
