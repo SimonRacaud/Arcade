@@ -11,7 +11,7 @@ DSRC	=	./src/
 CXXFLAGS	+= -W -Wall -Wextra $(INCLUDE) $(DEBUG) # -Werror
 DEBUG		= -g
 INCLUDE 	= -I./includes -I./src -I./src/exception/includes
-NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so lib/arcade_solarfox.so
+NAME		= arcade lib/arcade_nibbler.so lib/arcade_sfml.so lib/arcade_ncurses.so lib/arcade_sdl2.so lib/arcade_solarfox.so lib/arcade_pacman.so
 LDFLAGS 	= $(INCLUDE) $(DEBUG)
 
 ### DEFAULT
@@ -75,6 +75,18 @@ solarfox: LDFLAGS 	+= -shared -fPIC
 solarfox: CXXFLAGS 	+= -fPIC
 solarfox: $(SOLARFOX_OBJ)
 
+PACMAN_SRC	=	$(DSRC)Game/Pacman/PacmanMap/PacmanMap.cpp			\
+				$(DSRC)Game/Pacman/PacmanPlayer/PacmanPlayer.cpp	\
+				$(DSRC)Game/Pacman/PacmanGameModule.cpp				\
+				$(DSRC)Game/Pacman/entrypoint.cpp					\
+
+PACMAN_OBJ	=	$(PACMAN_SRC:.cpp=.o)
+pacman: OBJ = $(PACMAN_OBJ) $(DEF_GAME_SRC)
+pacman: NAME	=	lib/arcade_pacman.so
+pacman: LDFLAGS 	+= -shared -fPIC
+pacman: CXXFLAGS 	+= -fPIC
+pacman: $(PACMAN_OBJ)
+
 ### GRAPHICALS
 SFML_SRC 	= 	$(DSRC)lib/SFML/SFML.cpp
 SFML_OBJ	= 	$(SFML_SRC:.cpp=.o)
@@ -106,7 +118,7 @@ GPP=g++
 %.o: %.cpp
 	$(GPP) -c $(CXXFLAGS) -o $@ $<
 
-core nibbler sfml SDL2 ncurses solarfox: $(OBJ)
+core nibbler sfml SDL2 ncurses solarfox pacman: $(OBJ)
 	@$(GPP) -o $(NAME) $(OBJ) $(DEF_SRC) $(LDFLAGS) && \
 		$(ECHO) $(BOLD_T)$(GREEN_C)"\n[✔] COMPILED:" $(DEFAULT)$(LIGHT_GREEN) "$(NAME)\n"$(DEFAULT) || \
 		$(ECHO) $(BOLD_T)$(RED_C)"[✘] "$(UNDLN_T)"BUILD FAILED:" $(LIGHT_RED) "$(NAME)\n"$(DEFAULT)
