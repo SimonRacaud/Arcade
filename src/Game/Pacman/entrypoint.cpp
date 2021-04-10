@@ -5,10 +5,11 @@
 ** entrypoint.c
 */
 
+#include <memory>
 #include "./PacmanGameModule.hpp"
 #include "IGameModule.hpp"
 
-extern "C" arcade::IGameModule *entryPoint()
+extern "C" std::shared_ptr<arcade::IGameModule> entryPoint()
 {
-    return new Game::PacmanGameModule;
+    return std::make_shared<Game::PacmanGameModule>();
 }

@@ -30,7 +30,7 @@ DEF_GAME_SRC	= 	$(GAME_DSRC)/AbstractGameModule/AbstractGameModule.cpp	\
 ###
 all:  core games graphicals
 
-games: nibbler solarfox
+games: nibbler solarfox pacman
 graphicals: sfml SDL2 ncurses
 
 ### CORE
