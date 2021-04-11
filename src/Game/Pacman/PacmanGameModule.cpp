@@ -62,7 +62,7 @@ void PacmanGameModule::refreshGame(bool refreshActions)
 void PacmanGameModule::nextStage()
 {
     this->reset();
-    _speed += 0.2;
+    this->_speedCoef += 0.2;
 }
 
 void PacmanGameModule::eventManager(arcade::IDisplayModule &displayModule)
