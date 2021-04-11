@@ -11,7 +11,7 @@
 
 static const size_t SECOND_TO_MILLI = 1000;
 
-Timer::Timer(clock_t period) : _time(0), _period(period)
+Timer::Timer(clock_t period) : _time(clock()), _period(period)
 {
 }
 
@@ -43,6 +43,7 @@ void Timer::setPeriod(clock_t period)
 void Timer::setTimeout(clock_t duration)
 {
     _period = duration;
+    _time = clock();
 }
 
 bool Timer::isTimeout()
