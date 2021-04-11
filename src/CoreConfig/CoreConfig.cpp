@@ -10,7 +10,7 @@
 using namespace arcade;
 
 const std::deque<std::string> CoreConfig::GAME_LIB_NAMES = {
-    "arcade_nibbler.so", "arcade_solarfox.so", "arcade_pacman.so"
+    "arcade_nibbler.so", "arcade_solarfox.so", "arcade_pacman.so",
     "arcade_qix.so", "arcade_centipede.so",
 };
 

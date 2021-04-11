@@ -28,6 +28,7 @@ namespace Game
 
         virtual void draw(arcade::IDisplayModule &mod);
 
+        void destroyMatrix();
       public:
         GameMap(Vector const &size);
         GameMap(Vector const &size, std::deque<Color> const &fill);

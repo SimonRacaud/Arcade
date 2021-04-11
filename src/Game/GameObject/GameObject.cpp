@@ -93,6 +93,15 @@ bool GameObject::isCollideWith(const GameMap &map) const
     return false;
 }
 
+bool GameObject::isCollideToCase(Vector coord) const
+{
+    return this->isCollideCoord((Vector){std::floor(coord.x), std::floor(coord.y)})
+           || this->isCollideCoord((Vector){std::ceil(coord.x), std::floor(coord.y)})
+           || this->isCollideCoord((Vector){std::floor(coord.x), std::ceil(coord.y)})
+           || this->isCollideCoord((Vector){std::ceil(coord.x), std::ceil(coord.y)});
+}
+
+
 /** Private **/
 
 bool GameObject::canMove(double offsetX, double offsetY) const
@@ -108,6 +117,7 @@ bool GameObject::canMove(double offsetX, double offsetY) const
     }
     return true;
 }
+
 bool GameObject::isCollideCoord(const Vector &pos) const
 {
     for (size_t i = 0; i < _positions.size(); i++) {
