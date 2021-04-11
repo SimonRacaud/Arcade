@@ -33,6 +33,8 @@ namespace Game
         void reset();
         size_t processCoinCollision(GameObject &player);
 
+        bool isCollideToCase(Vector coord) const;
+
       protected:
         void draw(arcade::IDisplayModule &mod) override;
 

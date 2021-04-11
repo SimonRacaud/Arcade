@@ -42,6 +42,8 @@ namespace Game
         void setSpeedCoef(double &speedCoef);
 
         void setMap(PacmanMap &map);
+
+        Vector getPosition() const;
     };
 } // namespace Game
 

@@ -78,14 +78,7 @@ void PacmanPlayer::setDirection(PacmanPlayer::Direction dir)
             currentPos.x += 1;
         }
         try {
-            if (_map->isCollideToCoord(
-                    std::floor(currentPos.x), std::floor(currentPos.y))
-                || _map->isCollideToCoord(
-                    std::ceil(currentPos.x), std::floor(currentPos.y))
-                || _map->isCollideToCoord(
-                    std::floor(currentPos.x), std::ceil(currentPos.y))
-                || _map->isCollideToCoord(
-                    std::ceil(currentPos.x), std::ceil(currentPos.y))) {
+            if (_map->isCollideToCase(currentPos)) {
                 return;
             }
         } catch (OutOfBoundException const &e) {
@@ -128,4 +121,9 @@ bool PacmanPlayer::isCollideWithMap(const Vector &offset)
         return true;
     }
     return false;
+}
+
+arcade::Vector PacmanPlayer::getPosition() const
+{
+    return this->_positions[0];
 }
