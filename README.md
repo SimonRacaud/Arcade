@@ -50,5 +50,5 @@ $> ./arcade lib/arcade_{lib_name}
 [Interfaces_Documentaion](./doc/Documentation.pdf)
 
 - Class Diagram:
-![Class_Diagram](.github/img/)
+![Class_Diagram](doc/class%20diagram.png)
 
