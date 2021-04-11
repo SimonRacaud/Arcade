@@ -31,7 +31,7 @@ Compile games libraries
 $> make games
 ```
 
-You need install the SFML, Ncurses, and SDL2 previously.  
+You need install the SFML, Ncurses, and SDL2 previously.
 
 Compile the arcade core
 ```
@@ -46,9 +46,9 @@ $> ./arcade lib/arcade_{lib_name}
 
 # Documentation
 
-- Interfaces:  
-[Interfaces_Documentaion](./doc/Implementation.odg)
+- Interfaces:
+[Interfaces_Documentaion](./doc/Documentation.pdf)
 
-- Class Diagram:  
+- Class Diagram:
 ![Class_Diagram](.github/img/)
 
