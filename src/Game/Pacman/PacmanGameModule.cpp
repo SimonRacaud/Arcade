@@ -32,7 +32,9 @@ void PacmanGameModule::reset()
 {
     this->_player.reset();
     this->_map.reset();
-    // TODO : reset ghosts
+    for (auto &ghost : _ghosts) {
+        ghost->reset();
+    }
 }
 
 /** Private **/
@@ -44,7 +46,10 @@ void PacmanGameModule::refreshGame(bool refreshActions)
         this->coinsCollision();
         for (auto const &ghost : _ghosts) {
             ghost->move(this->_player.getPosition(), _map);
-            break; // TODO DEBUG
+        }
+        this->ghostsCollision();
+        if (this->isEndGame()) {
+            this->nextStage();
         }
     }
     this->_map.display(*this->_graphModule);
@@ -56,7 +61,8 @@ void PacmanGameModule::refreshGame(bool refreshActions)
 
 void PacmanGameModule::nextStage()
 {
-    // TODO
+    this->reset();
+    _speed += 0.2;
 }
 
 void PacmanGameModule::eventManager(arcade::IDisplayModule &displayModule)
@@ -78,7 +84,31 @@ void PacmanGameModule::eventManager(arcade::IDisplayModule &displayModule)
 
 void PacmanGameModule::coinsCollision()
 {
-    size_t scoreInc = _map.processCoinCollision(_player);
+    PacmanMap::CoinCollision collision = _map.isCollideCoin(_player);
 
-    this->_score += scoreInc;
+    if (collision == PacmanMap::CoinCollision::COIN) {
+        this->increaseScore(GUM_SCORE_INC);
+    } else if (collision == PacmanMap::CoinCollision::SUPERCOIN) {
+        this->increaseScore(SGUM_SCORE_INC);
+        for (auto &ghost : _ghosts) {
+            ghost->enableFlee();
+        }
+    }
+}
+
+void PacmanGameModule::ghostsCollision()
+{
+    for (auto &ghost : _ghosts) {
+        PacmanGhost::Collision collision = ghost->isCollideWithPlayer(_player);
+        if (collision == PacmanGhost::Collision::KILLED) {
+            this->increaseScore(KILL_SCORE_INC);
+        } else if (collision == PacmanGhost::Collision::KILLER) {
+            this->setStatus(GameStatus::GAMEOVER);
+        }
+    }
+}
+
+bool PacmanGameModule::isEndGame() const
+{
+    return _map.isCoinsEmpty();
 }

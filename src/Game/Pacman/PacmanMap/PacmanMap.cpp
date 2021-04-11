@@ -472,14 +472,7 @@ Game::PacmanMap::PacmanMap() : GameMap(MAP_SIZE)
 
 Game::PacmanMap::~PacmanMap()
 {
-    while (this->_pacgums.empty() == false) {
-        delete this->_pacgums.back();
-        this->_pacgums.pop_back();
-    }
-    while (this->_superPacgums.empty() == false) {
-        delete this->_superPacgums.back();
-        this->_superPacgums.pop_back();
-    }
+    this->destroyPacgums();
 }
 
 void Game::PacmanMap::draw(arcade::IDisplayModule &mod)
@@ -490,6 +483,19 @@ void Game::PacmanMap::draw(arcade::IDisplayModule &mod)
     for (GameObject *obj : _superPacgums) {
         obj->display(mod);
     }
+}
+
+/**
+ * throw OutOfBoundException
+ * @param coord
+ * @return
+ */
+bool PacmanMap::isCollideToCase(Vector coord) const
+{
+    return this->isCollideToCoord(std::floor(coord.x), std::floor(coord.y))
+           || this->isCollideToCoord(std::ceil(coord.x), std::floor(coord.y))
+           || this->isCollideToCoord(std::floor(coord.x), std::ceil(coord.y))
+           || this->isCollideToCoord(std::ceil(coord.x), std::ceil(coord.y));
 }
 
 void Game::PacmanMap::loadMap(
@@ -529,48 +535,43 @@ void Game::PacmanMap::loadMap(
 
 void PacmanMap::reset()
 {
-    GameMap::~GameMap();
-    this->~PacmanMap();
+    this->destroyMatrix();
+    this->destroyPacgums();
     this->loadMap(MAP_SIZE, BASE_MAP);
 }
 
-size_t PacmanMap::processCoinCollision(GameObject &player)
+PacmanMap::CoinCollision PacmanMap::isCollideCoin(GameObject &player)
 {
-    size_t score = 0;
-
     for (auto it = _pacgums.begin(); it != _pacgums.end(); it++) {
         if ((*it)->isCollideWith(player)) {
             delete *it;
             _pacgums.erase(it);
-            score += GUM_SCORE_INC;
-            break;
+            return CoinCollision::COIN;
         }
     }
     for (auto it = _superPacgums.begin(); it != _superPacgums.end(); it++) {
         if ((*it)->isCollideWith(player)) {
             delete *it;
             _superPacgums.erase(it);
-            // timer
-            score += SGUM_SCORE_INC;
-            break;
+            return CoinCollision::SUPERCOIN;
         }
     }
-    return score;
+    return CoinCollision::NONE;
 }
 
-/**
- * throw OutOfBoundException
- * @param coord
- * @return
- */
-bool PacmanMap::isCollideToCase(Vector coord) const
+void PacmanMap::destroyPacgums()
 {
-    return this->isCollideToCoord(
-               std::floor(coord.x), std::floor(coord.y))
-        || this->isCollideToCoord(
-            std::ceil(coord.x), std::floor(coord.y))
-        || this->isCollideToCoord(
-            std::floor(coord.x), std::ceil(coord.y))
-        || this->isCollideToCoord(
-            std::ceil(coord.x), std::ceil(coord.y));
+    while (this->_pacgums.empty() == false) {
+        delete this->_pacgums.back();
+        this->_pacgums.pop_back();
+    }
+    while (this->_superPacgums.empty() == false) {
+        delete this->_superPacgums.back();
+        this->_superPacgums.pop_back();
+    }
+}
+
+bool PacmanMap::isCoinsEmpty() const
+{
+    return this->_pacgums.empty() && this->_superPacgums.empty();
 }

@@ -40,6 +40,8 @@ namespace Game
         void setAnimation(Color secondary, size_t freq);
 
         bool isCollideCoord(Vector const &pos) const;
+
+        bool isCollideToCase(Vector coord) const;
       protected:
         bool canMove(double offsetX, double offsetY) const;
 

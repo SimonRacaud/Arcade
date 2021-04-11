@@ -78,6 +78,8 @@ solarfox: $(SOLARFOX_OBJ)
 PACMAN_SRC	=	$(DSRC)Game/Pacman/PacmanMap/PacmanMap.cpp			\
 				$(DSRC)Game/Pacman/PacmanPlayer/PacmanPlayer.cpp	\
 				$(DSRC)Game/Pacman/PacmanGameModule.cpp				\
+				$(DSRC)Game/Pacman/PacmanGhost/PacmanGhost.cpp		\
+				$(DSRC)Game/Pacman/PacmanDriver/PacmanDriver.cpp	\
 				$(DSRC)Game/Pacman/entrypoint.cpp					\
 
 PACMAN_OBJ	=	$(PACMAN_SRC:.cpp=.o)

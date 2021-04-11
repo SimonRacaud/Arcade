@@ -30,11 +30,15 @@ namespace Game
 
         void reset() override;
 
+        bool isEndGame() const;
+
       protected:
         void refreshGame(bool refreshActions) override;
         void nextStage();
         virtual void eventManager(arcade::IDisplayModule &displayModule);
+
         void coinsCollision();
+        void ghostsCollision();
     };
 }
 

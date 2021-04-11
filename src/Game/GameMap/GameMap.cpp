@@ -33,12 +33,7 @@ GameMap::GameMap(const Vector &size, std::deque<Color> const &fill)
 
 GameMap::~GameMap()
 {
-    if (this->_mtx != nullptr) {
-        for (size_t y = 0; y < (size_t) _size.y; y++) {
-            delete[] this->_mtx[y];
-        }
-        delete[] this->_mtx;
-    }
+    this->destroyMatrix();
 }
 
 void GameMap::display(arcade::IDisplayModule &mod)
@@ -93,4 +88,14 @@ bool GameMap::isCollideToCoord(int x, int y) const
 const Vector &GameMap::getSize() const
 {
     return _size;
+}
+
+void GameMap::destroyMatrix()
+{
+    if (this->_mtx != nullptr) {
+        for (size_t y = 0; y < (size_t) _size.y; y++) {
+            delete[] this->_mtx[y];
+        }
+        delete[] this->_mtx;
+    }
 }

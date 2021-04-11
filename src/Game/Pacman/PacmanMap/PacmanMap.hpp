@@ -9,37 +9,37 @@
 #define PACMANMAP_HPP_
 
 #include <deque>
-#include <unordered_map>
 #include "../../GameMap/GameMap.hpp"
 #include "../../GameObject/GameObject.hpp"
+#include <unordered_map>
+#include "Game/Pacman/pacmanEnv.hpp"
 
 namespace Game
 {
-    #define MAP_SIZE Vector(21, 21)
-    #define INIT_PLAYER_COORD Vector(10,15)
-    #define GUM_SCORE_INC 10
-    #define SGUM_SCORE_INC 20
-
-
     class PacmanMap : public GameMap {
       private:
         std::deque<GameObject *> _pacgums;
         std::deque<GameObject *> _superPacgums;
 
       public:
+        enum class CoinCollision {NONE, COIN, SUPERCOIN};
+
         PacmanMap();
         virtual ~PacmanMap();
 
         void reset();
-        size_t processCoinCollision(GameObject &player);
 
+        CoinCollision isCollideCoin(GameObject &player);
         bool isCollideToCase(Vector coord) const;
+
+        bool isCoinsEmpty() const;
 
       protected:
         void draw(arcade::IDisplayModule &mod) override;
 
         void loadMap(Vector const &size, std::deque<Color> const &fill);
 
+        void destroyPacgums();
     };
 } // namespace Game
 
