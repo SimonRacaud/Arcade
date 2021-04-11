@@ -238,17 +238,19 @@ void MainMenu::displayThirdPanel(IDisplayModule &selectedGraphic)
     std::string highScore("0");
     std::string score("0");
     std::string username;
+    std::string player("");
 
     for (auto it = _gamesScores.begin(); it != _gamesScores.end(); it++) {
         if ((*it)->name.find(_selectedGame) != std::string::npos) {
             highScore = std::to_string((*it)->highScore);
             score = std::to_string((*it)->score);
+            player = (*it)->player;
         }
     }
     if (std::string("GAMES").find(_selectedCategorie) != std::string::npos) {
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 14), "SCORE: " + score);
         selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 15), "HIGH SCORE: " + highScore);
-        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 16), "USER: ");
+        selectedGraphic.putText(IDisplayModule::Color::RED, Coord(32, 16), "USER: " + player);
     }
     if (std::string("SETTINGS").find(_selectedCategorie) != std::string::npos) {
         username = _textInput.getInputText();

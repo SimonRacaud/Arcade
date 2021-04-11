@@ -48,7 +48,7 @@ CoreConfig::CoreConfig(const std::string &defGraphicFile)
 
 CoreConfig::~CoreConfig()
 {
-    _scoreLogger.saveScores(this->_gameLibManager);
+    _scoreLogger.saveScores(this->_gameLibManager, _username);
     _selectedGraphic.reset();
     _selectedGame.reset();
 }
@@ -272,6 +272,6 @@ void CoreConfig::rotateGameLib(bool rev)
 
 void CoreConfig::updateScores()
 {
-    _scoreLogger.saveScores(this->_gameLibManager);
+    _scoreLogger.saveScores(this->_gameLibManager, _username);
     _scoreLogger.loadScores();
 }

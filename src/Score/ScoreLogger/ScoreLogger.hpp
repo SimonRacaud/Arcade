@@ -19,6 +19,7 @@ namespace arcade
 {
     struct GameScore {
         std::string name;
+        std::string player;
         size_t score;
         size_t highScore;
     };
@@ -32,6 +33,7 @@ namespace arcade
 
         void loadScores(std::string const &filename = ARCADE_DEF_SCORE_FILE);
         void saveScores(DL::DLManager<IGameModule> &gameDLManager,
+            const std::string &playerName,
             std::string const &filename = ARCADE_DEF_SCORE_FILE);
 
         std::deque<std::shared_ptr<GameScore>> const &getGameScores() const;
@@ -43,7 +45,8 @@ namespace arcade
 
         GameScore getGameScore(std::string const &libName,
             std::shared_ptr<IGameModule> const &gameModule,
-            std::deque<std::shared_ptr<GameScore>> const &log);
+            std::deque<std::shared_ptr<GameScore>> const &log,
+            const std::string &name);
 
         std::deque<std::shared_ptr<GameScore>> _data;
     };

@@ -10,7 +10,7 @@
 using namespace arcade;
 
 static const size_t MAX_BLOCK_SIZE = 30;
-static const size_t COLUMNS = 3;
+static const size_t COLUMNS = 4;
 
 ScoreLogger::ScoreLogger(const std::string &filename)
 {
@@ -28,12 +28,13 @@ void ScoreLogger::loadScores(const std::string &filename)
         this->_data = this->readParseFile(filename);
     } catch (ScoreException const &e) {
         this->_data.clear();
-        std::cerr << "Warning: Score log loading fail" << std::endl;
+        std::cerr << "Warning: Score log loading fail: " << e.what() << std::endl;
     }
 }
 
 void ScoreLogger::saveScores(
-    DL::DLManager<IGameModule> &gameDLManager, const std::string &filename)
+    DL::DLManager<IGameModule> &gameDLManager, const std::string &playerName,
+    const std::string &filename)
 {
     std::deque<std::string> const &libs = gameDLManager.getAvailableLibs();
     std::ofstream file(filename);
@@ -44,9 +45,8 @@ void ScoreLogger::saveScores(
     for (std::string const &libName : libs) {
         try {
             auto const &gameModule = gameDLManager.getModule(libName);
-            GameScore gs = this->getGameScore(libName, gameModule, _data);
-
-            file << gs.name << "," << gs.score << "," << gs.highScore << "\n";
+            GameScore gs = this->getGameScore(libName, gameModule, _data, playerName);
+            file << gs.name << "," << gs.score << "," << gs.highScore << "," << gs.player << "\n";
         } catch (BaseException const &e) {
             std::cerr << "ScoreLogger::saveScores : " << e.what() << std::endl;
         }
@@ -101,21 +101,26 @@ std::shared_ptr<GameScore> arcade::ScoreLogger::parseFileLine(
     try {
         parsedLine->score = std::stoul(splitLine[1]);
         parsedLine->highScore = std::stoul(splitLine[2]);
+        parsedLine->player = splitLine[3];
     } catch (std::invalid_argument const &e) {
         throw ScoreException("Score log load : invalid score values");
     }
+    std::cout << line << std::endl;
     return parsedLine;
 }
 
 GameScore ScoreLogger::getGameScore(std::string const &libName,
     std::shared_ptr<IGameModule> const &gameModule,
-    const std::deque<std::shared_ptr<GameScore>> &log)
+    const std::deque<std::shared_ptr<GameScore>> &log,
+    const std::string &playerName
+    )
 {
     GameScore gs;
 
     gs.name = libName;
     gs.score = gameModule->getScore();
     gs.highScore = gameModule->getScoreHigh();
+    gs.player = playerName;
     auto it =
         std::find_if(log.begin(), log.end(), [libName](auto const &gameScore) {
             return gameScore->name == libName;

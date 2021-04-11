@@ -37,6 +37,7 @@ void Core::loop()
         }
         if (selectedGame == nullptr) {
             _mainMenu.refresh();
+            this->_config.setUsername(_mainMenu.getUsername());
             selectedGraphic = _config.getSelectedGraphic();
         } else {
             selectedGame->setUsername(_mainMenu.getUsername());
