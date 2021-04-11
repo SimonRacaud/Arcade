@@ -105,7 +105,6 @@ std::shared_ptr<GameScore> arcade::ScoreLogger::parseFileLine(
     } catch (std::invalid_argument const &e) {
         throw ScoreException("Score log load : invalid score values");
     }
-    std::cout << line << std::endl;
     return parsedLine;
 }
 
