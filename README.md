@@ -1,6 +1,5 @@
-# B-OOP-400-REN-4-1-arcade-aurelien.joncour
-
-Arcade is a gaming platform: a program that lets the user choose a game to play and keeps a register of player scores.
+# Arcade
+Arcade is a retro gaming platform: a program that lets the user choose a game to play and keeps a register of player scores.
 
 **Group members:**
   - [@SimonRacaud](https://github.com/SimonRacaud)
